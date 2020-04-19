@@ -29,3 +29,17 @@ $ phpcstd [options] <files or folders>
 --help
   Displays this help message
 ```
+
+## Contents
+### Tools included
+Tool | Description
+-----|------------
+[phpstan](https://github.com/phpstan/phpstan) | Runs logical checks
+
+### Extensions used
+- **phpstan**
+  - nunomaduro/larastan
+  - phpstan/phpstan-deprecation-rules
+  - phpstan/phpstan-mockery
+  - phpstan/phpstan-phpunit
+  - phpstan/phpstan-strict-rules
