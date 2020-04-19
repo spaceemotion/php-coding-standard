@@ -34,6 +34,7 @@ $ phpcstd [options] <files or folders>
 ### Tools included
 Tool | Description
 -----|------------
+[PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) | Detects styling issues
 [phpstan](https://github.com/phpstan/phpstan) | Runs logical checks
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | Tries to keep code complexity to a minimum
 
@@ -44,3 +45,6 @@ Tool | Description
   - phpstan/phpstan-mockery
   - phpstan/phpstan-phpunit
   - phpstan/phpstan-strict-rules
+- **PHP_CodeSniffer**
+  - escapestudios/symfony2-coding-standard
+  - slevomat/coding-standard

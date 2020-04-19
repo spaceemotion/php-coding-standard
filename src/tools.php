@@ -3,7 +3,19 @@
 declare(strict_types=1);
 
 // Define all possible commands
-$tools = [
+$tools = $flags['fix']
+    ? [
+        static fn () => (
+            run('phpcbf', $files) === 0
+        ),
+    ]
+    : [
+        static fn () => (
+            run('phpcs', [
+                $flags['ci'] ? '--no-colors --report=checkstyle' : '--colors --report=summary' ,
+                ...$files
+            ]) < 2
+        ),
         static fn () => (
             run('phpstan', [
                 'analyse',

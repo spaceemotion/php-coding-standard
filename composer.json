@@ -15,12 +15,14 @@
         "php": "^7.4"
     },
     "require-dev": {
+        "escapestudios/symfony2-coding-standard": "^3.9.2",
         "nunomaduro/larastan": "^0.5",
         "phpmd/phpmd": "^2.8",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-mockery": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan-strict-rules": "^0.12"
+        "phpstan/phpstan-strict-rules": "^0.12",
+        "slevomat/coding-standard": "^6.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
