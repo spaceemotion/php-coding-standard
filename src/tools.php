@@ -13,7 +13,7 @@ $tools = $flags['fix']
         static fn () => (
             run('phpcs', [
                 $flags['ci'] ? '--no-colors --report=checkstyle' : '--colors --report=summary' ,
-                ...$files
+                ...$files,
             ]) < 2
         ),
         static fn () => (
