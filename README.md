@@ -9,10 +9,10 @@ However, most of it is based on the official PSR standards and only do slight st
 
 ## Getting started
 ```
-composer require-dev spaceemotion/phlint
+composer require-dev spaceemotion/phpcstd
 ```
 
-This will install the `phlint` binary to your vendor folder.
+This will install the `phpcstd` binary to your vendor folder.
 
 ```
 $ phpcstd [options] <files or folders>
