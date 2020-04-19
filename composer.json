@@ -1,0 +1,23 @@
+{
+    "name": "spaceemotion/php-coding-standard",
+    "type": "library",
+    "description": "Custom, opinionated php linting rules.",
+    "keywords": ["phpcs","linting","phpstan"],
+    "homepage": "https://github.com/spaceemotion/php-coding-standard",
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "spaceemotion",
+            "email": "hello@spaceemotion.net"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": ["bin/phlint"],
+    "config": {
+        "sort-packages": true
+    }
+}
