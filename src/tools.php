@@ -11,4 +11,11 @@ $tools = [
                 $flags['ci'] ? '--no-ansi --error-format=checkstyle' : '--ansi',
             ]) === 0
         ),
+        static fn () => (
+            run('phpmd', [
+                implode(',', $files),
+                $flags['ci'] ? 'xml' : 'ansi',
+                'phpmd.xml',
+            ]) === 0
+        ),
     ];

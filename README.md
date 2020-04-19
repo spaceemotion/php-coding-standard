@@ -35,6 +35,7 @@ $ phpcstd [options] <files or folders>
 Tool | Description
 -----|------------
 [phpstan](https://github.com/phpstan/phpstan) | Runs logical checks
+[PHP Mess Detector](https://github.com/phpmd/phpmd) | Tries to keep code complexity to a minimum
 
 ### Extensions used
 - **phpstan**
