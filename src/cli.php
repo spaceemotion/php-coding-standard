@@ -36,6 +36,10 @@ if ($flags['help']) {
 $files = array_slice($argv, count($options) + 1);
 
 if (count($files) === 0) {
+    $files = $config['source'] ?? [];
+}
+
+if (count($files) === 0) {
     echo 'No files specified.' . PHP_EOL;
     exit(1);
 }

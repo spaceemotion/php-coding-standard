@@ -13,7 +13,7 @@ function run(string $command, array $arguments): int
 {
     $arguments = implode(' ', $arguments);
 
-    $binary = PHPCSTD_ROOT . $command;
+    $binary = PHPCSTD_BINARY_PATH . $command;
 
     if (PHP_OS_FAMILY === 'Windows') {
         $binary = "{$binary}.bat";
