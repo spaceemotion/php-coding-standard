@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 function run(string $command, array $arguments): int
 {
-    $arguments = implode(' ', $arguments);
+    $joined = implode(' ', $arguments);
 
     $binary = PHPCSTD_BINARY_PATH . $command;
 
@@ -19,11 +19,11 @@ function run(string $command, array $arguments): int
         $binary = "{$binary}.bat";
     }
 
-    echo "-> {$command} {$arguments}" . PHP_EOL;
+    echo "-> {$command} {$joined}" . PHP_EOL;
 
     $exitCode = 0;
 
-    passthru("{$binary} {$arguments}", $exitCode);
+    passthru("{$binary} {$joined}", $exitCode);
 
     return $exitCode;
 }
