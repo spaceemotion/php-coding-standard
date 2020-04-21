@@ -6,13 +6,13 @@ declare(strict_types=1);
 $tools = $flags['fix']
     ? [
         static fn () => (
-            run('phpcbf', $files) === 0
+            run('ecs', ['check', ...$files, '--fix']) === 0
         ),
     ]
     : [
         static fn () => (
-            run('phpcs', [
-                $flags['ci'] ? '--no-colors --report=checkstyle' : '--colors --report=summary' ,
+            run('ecs', [
+                'check',
                 ...$files,
             ]) < 2
         ),
