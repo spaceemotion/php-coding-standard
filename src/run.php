@@ -8,6 +8,8 @@ declare(strict_types=1);
  *
  * @param string $command The raw binary name
  * @param string[] $arguments
+ *
+ * @return int The exit code of the command
  */
 function run(string $command, array $arguments): int
 {
