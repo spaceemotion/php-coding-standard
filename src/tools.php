@@ -6,7 +6,12 @@ declare(strict_types=1);
 $tools = $flags['fix']
     ? [
         static fn () => (
-            run('ecs', ['check', ...$files, '--fix']) === 0
+            run('ecs', [
+                'check',
+                ...$files,
+                '--output-format=json',
+                '--fix',
+            ]) === 0
         ),
     ]
     : [
@@ -14,13 +19,19 @@ $tools = $flags['fix']
             run('ecs', [
                 'check',
                 ...$files,
+                $flags['ci']
+                    ? '--no-progress-bar'
+                    : '',
+                '--output-format=json',
             ]) < 2
         ),
         static fn () => (
             run('phpstan', [
                 'analyse',
                 ...$files,
-                $flags['ci'] ? '--no-ansi --error-format=checkstyle' : '--ansi',
+                $flags['ci']
+                    ? '--no-ansi --error-format=checkstyle'
+                    : '--ansi --error-format=json',
             ]) === 0
         ),
         static fn () => (
