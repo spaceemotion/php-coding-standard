@@ -28,7 +28,7 @@ foreach (
     }
 }
 
-if (!defined('PHPCSTD_ROOT')) {
+if (! defined('PHPCSTD_ROOT')) {
     fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?');
     exit(1);
 }

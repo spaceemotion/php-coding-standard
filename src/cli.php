@@ -27,7 +27,7 @@ if ($flags['help']) {
     echo 'Options:' . PHP_EOL;
 
     foreach ($help as $flag => $message) {
-        echo "  --{$flag}" . PHP_EOL . "    $message" . PHP_EOL . PHP_EOL;
+        echo "  --{$flag}" . PHP_EOL . "    ${message}" . PHP_EOL . PHP_EOL;
     }
 
     exit;
