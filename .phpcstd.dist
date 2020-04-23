@@ -1,2 +1,5 @@
 ; Define a list of source folders to check against
 source[] = src
+
+; Runs the command with --fix enabled before continuing as usual
+autofix = true

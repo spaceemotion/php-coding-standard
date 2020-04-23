@@ -75,6 +75,15 @@ class Cli
         $context->isFixing = $this->hasFlag(self::FLAG_FIX);
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);
 
+        if (! $context->isFixing && $this->config->shouldAutoFix()) {
+            $context->isFixing = true;
+
+            // Ignore any errors, as they most likely will come up in the regular run
+            $this->executeContext($tools, $context);
+
+            $context->isFixing = false;
+        }
+
         return $this->executeContext($tools, $context);
     }
 

@@ -36,4 +36,9 @@ class Config
     {
         return (bool) ($this->config['continue'] ?? false);
     }
+
+    public function shouldAutoFix(): bool
+    {
+        return (bool) ($this->config['autofix'] ?? false);
+    }
 }
