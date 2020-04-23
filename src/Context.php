@@ -8,9 +8,9 @@ class Context
 {
     public Config $config;
 
-    public array $files;
+    public array $files = [];
 
-    public bool $isFixing;
+    public bool $isFixing = false;
 
-    public bool $runningInCi;
+    public bool $runningInCi = false;
 }
