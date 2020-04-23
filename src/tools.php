@@ -22,8 +22,7 @@ $tools = $flags['fix']
                 $flags['ci']
                     ? '--no-progress-bar'
                     : '',
-                '--output-format=json',
-            ]) < 2
+            ]) === 0
         ),
         static fn () => (
             run('phpstan', [
@@ -31,7 +30,7 @@ $tools = $flags['fix']
                 ...$files,
                 $flags['ci']
                     ? '--no-ansi --error-format=checkstyle'
-                    : '--ansi --error-format=json',
+                    : '--ansi',
             ]) === 0
         ),
         static fn () => (
