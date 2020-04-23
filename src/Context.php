@@ -13,4 +13,6 @@ class Context
     public bool $isFixing = false;
 
     public bool $runningInCi = false;
+
+    public array $toolsExecuted = [];
 }

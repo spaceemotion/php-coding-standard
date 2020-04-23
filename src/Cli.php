@@ -27,6 +27,8 @@ class Cli
 
     private array $flags;
 
+    private Config $config;
+
     public function __construct(array $arguments)
     {
         $options = getopt('', array_keys(self::OPTIONS));
@@ -47,46 +49,38 @@ class Cli
      * Starts the whole application.
      *
      * @param Tool[] $tools A list of supported tools
-     * @return int Exit code
+     * @return bool Success state
      */
-    public function start(array $tools): int
+    public function start(array $tools): bool
     {
         if ($this->hasFlag(self::FLAG_HELP)) {
             $this->showHelp();
-            return 0;
+            return true;
+        }
+
+        $this->config = new Config();
+
+        if (count($this->files) === 0) {
+            $this->files = $this->config->getSources();
+        }
+
+        if (count($this->files) === 0) {
+            echo 'No files specified.' . PHP_EOL;
+            return false;
         }
 
         $context = new Context();
-        $context->config = new Config();
-        $context->files = $this->getFiles() ?: $context->config->getSources();
+        $context->config = $this->config;
+        $context->files = $this->files;
         $context->isFixing = $this->hasFlag(self::FLAG_FIX);
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);
 
-        if (count($context->files) === 0) {
-            echo 'No files specified.' . PHP_EOL;
-            return 1;
-        }
-
-        $continue = $this->hasFlag(self::FLAG_CONTINUE) || $context->config->shouldContinue();
-
-        foreach ($tools as $tool) {
-            if (! $tool->run($context) && ! $continue) {
-                echo PHP_EOL;
-                return 1;
-            }
-        }
-
-        return 0;
+        return $this->executeContext($tools, $context);
     }
 
-    public function hasFlag(string $flag): bool
+    private function hasFlag(string $flag): bool
     {
         return array_key_exists($flag, $this->flags) && $this->flags[$flag] === true;
-    }
-
-    public function getFiles(): array
-    {
-        return $this->files;
     }
 
     /**
@@ -102,5 +96,27 @@ class Cli
         foreach (self::OPTIONS as $flag => $message) {
             echo "  --{$flag}" . PHP_EOL . "    ${message}" . PHP_EOL . PHP_EOL;
         }
+    }
+
+    /**
+     * @param Tool[] $tools
+     */
+    private function executeContext(array $tools, Context $context): bool
+    {
+        $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
+
+        foreach ($tools as $tool) {
+            if (! $tool->shouldRun($context)) {
+                continue;
+            }
+
+            if (! $tool->run($context) && ! $continue) {
+                return false;
+            }
+
+            $context->toolsExecuted[] = get_class($tool);
+        }
+
+        return true;
     }
 }

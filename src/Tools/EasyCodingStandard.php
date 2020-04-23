@@ -8,6 +8,8 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 class EasyCodingStandard extends Tool
 {
+    protected bool $canFix = true;
+
     public function run(Context $context): bool
     {
         return $this->execute('ecs', [

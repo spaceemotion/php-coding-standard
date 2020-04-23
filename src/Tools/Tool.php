@@ -8,7 +8,29 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 abstract class Tool
 {
+    /** @var bool Indicates whether this tool can auto-fix any violations it finds */
+    protected bool $canFix = false;
+
+    /**
+     * Runs this tool with the given context.
+     */
     abstract public function run(Context $context): bool;
+
+    /**
+     * Indicates if this should should run for the given context.
+     */
+    public function shouldRun(Context $context): bool
+    {
+        if (in_array(static::class, $context->toolsExecuted, true)) {
+            return false;
+        }
+
+        if ($context->isFixing) {
+            return $this->canFix;
+        }
+
+        return true;
+    }
 
     /**
      * Runs the given command list in sequence.

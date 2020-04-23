@@ -10,4 +10,4 @@ exit((new Cli($argv))->start([
     new Tools\EasyCodingStandard(),
     new Tools\PhpMessDetector(),
     new Tools\Phpstan(),
-]));
+]) ? 1 : 0);
