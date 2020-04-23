@@ -16,7 +16,7 @@ class Cli
 
     public const FLAG_HELP = 'help';
 
-    private const HELP = [
+    private const OPTIONS = [
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',
@@ -29,14 +29,14 @@ class Cli
 
     public function __construct(array $arguments)
     {
-        $options = getopt('', array_keys(self::HELP));
+        $options = getopt('', array_keys(self::OPTIONS));
 
         $this->flags = array_combine(
-            array_keys(self::HELP),
+            array_keys(self::OPTIONS),
             array_map(
                 static fn ($key, $flag) => array_key_exists($flag, $options),
-                self::HELP,
-                array_keys(self::HELP),
+                self::OPTIONS,
+                array_keys(self::OPTIONS),
             ),
         );
 
@@ -99,7 +99,7 @@ class Cli
 
         echo 'Options:' . PHP_EOL;
 
-        foreach (self::HELP as $flag => $message) {
+        foreach (self::OPTIONS as $flag => $message) {
             echo "  --{$flag}" . PHP_EOL . "    ${message}" . PHP_EOL . PHP_EOL;
         }
     }
