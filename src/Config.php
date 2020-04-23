@@ -34,6 +34,6 @@ class Config
 
     public function shouldContinue(): bool
     {
-        return $this->config['continue'] ?? false;
+        return (bool) ($this->config['continue'] ?? false);
     }
 }
