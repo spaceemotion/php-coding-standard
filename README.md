@@ -14,7 +14,7 @@ However, most of it is using the official PSR standards and only do slight style
 
 ## Getting started
 ```
-composer require-dev spaceemotion/phpcstd
+composer require-dev spaceemotion/php-coding-standard
 ```
 
 This will install the `phpcstd` binary to your vendor folder.
