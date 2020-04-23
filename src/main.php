@@ -10,6 +10,7 @@ require_once 'tools.php';
 // Execute stuff
 foreach ($tools as $callback) {
     if (! $callback() && ! $flags['continue']) {
+        echo PHP_EOL;
         exit(1);
     }
 }

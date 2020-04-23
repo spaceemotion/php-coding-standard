@@ -29,7 +29,7 @@ foreach (
 }
 
 if (! defined('PHPCSTD_ROOT')) {
-    fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?');
+    fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?' . PHP_EOL);
     exit(1);
 }
 
