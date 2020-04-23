@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-require_once 'init.php';
-require_once 'cli.php';
-require_once 'run.php';
-require_once 'tools.php';
+namespace Spaceemotion\PhpCodingStandard;
 
-// Execute stuff
-foreach ($tools as $callback) {
-    if (! $callback() && ! $flags['continue']) {
-        echo PHP_EOL;
-        exit(1);
-    }
-}
+require_once 'init.php';
+
+exit((new Cli($argv))->start([
+    new Tools\EasyCodingStandard(),
+    new Tools\PhpMessDetector(),
+    new Tools\Phpstan(),
+]));

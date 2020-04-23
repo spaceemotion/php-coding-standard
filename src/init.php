@@ -22,8 +22,6 @@ foreach (
             . DIRECTORY_SEPARATOR,
         );
 
-        echo 'Running in ' . PHPCSTD_BINARY_PATH . PHP_EOL;
-
         break;
     }
 }
@@ -33,4 +31,6 @@ if (! defined('PHPCSTD_ROOT')) {
     exit(1);
 }
 
-$config = parse_ini_file(PHPCSTD_ROOT . 'phpcstd.ini');
+unset($autoloadFile);
+
+require_once __DIR__ . '/../vendor/autoload.php';
