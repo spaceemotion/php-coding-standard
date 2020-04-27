@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 (static function () {
     // Find root "bin" folder for composer installation
-    $autoloadFile = 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+    static $autoloadFile = 'vendor/autoload.php';
 
     foreach (
         [
-            __DIR__ . DIRECTORY_SEPARATOR . '..',
-            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..',
+            __DIR__ . '/..',
+            __DIR__ . '/../..',
         ] as $path
     ) {
-        if (file_exists($path . DIRECTORY_SEPARATOR . $autoloadFile)) {
-            define('PHPCSTD_ROOT', $path . DIRECTORY_SEPARATOR);
-
-            define(
-                'PHPCSTD_BINARY_PATH',
-                $path
-                . DIRECTORY_SEPARATOR . 'vendor'
-                . DIRECTORY_SEPARATOR . 'bin'
-                . DIRECTORY_SEPARATOR,
-            );
+        if (file_exists("{$path}/{$autoloadFile}")) {
+            define('PHPCSTD_ROOT', "{$path}/");
+            define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
             break;
         }
