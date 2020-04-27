@@ -27,7 +27,7 @@
         "phpstan/phpstan-mockery": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "symplify/easy-coding-standard": "^7.2"
+        "symplify/easy-coding-standard-prefixed": "^7.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
