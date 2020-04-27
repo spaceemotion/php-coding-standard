@@ -3,3 +3,15 @@ source[] = src
 
 ; Runs the command with --fix enabled before continuing as usual
 autofix = true
+
+; Configuration for Easy Coding Standard
+[ecs]
+enabled = true
+
+; Configuration for PHP Mess Detector
+[phpmd]
+enabled = true
+
+; Configuration for phpstan
+[phpstan]
+enabled = true

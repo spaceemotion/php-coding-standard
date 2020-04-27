@@ -19,7 +19,7 @@ class Config
             return;
         }
 
-        $this->config = parse_ini_file($path);
+        $this->config = parse_ini_file($path, true);
     }
 
     /**
@@ -40,5 +40,10 @@ class Config
     public function shouldAutoFix(): bool
     {
         return (bool) ($this->config['autofix'] ?? false);
+    }
+
+    public function isEnabled(string $toolName): bool
+    {
+        return (bool) ($this->config[$toolName]['enabled'] ?? true);
     }
 }

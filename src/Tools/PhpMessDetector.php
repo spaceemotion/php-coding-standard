@@ -8,6 +8,8 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 class PhpMessDetector extends Tool
 {
+    protected string $name = 'phpmd';
+
     public function run(Context $context): bool
     {
         return $this->execute('phpmd', [

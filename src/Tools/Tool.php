@@ -11,6 +11,9 @@ abstract class Tool
     /** @var bool Indicates whether this tool can auto-fix any violations it finds */
     protected bool $canFix = false;
 
+    /** @var string A short name for the tool to be used in the config */
+    protected string $name = '';
+
     /**
      * Runs this tool with the given context.
      */
@@ -21,6 +24,10 @@ abstract class Tool
      */
     public function shouldRun(Context $context): bool
     {
+        if (! $context->config->isEnabled($this->name)) {
+            return false;
+        }
+
         if (in_array(static::class, $context->toolsExecuted, true)) {
             return false;
         }

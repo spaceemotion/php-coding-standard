@@ -10,6 +10,8 @@ class EasyCodingStandard extends Tool
 {
     protected bool $canFix = true;
 
+    protected string $name = 'ecs';
+
     public function run(Context $context): bool
     {
         return $this->execute('ecs', [

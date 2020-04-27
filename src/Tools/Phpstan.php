@@ -8,6 +8,8 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 class Phpstan extends Tool
 {
+    protected string $name = 'phpstan';
+
     public function run(Context $context): bool
     {
         return $this->execute('phpstan', [
