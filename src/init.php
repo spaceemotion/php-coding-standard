@@ -25,4 +25,7 @@ declare(strict_types=1);
         fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?' . PHP_EOL);
         exit(1);
     }
+
+    // Try to grab as much memory as we can
+    ini_set('memory_limit', '-1');
 })();
