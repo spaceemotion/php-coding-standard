@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-(static function () {
+(static function (): void {
     // Find root "bin" folder for composer installation
     static $autoloadFile = 'vendor/autoload.php';
 
@@ -20,7 +20,7 @@ declare(strict_types=1);
         }
     }
 
-    if (!defined('PHPCSTD_ROOT')) {
+    if (! defined('PHPCSTD_ROOT')) {
         fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?' . PHP_EOL);
         exit(1);
     }

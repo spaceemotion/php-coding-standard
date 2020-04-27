@@ -67,7 +67,7 @@ class Cli
             $this->files = $this->config->getSources();
         }
 
-        $this->files = array_filter(array_map('trim', $this->files,));
+        $this->files = array_filter(array_map('trim', $this->files));
 
         if (count($this->files) === 0) {
             echo 'No files specified.' . PHP_EOL;
