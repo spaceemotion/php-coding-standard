@@ -6,6 +6,9 @@ namespace Spaceemotion\PhpCodingStandard;
 
 use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
+use function array_map;
+use function array_filter;
+
 class Cli
 {
     public const FLAG_CI = 'ci';
@@ -63,6 +66,8 @@ class Cli
         if (count($this->files) === 0) {
             $this->files = $this->config->getSources();
         }
+
+        $this->files = array_filter(array_map('trim', $this->files,));
 
         if (count($this->files) === 0) {
             echo 'No files specified.' . PHP_EOL;
