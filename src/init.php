@@ -15,6 +15,8 @@ declare(strict_types=1);
             define('PHPCSTD_ROOT', "{$path}/");
             define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
+            require_once "{$path}/vendor/autoload.php";
+
             break;
         }
     }
@@ -23,6 +25,4 @@ declare(strict_types=1);
         fwrite(STDERR, 'Vendor folder not found. Did you forget to run "composer install"?' . PHP_EOL);
         exit(1);
     }
-
-    require_once __DIR__ . '/../vendor/autoload.php';
 })();
