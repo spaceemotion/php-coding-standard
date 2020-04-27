@@ -6,11 +6,10 @@ declare(strict_types=1);
     // Find root "bin" folder for composer installation
     static $autoloadFile = 'vendor/autoload.php';
 
-    foreach (
-        [
-            __DIR__ . '/..',
-            __DIR__ . '/../..',
-        ] as $path
+    for (
+        $path = __DIR__ . '/', $level = 0;
+        $level <= 3;
+        $path .= '/..', $level++
     ) {
         if (file_exists("{$path}/{$autoloadFile}")) {
             define('PHPCSTD_ROOT', "{$path}/");
