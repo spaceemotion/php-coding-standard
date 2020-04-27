@@ -45,7 +45,6 @@ Tool | Description
 
 ### Extensions used
 - **phpstan**
-  - nunomaduro/larastan
   - phpstan/phpstan-deprecation-rules
   - phpstan/phpstan-mockery
   - phpstan/phpstan-phpunit
