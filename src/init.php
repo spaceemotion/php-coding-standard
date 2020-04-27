@@ -28,4 +28,7 @@ declare(strict_types=1);
 
     // Try to grab as much memory as we can
     ini_set('memory_limit', '-1');
+
+    // Don't run with XDebug enabled to improve performance
+    (new \Composer\XdebugHandler\XdebugHandler('phpcstd'))->check();
 })();

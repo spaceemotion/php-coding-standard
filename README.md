@@ -50,3 +50,9 @@ Tool | Description
   - phpstan/phpstan-mockery
   - phpstan/phpstan-phpunit
   - phpstan/phpstan-strict-rules
+
+## Development
+### Using XDebug
+This project uses [composer/xdebug-handler](https://github.com/composer/xdebug-handler) to improve performance
+by disabling xdebug upon startup. To enable XDebug during development you need to set the following env variable:
+`MYAPP_ALLOW_XDEBUG=1` (as written in their README).
