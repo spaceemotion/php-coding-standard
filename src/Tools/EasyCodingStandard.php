@@ -14,7 +14,7 @@ class EasyCodingStandard extends Tool
 
     public function run(Context $context): bool
     {
-        return $this->execute('ecs', [
+        return $this->execute($this->name, [
             'check',
             ...$context->files,
             $context->isFixing ? '--fix' : '',

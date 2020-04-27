@@ -12,7 +12,7 @@ class Phpstan extends Tool
 
     public function run(Context $context): bool
     {
-        return $this->execute('phpstan', [
+        return $this->execute($this->name, [
             'analyse',
             ...$context->files,
             $context->runningInCi

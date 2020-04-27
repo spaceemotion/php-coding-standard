@@ -12,7 +12,7 @@ class PhpMessDetector extends Tool
 
     public function run(Context $context): bool
     {
-        return $this->execute('phpmd', [
+        return $this->execute($this->name, [
             implode(',', $context->files),
             $context->runningInCi ? 'xml' : 'ansi',
             'phpmd.xml',
