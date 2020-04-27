@@ -50,6 +50,7 @@ abstract class Tool
      */
     protected function execute(string $command, array $arguments): int
     {
+        $arguments = array_map('escapeshellarg', $arguments);
         $joined = implode(' ', $arguments);
 
         $binary = PHPCSTD_BINARY_PATH . $command;
