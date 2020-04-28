@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard;
 
+use RuntimeException;
+
 class Config
 {
     private array $config;
@@ -19,7 +21,15 @@ class Config
             return;
         }
 
-        $this->config = parse_ini_file($path, true);
+        $config = parse_ini_file($path, true);
+
+        if ($config === false) {
+            throw new RuntimeException(
+                'Unable to parse config. Please make sure that it\'s a valid ini formatted file.'
+            );
+        }
+
+        $this->config = $config;
     }
 
     /**
