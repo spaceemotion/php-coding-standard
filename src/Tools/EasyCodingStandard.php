@@ -11,25 +11,29 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class EasyCodingStandard extends Tool
 {
-    protected bool $canFix = true;
-
-    protected string $name = 'ecs';
+    protected $name = 'ecs';
 
     public function run(Context $context): bool
     {
         $output = [];
 
-        if ($this->execute($this->name, [
-            'check',
-            ...$context->files,
-            ...($context->isFixing ? ['--fix'] : []),
-            '--no-progress-bar',
-            '--output-format=json',
-        ], $output) === 0) {
+        if ($this->execute($this->name, array_merge(
+            [
+                'check',
+                '--no-progress-bar',
+                '--output-format=json',
+            ],
+            $context->isFixing ? ['--fix'] : [],
+            $context->files
+        ), $output) === 0) {
             return true;
         }
 
-        $json = json_decode(implode('', $output), true, 512, JSON_THROW_ON_ERROR);
+        $json = self::parseJson(implode('', $output));
+
+        if ($json === []) {
+            return false;
+        }
 
         $result = new Result();
 

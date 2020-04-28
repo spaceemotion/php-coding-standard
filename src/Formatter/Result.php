@@ -7,7 +7,7 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 class Result
 {
     /** @var array<string, File>|File[] */
-    public array $files = [];
+    public $files = [];
 
     public function add(self $result): self
     {

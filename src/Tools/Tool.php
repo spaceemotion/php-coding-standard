@@ -9,10 +9,10 @@ use Spaceemotion\PhpCodingStandard\Context;
 abstract class Tool
 {
     /** @var bool Indicates whether this tool can auto-fix any violations it finds */
-    protected bool $canFix = false;
+    protected $canFix = false;
 
     /** @var string A short name for the tool to be used in the config */
-    protected string $name = '';
+    protected $name = '';
 
     /**
      * Runs this tool with the given context.
@@ -72,5 +72,16 @@ abstract class Tool
         passthru("{$binary} {$joined}", $exitCode);
 
         return $exitCode;
+    }
+
+    protected static function parseJson(string $raw): array
+    {
+        $json = json_decode($raw, true, 512);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $json;
+        }
+
+        return [];
     }
 }

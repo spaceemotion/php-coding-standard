@@ -33,7 +33,7 @@ class ConsoleFormatter implements Formatter
 
                 $severity = self::colorize(
                     self::COLOR_BY_SEVERITY[$violation->severity],
-                    strtoupper($violation->severity),
+                    strtoupper($violation->severity)
                 );
 
                 $tool = self::colorize('gray', "({$violation->tool})");
@@ -55,9 +55,11 @@ class ConsoleFormatter implements Formatter
         }
 
         echo PHP_EOL . 'Results: ' . implode(', ', array_map(
-            static fn (int $count, string $key) => "${count} ${key}(s)",
+            static function (int $count, string $key): string {
+                return "${count} ${key}(s)";
+            },
             $counts,
-            array_keys($counts),
+            array_keys($counts)
         )) . PHP_EOL;
     }
 

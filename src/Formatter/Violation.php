@@ -10,15 +10,21 @@ class Violation
 
     public const SEVERITY_ERROR = 'error';
 
-    public int $line = 0;
+    /** @var int */
+    public $line = 0;
 
-    public int $column = 0;
+    /** @var int */
+    public $column = 0;
 
-    public string $severity = self::SEVERITY_ERROR;
+    /** @var string */
+    public $severity = self::SEVERITY_ERROR;
 
-    public string $message = '';
+    /** @var string */
+    public $message = '';
 
-    public string $source = '';
+    /** @var string */
+    public $source = '';
 
-    public string $tool = '';
+    /** @var string */
+    public $tool = '';
 }

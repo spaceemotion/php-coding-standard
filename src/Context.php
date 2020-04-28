@@ -8,17 +8,23 @@ use Spaceemotion\PhpCodingStandard\Formatter\Result;
 
 class Context
 {
-    public Config $config;
+    /** @var Config */
+    public $config;
 
-    public array $files = [];
+    /** @var array */
+    public $files = [];
 
-    public bool $isFixing = false;
+    /** @var bool */
+    public $isFixing = false;
 
-    public bool $runningInCi = false;
+    /** @var bool */
+    public $runningInCi = false;
 
-    public array $toolsExecuted = [];
+    /** @var array */
+    public $toolsExecuted = [];
 
-    public Result $result;
+    /** @var Result */
+    public $result;
 
     public function __construct()
     {

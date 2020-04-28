@@ -17,15 +17,18 @@ class PhpParallelLint extends Tool
     {
         $output = [];
 
-        if ($this->execute($this->name, [
-            '--no-progress',
-            ...$context->files,
-            '--json',
-        ], $output) === 0) {
+        if ($this->execute($this->name, array_merge(
+            ['--no-progress', '--json'],
+            $context->files
+        ), $output) === 0) {
             return true;
         }
 
-        $json = json_decode($output[count($output) - 1], true, 512);
+        $json = self::parseJson($output[count($output) - 1]);
+
+        if ($json === []) {
+            return false;
+        }
 
         foreach ($json['results']['errors'] as $error) {
             $message = self::removeFromEnd(

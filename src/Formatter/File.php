@@ -7,7 +7,7 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 class File
 {
     /** @var Violation[] */
-    public array $violations = [];
+    public $violations = [];
 
     public function add(self $file): self
     {

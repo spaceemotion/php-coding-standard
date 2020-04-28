@@ -11,7 +11,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class PhpMessDetector extends Tool
 {
-    protected string $name = 'phpmd';
+    protected $name = 'phpmd';
 
     public function run(Context $context): bool
     {
@@ -25,7 +25,12 @@ class PhpMessDetector extends Tool
             return true;
         }
 
-        $json = json_decode(implode('', $output), true, 512, JSON_THROW_ON_ERROR);
+        $json = self::parseJson(implode('', $output));
+
+        if ($json === []) {
+            return false;
+        }
+
         $result = new Result();
 
         foreach ($json['files'] as $entry) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard;
 
+use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Formatter\ConsoleFormatter;
 use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
@@ -27,24 +28,23 @@ class Cli
         self::FLAG_HELP => 'Displays this help message',
     ];
 
-    private array $files;
+    /** @var string[] */
+    private $files;
 
-    private array $flags;
+    /** @var array<string, bool>|bool[] */
+    private $flags;
 
-    private Config $config;
+    /** @var Config */
+    private $config;
 
+    /**
+     * @param string[] $arguments
+     */
     public function __construct(array $arguments)
     {
         $options = getopt('', array_keys(self::OPTIONS));
 
-        $this->flags = array_combine(
-            array_keys(self::OPTIONS),
-            array_map(
-                static fn ($key, $flag) => array_key_exists($flag, $options),
-                self::OPTIONS,
-                array_keys(self::OPTIONS),
-            ),
-        );
+        $this->flags = $this->parseFlags($options);
 
         $this->files = array_slice($arguments, count($options) + 1);
     }
@@ -137,5 +137,29 @@ class Cli
         }
 
         return true;
+    }
+
+    /**
+     * @param mixed[] $options
+     * @return array<string, bool>
+     */
+    private function parseFlags(array $options): array
+    {
+        $flags = array_combine(
+            array_keys(self::OPTIONS),
+            array_map(
+                static function ($key, $flag) use ($options): bool {
+                    return array_key_exists($flag, $options);
+                },
+                self::OPTIONS,
+                array_keys(self::OPTIONS)
+            )
+        );
+
+        if ($flags === false) {
+            throw new RuntimeException('Unable to parse flags');
+        }
+
+        return $flags;
     }
 }

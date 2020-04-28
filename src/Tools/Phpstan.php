@@ -11,26 +11,32 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class Phpstan extends Tool
 {
-    protected string $name = 'phpstan';
+    protected $name = 'phpstan';
 
     public function run(Context $context): bool
     {
         $output = [];
 
-        if ($this->execute($this->name, [
-            'analyse',
-            ...$context->files,
-            '--error-format=json',
-            '--no-progress',
-            '--no-ansi',
-            '--no-interaction',
-        ], $output) === 0) {
+        if ($this->execute($this->name, array_merge(
+            [
+                'analyse',
+                '--error-format=json',
+                '--no-progress',
+                '--no-ansi',
+                '--no-interaction',
+            ],
+            $context->files
+        ), $output) === 0) {
             return true;
         }
 
-        $json = json_decode($output[count($output) - 1], true, 512, JSON_THROW_ON_ERROR);
-
+        $lastLine = $output[count($output) - 1];
+        $json = self::parseJson($lastLine);
         $result = new Result();
+
+        if ($json === []) {
+            return false;
+        }
 
         foreach ($json['files'] as $filename => $details) {
             $file = new File();
