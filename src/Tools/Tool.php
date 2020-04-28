@@ -48,6 +48,10 @@ abstract class Tool
      */
     protected function execute(string $command, array $arguments, ?array &$output = null): int
     {
+        $arguments = array_filter($arguments, static function ($argument): bool {
+            return $argument !== '';
+        });
+
         $arguments = array_map('escapeshellarg', $arguments);
         $joined = implode(' ', $arguments);
 
