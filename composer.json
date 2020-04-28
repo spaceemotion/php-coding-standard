@@ -33,6 +33,7 @@
         "symplify/easy-coding-standard-prefixed": "^7.2"
     },
     "suggest": {
+        "ergebnis/composer-normalize": "Normalizes composer.json files",
         "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
         "phpmd/phpmd": "Code mess detection",
         "phpstan/phpstan": "Static analysis",

@@ -24,3 +24,10 @@ enabled = true
 ; Configuration for php-parallel-lint
 [parallel-lint]
 enabled = true
+
+; Configuration for the "composer normalize" plugin
+[composer-normalize]
+enabled = true
+
+; The path to the composer binary
+binary = "composer"
