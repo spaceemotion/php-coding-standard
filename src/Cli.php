@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard;
 
+use Spaceemotion\PhpCodingStandard\Formatter\ConsoleFormatter;
 use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
 use function array_map;
@@ -89,7 +90,11 @@ class Cli
             $context->isFixing = false;
         }
 
-        return $this->executeContext($tools, $context);
+        $code = $this->executeContext($tools, $context);
+
+        (new ConsoleFormatter())->format($context->result);
+
+        return $code;
     }
 
     private function hasFlag(string $flag): bool
