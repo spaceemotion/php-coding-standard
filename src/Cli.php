@@ -70,7 +70,7 @@ class Cli
 
         $this->files = array_filter(
             array_filter(array_map('trim', $this->files)),
-            static function (string $path) {
+            static function (string $path): bool {
                 return is_file($path) || is_dir($path);
             }
         );

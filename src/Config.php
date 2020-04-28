@@ -58,6 +58,9 @@ class Config
         return (bool) ($this->config[$toolName]['enabled'] ?? false);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPart(string $toolName): array
     {
         $contents = $this->config[$toolName] ?? [];

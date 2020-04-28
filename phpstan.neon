@@ -4,3 +4,6 @@ includes:
 
 parameters:
     level: max
+
+    ignoreErrors:
+        -'#Constant PHPCSTD_#'

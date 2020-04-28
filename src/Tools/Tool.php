@@ -43,6 +43,7 @@ abstract class Tool
      *
      * @param string $binary The raw binary name
      * @param string[] $arguments
+     * @param string[] $output
      *
      * @return int The exit code of the command
      */
@@ -73,6 +74,9 @@ abstract class Tool
         return $binary;
     }
 
+    /**
+     * @return mixed[]
+     */
     protected static function parseJson(string $raw): array
     {
         $json = json_decode($raw, true, 512);

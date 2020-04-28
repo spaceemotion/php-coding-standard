@@ -11,7 +11,7 @@ class Context
     /** @var Config */
     public $config;
 
-    /** @var array */
+    /** @var string[] */
     public $files = [];
 
     /** @var bool */
@@ -20,7 +20,7 @@ class Context
     /** @var bool */
     public $runningInCi = false;
 
-    /** @var array */
+    /** @var string[] */
     public $toolsExecuted = [];
 
     /** @var Result */
