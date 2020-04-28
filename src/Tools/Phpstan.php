@@ -35,6 +35,25 @@ class Phpstan extends Tool
         $result = new Result();
 
         if ($json === []) {
+            $match = [];
+
+            if (preg_match('/(.*) in (.*?) on line (\d+)$/i', $lastLine, $match) === false) {
+                return false;
+            }
+
+            $file = new File();
+
+            $violation = new Violation();
+            $violation->line = $match[3];
+            $violation->message = $match[1];
+            $violation->tool = $this->name;
+
+            $file->violations[] = $violation;
+
+            $result->files[$match[2]] = $file;
+
+            $context->addResult($result);
+
             return false;
         }
 
