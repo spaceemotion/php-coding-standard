@@ -59,13 +59,7 @@ abstract class Tool
 
         $exitCode = 0;
 
-        if ($output !== null) {
-            exec("{$binary} {$joined} 2>&1", $output, $exitCode);
-
-            return $exitCode;
-        }
-
-        passthru("{$binary} {$joined}", $exitCode);
+        exec("{$binary} {$joined} 2>&1", $output, $exitCode);
 
         return $exitCode;
     }
