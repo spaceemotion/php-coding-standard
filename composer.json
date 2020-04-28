@@ -1,8 +1,15 @@
 {
     "name": "spaceemotion/php-coding-standard",
     "type": "library",
-    "description": "Custom, opinionated php linting rules.",
-    "keywords": ["phpcs","linting","phpstan", "phpmd"],
+    "description": "Combines multiple code quality tools into one binary with unified output.",
+    "keywords": [
+        "phpcs",
+        "linting",
+        "phpstan",
+        "phpmd",
+        "analysis",
+        "code quality"
+    ],
     "homepage": "https://github.com/spaceemotion/php-coding-standard",
     "license": "ISC",
     "authors": [
@@ -17,6 +24,7 @@
         "composer/xdebug-handler": "^1.0"
     },
     "require-dev": {
+        "ergebnis/composer-normalize": "^2.4",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpmd/phpmd": "^2.8",
         "phpstan/phpstan": "^0.12",
@@ -25,11 +33,14 @@
         "symplify/easy-coding-standard-prefixed": "^7.2"
     },
     "suggest": {
-        "phpstan/phpstan": "Static analysis",
+        "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
         "phpmd/phpmd": "Code mess detection",
-        "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
+        "phpstan/phpstan": "Static analysis",
         "symplify/easy-coding-standard": "Code style linter + fixer",
-        "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors"
+        "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -38,8 +49,7 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["bin/phpcstd"],
-    "config": {
-        "sort-packages": true
-    }
+    "bin": [
+        "bin/phpcstd"
+    ]
 }
