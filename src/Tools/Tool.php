@@ -32,6 +32,11 @@ abstract class Tool
         return true;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     /**
      * Runs the given command list in sequence.
      * On windows, the .bat file will be executed instead.
@@ -52,19 +57,13 @@ abstract class Tool
             $binary = "{$binary}.bat";
         }
 
-        echo "-> {$command}: ";
-
         $exitCode = 0;
 
         if ($output !== null) {
             exec("{$binary} {$joined} 2>&1", $output, $exitCode);
 
-            echo($exitCode > 0 ? 'FAIL' : 'OK') . PHP_EOL;
-
             return $exitCode;
         }
-
-        echo PHP_EOL;
 
         passthru("{$binary} {$joined}", $exitCode);
 

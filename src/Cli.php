@@ -116,13 +116,23 @@ class Cli
         $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
 
         foreach ($tools as $tool) {
+            echo "-> {$tool->getName()}: ";
+
             if (! $tool->shouldRun($context)) {
+                echo 'SKIP' . PHP_EOL;
                 continue;
             }
 
             $context->toolsExecuted[] = get_class($tool);
 
-            if (! $tool->run($context) && ! $continue) {
+            if ($tool->run($context)) {
+                echo 'OK' . PHP_EOL;
+                continue;
+            }
+
+            echo 'FAIL' . PHP_EOL;
+
+            if (! $continue) {
                 return false;
             }
         }
