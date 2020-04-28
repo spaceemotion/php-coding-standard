@@ -8,7 +8,7 @@ declare(strict_types=1);
 
     for (
         $path = __DIR__, $level = 0;
-        $level <= 3;
+        $level <= 4;
         $path .= '/..', $level++
     ) {
         if (file_exists("{$path}/{$autoloadFile}")) {
