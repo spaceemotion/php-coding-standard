@@ -26,7 +26,7 @@ class ConsoleFormatter implements Formatter
         ];
 
         foreach ($result->files as $path => $file) {
-            echo PHP_EOL . self::colorize('green', "- ${path}") . PHP_EOL;
+            echo PHP_EOL . self::colorize('green', $path) . PHP_EOL;
 
             $violationsSorted = self::sortByLineNumber($file->violations);
 
