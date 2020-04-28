@@ -28,7 +28,9 @@ class ConsoleFormatter implements Formatter
         foreach ($result->files as $path => $file) {
             echo PHP_EOL . self::colorize('green', "- ${path}") . PHP_EOL;
 
-            foreach ($file->violations as $idx => $violation) {
+            $violationsSorted = self::sortByLineNumber($file->violations);
+
+            foreach ($violationsSorted as $idx => $violation) {
                 $counts[$violation->severity]++;
 
                 $severity = self::colorize(
@@ -48,7 +50,7 @@ class ConsoleFormatter implements Formatter
                     . self::colorize('gray', $violation->source)
                     . PHP_EOL;
 
-                if ($idx < count($file->violations) - 1) {
+                if ($idx < count($violationsSorted) - 1) {
                     echo PHP_EOL;
                 }
             }
@@ -66,5 +68,21 @@ class ConsoleFormatter implements Formatter
     private static function colorize(string $color, string $text): string
     {
         return "\033[" . self::COLORS[$color] . 'm' . $text . "\033[0m";
+    }
+
+    /**
+     * @param Violation[] $violations
+     * @return Violation[]
+     */
+    private static function sortByLineNumber(array $violations): array
+    {
+        uasort(
+            $violations,
+            static function (Violation $first, Violation $second): int {
+                return $first->line <=> $second->line;
+            }
+        );
+
+        return array_values($violations);
     }
 }
