@@ -17,6 +17,7 @@
         "composer/xdebug-handler": "^1.0"
     },
     "require-dev": {
+        "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpmd/phpmd": "^2.8",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
@@ -27,7 +28,8 @@
         "phpstan/phpstan": "Static analysis",
         "phpmd/phpmd": "Code mess detection",
         "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
-        "symplify/easy-coding-standard": "Code style linter + fixer"
+        "symplify/easy-coding-standard": "Code style linter + fixer",
+        "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors"
     },
     "autoload": {
         "psr-4": {

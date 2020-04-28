@@ -129,11 +129,11 @@ class Cli
                 continue;
             }
 
+            $context->toolsExecuted[] = get_class($tool);
+
             if (! $tool->run($context) && ! $continue) {
                 return false;
             }
-
-            $context->toolsExecuted[] = get_class($tool);
         }
 
         return true;

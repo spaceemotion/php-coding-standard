@@ -15,3 +15,7 @@ enabled = true
 ; Configuration for phpstan
 [phpstan]
 enabled = true
+
+; Configuration for php-parallel-lint
+[parallel-lint]
+enabled = true
