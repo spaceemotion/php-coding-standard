@@ -4,6 +4,11 @@ source[] = src
 ; Runs the command with --fix enabled before continuing as usual
 autofix = true
 
+; Indicates whether the run should continue whenever an error has been found
+; This might reduce the time running phpcstd against your codebase,
+; but also requires multiple runs to find all errors.
+continue = false
+
 ; Configuration for Easy Coding Standard
 [ecs]
 enabled = true
