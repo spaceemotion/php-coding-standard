@@ -48,7 +48,7 @@ abstract class Tool
      *
      * @return int The exit code of the command
      */
-    protected function execute(string $command, array $arguments): int
+    protected function execute(string $command, array $arguments, ?array &$output = null): int
     {
         $arguments = array_map('escapeshellarg', $arguments);
         $joined = implode(' ', $arguments);
@@ -62,6 +62,12 @@ abstract class Tool
         echo "-> {$command} {$joined}" . PHP_EOL;
 
         $exitCode = 0;
+
+        if ($output !== null) {
+            exec("{$binary} {$joined} 2>&1", $output, $exitCode);
+
+            return $exitCode;
+        }
 
         passthru("{$binary} {$joined}", $exitCode);
 
