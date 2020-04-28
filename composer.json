@@ -2,7 +2,7 @@
     "name": "spaceemotion/php-coding-standard",
     "type": "library",
     "description": "Custom, opinionated php linting rules.",
-    "keywords": ["phpcs","linting","phpstan"],
+    "keywords": ["phpcs","linting","phpstan", "phpmd"],
     "homepage": "https://github.com/spaceemotion/php-coding-standard",
     "license": "ISC",
     "authors": [
@@ -12,16 +12,22 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.1",
         "ext-json": "*",
-        "composer/xdebug-handler": "^1.0",
+        "composer/xdebug-handler": "^1.0"
+    },
+    "require-dev": {
         "phpmd/phpmd": "^2.8",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
-        "phpstan/phpstan-mockery": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
         "symplify/easy-coding-standard-prefixed": "^7.2"
+    },
+    "suggest": {
+        "phpstan/phpstan": "Static analysis",
+        "phpmd/phpmd": "Code mess detection",
+        "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
+        "symplify/easy-coding-standard": "Code style linter + fixer"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

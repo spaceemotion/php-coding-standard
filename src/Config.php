@@ -54,6 +54,6 @@ class Config
 
     public function isEnabled(string $toolName): bool
     {
-        return (bool) ($this->config[$toolName]['enabled'] ?? true);
+        return (bool) ($this->config[$toolName]['enabled'] ?? false);
     }
 }
