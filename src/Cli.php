@@ -78,17 +78,8 @@ class Cli
         $context = new Context();
         $context->config = $this->config;
         $context->files = $this->files;
-        $context->isFixing = $this->hasFlag(self::FLAG_FIX);
+        $context->isFixing = $this->hasFlag(self::FLAG_FIX) || $this->config->shouldAutoFix();
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);
-
-        if (! $context->isFixing && $this->config->shouldAutoFix()) {
-            $context->isFixing = true;
-
-            // Ignore any errors, as they most likely will come up in the regular run
-            $this->executeContext($tools, $context);
-
-            $context->isFixing = false;
-        }
 
         $code = $this->executeContext($tools, $context);
 

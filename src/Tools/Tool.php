@@ -8,9 +8,6 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 abstract class Tool
 {
-    /** @var bool Indicates whether this tool can auto-fix any violations it finds */
-    protected $canFix = false;
-
     /** @var string A short name for the tool to be used in the config */
     protected $name = '';
 
@@ -30,10 +27,6 @@ abstract class Tool
 
         if (in_array(static::class, $context->toolsExecuted, true)) {
             return false;
-        }
-
-        if ($context->isFixing) {
-            return $this->canFix;
         }
 
         return true;
