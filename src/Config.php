@@ -12,16 +12,16 @@ class Config
 
     public function __construct(string $path = PHPCSTD_ROOT . '.phpcstd')
     {
-        if (! is_file($path)) {
+        if (! is_file("{$path}.ini")) {
             $path .= '.dist';
         }
 
-        if (! is_file($path)) {
+        if (! is_file("{$path}.ini")) {
             $this->config = [];
             return;
         }
 
-        $config = parse_ini_file($path, true);
+        $config = parse_ini_file("{$path}.ini", true);
 
         if ($config === false) {
             throw new RuntimeException(
