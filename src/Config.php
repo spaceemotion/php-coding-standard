@@ -56,4 +56,15 @@ class Config
     {
         return (bool) ($this->config[$toolName]['enabled'] ?? false);
     }
+
+    public function getPart(string $toolName): array
+    {
+        $contents = $this->config[$toolName] ?? [];
+
+        if (! is_array($contents)) {
+            return [];
+        }
+
+        return $contents;
+    }
 }
