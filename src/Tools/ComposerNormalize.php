@@ -11,14 +11,25 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class ComposerNormalize extends Tool
 {
+    protected const COMPOSER_FILE = 'composer.json';
+
     protected $name = 'composer-normalize';
+
+    public function shouldRun(Context $context): bool
+    {
+        if ($context->files !== []) {
+            return false;
+        }
+
+        return parent::shouldRun($context);
+    }
 
     public function run(Context $context): bool
     {
         $config = $context->config->getPart($this->name);
 
         $binary = $config['binary'] ?? 'composer';
-        $filename = PHPCSTD_ROOT . 'composer.json';
+        $filename = PHPCSTD_ROOT . self::COMPOSER_FILE;
 
         if ($this->execute($binary, [
             'normalize',
