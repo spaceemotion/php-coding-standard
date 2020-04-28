@@ -8,7 +8,8 @@ use RuntimeException;
 
 class Config
 {
-    private array $config;
+    /** @var mixed[] */
+    private $config;
 
     public function __construct(string $path = PHPCSTD_ROOT . '.phpcstd')
     {
