@@ -7,11 +7,13 @@ declare(strict_types=1);
     static $autoloadFile = 'vendor/autoload.php';
 
     for (
-        $path = __DIR__ . '/', $level = 0;
+        $path = __DIR__, $level = 0;
         $level <= 3;
         $path .= '/..', $level++
     ) {
         if (file_exists("{$path}/{$autoloadFile}")) {
+            $path = realpath($path);
+
             define('PHPCSTD_ROOT', "{$path}/");
             define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
