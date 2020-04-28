@@ -29,6 +29,11 @@
         "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
         "symplify/easy-coding-standard": "Code style linter + fixer"
     },
+    "autoload": {
+        "psr-4": {
+            "Spaceemotion\\PhpCodingStandard\\": "src/"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "bin": ["bin/phpcstd"],
