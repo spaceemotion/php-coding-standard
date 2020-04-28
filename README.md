@@ -44,13 +44,6 @@ Tool | Description
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | Tries to keep code complexity to a minimum
 [php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | Quickly lints the whole project against PHP (syntax) errors
 
-### Extensions used
-- **phpstan**
-  - phpstan/phpstan-deprecation-rules
-  - phpstan/phpstan-mockery
-  - phpstan/phpstan-phpunit
-  - phpstan/phpstan-strict-rules
-
 ## Development
 ### Using XDebug
 This project uses [composer/xdebug-handler](https://github.com/composer/xdebug-handler) to improve performance
