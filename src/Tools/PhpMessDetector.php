@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
 use Spaceemotion\PhpCodingStandard\Context;
+use Spaceemotion\PhpCodingStandard\Formatter\File;
+use Spaceemotion\PhpCodingStandard\Formatter\Result;
+use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class PhpMessDetector extends Tool
 {
@@ -12,10 +15,39 @@ class PhpMessDetector extends Tool
 
     public function run(Context $context): bool
     {
-        return $this->execute($this->name, [
+        $output = [];
+
+        if ($this->execute($this->name, [
             implode(',', $context->files),
-            $context->runningInCi ? 'xml' : 'ansi',
+            $context->runningInCi ? 'xml' : 'json',
             'phpmd.xml',
-        ]) === 0;
+        ], $output) === 0) {
+            return true;
+        }
+
+        $json = json_decode(implode('', $output), true, 512, JSON_THROW_ON_ERROR);
+        $result = new Result();
+
+        foreach ($json['files'] as $entry) {
+            $file = new File();
+
+            foreach ($entry['violations'] as $details) {
+                $violation = new Violation();
+                $violation->line = (int) $details['beginLine'];
+                $violation->message = $details['description'];
+                $violation->source = "{$details['ruleSet']} > {$details['rule']} ({$details['externalInfoUrl']})";
+                $violation->tool = $this->name;
+
+                $file->violations[] = $violation;
+            }
+
+            if (count($file->violations) > 0) {
+                $result->files[$entry['file']] = $file;
+            }
+        }
+
+        $context->addResult($result);
+
+        return false;
     }
 }
