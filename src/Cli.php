@@ -68,10 +68,15 @@ class Cli
             $this->files = $this->config->getSources();
         }
 
-        $this->files = array_filter(array_map('trim', $this->files));
+        $this->files = array_filter(
+            array_filter(array_map('trim', $this->files)),
+            static function (string $path) {
+                return is_file($path) || is_dir($path);
+            }
+        );
 
         if (count($this->files) === 0) {
-            echo 'No files specified.' . PHP_EOL;
+            echo 'No (valid) files specified.' . PHP_EOL;
             return false;
         }
 
