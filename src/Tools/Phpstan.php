@@ -17,7 +17,7 @@ class Phpstan extends Tool
     {
         $output = [];
 
-        if ($this->execute($this->name, array_merge(
+        if ($this->execute(self::vendorBinary($this->name), array_merge(
             [
                 'analyse',
                 '--error-format=json',

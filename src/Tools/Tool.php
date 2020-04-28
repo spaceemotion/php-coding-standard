@@ -41,12 +41,12 @@ abstract class Tool
      * Runs the given command list in sequence.
      * On windows, the .bat file will be executed instead.
      *
-     * @param string $command The raw binary name
+     * @param string $binary The raw binary name
      * @param string[] $arguments
      *
      * @return int The exit code of the command
      */
-    protected function execute(string $command, array $arguments, ?array &$output = null): int
+    protected function execute(string $binary, array $arguments, ?array &$output = null): int
     {
         $arguments = array_filter($arguments, static function ($argument): bool {
             return $argument !== '';
@@ -55,17 +55,22 @@ abstract class Tool
         $arguments = array_map('escapeshellarg', $arguments);
         $joined = implode(' ', $arguments);
 
-        $binary = PHPCSTD_BINARY_PATH . $command;
-
-        if (PHP_OS_FAMILY === 'Windows') {
-            $binary = "{$binary}.bat";
-        }
-
         $exitCode = 0;
 
         exec("{$binary} {$joined} 2>&1", $output, $exitCode);
 
         return $exitCode;
+    }
+
+    protected static function vendorBinary(string $binary): string
+    {
+        $binary = PHPCSTD_BINARY_PATH . $binary;
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            $binary = "{$binary}.bat";
+        }
+
+        return $binary;
     }
 
     protected static function parseJson(string $raw): array
