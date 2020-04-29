@@ -1,18 +1,18 @@
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spaceemotion/php-coding-standard.svg?style=flat-square) ](https://packagist.org/packages/spaceemotion/php-coding-standard) 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spaceemotion/php-coding-standard.svg?style=flat-square)](https://packagist.org/packages/spaceemotion/php-coding-standard) 
 [![Total Downloads](https://img.shields.io/packagist/dt/spaceemotion/php-coding-standard.svg?style=flat-square)](https://packagist.org/packages/spaceemotion/php-coding-standard)
 
 # php-coding-standard (phpcstd)
 
-<img src="./img/project-workflow.png" alt="diagram of the project workflow" width="300" align="right">
+<img src="./img/project-workflow.png" alt="diagram of the project workflow" width="350" align="right">
 
 `phpcstd` combines various code quality tools (e.g. linting and static analysis)
 into one, easy to use package which can be shared across teams and code bases.
 
 There are two parts to this:
 1. `phpcstd` executes all the enabled tools and returns a single per-file error output
-2. In your projects, you depend on a single repository (like `your-company/code-quality-configs`) 
+2. In your projects, you depend on a single repository (e.g. `acme/coding-standard`) 
    which depends on `phpcstd` and includes the various base configurations 
-   (e.g. phpmd.xml, ecs.yaml, ...)
+   (e.g. phpmd.xml, ecs.yaml, ...). Your own projects then depend on your own coding standard.
 
 `phpcstd` itself does not come with any tools preinstalled. 
 You can take a look at [my own coding standards](https://github.com/spaceemotion/my-php-coding-standard) as an example.
