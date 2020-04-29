@@ -71,6 +71,10 @@ abstract class Tool
             $binary = "{$binary}.bat";
         }
 
+        if (! is_file($binary)) {
+            $binary = "${binary}.phar";
+        }
+
         return $binary;
     }
 
