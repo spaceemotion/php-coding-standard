@@ -27,19 +27,14 @@ class Psalm extends Tool
 
         $tmpFileJson = $this->createTempReportFile();
         $output = [];
-
-        if (
-            $this->execute($binary, array_merge(
-                [
-                    '--no-progress',
-                    '--monochrome',
-                    "--report=${tmpFileJson}",
-                ],
-                $context->files
-            ), $output) === 0
-        ) {
-            return true;
-        }
+        $exitCode = $this->execute($binary, array_merge(
+            [
+                '--no-progress',
+                '--monochrome',
+                "--report=${tmpFileJson}",
+            ],
+            $context->files
+        ), $output);
 
         $contents = file_get_contents($tmpFileJson);
 
@@ -50,6 +45,10 @@ class Psalm extends Tool
         $json = self::parseJson($contents);
 
         if (count($json) === 0) {
+            if ($exitCode === 0) {
+                return true;
+            }
+
             echo implode("\n", $output) . ' ';
             return false;
         }
@@ -71,7 +70,7 @@ class Psalm extends Tool
             $context->addResult($result);
         }
 
-        return false;
+        return $exitCode === 0;
     }
 
     protected function createTempReportFile(): string
