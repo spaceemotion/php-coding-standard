@@ -17,7 +17,7 @@ class EasyCodingStandard extends Tool
     {
         $output = [];
 
-        if ($this->execute(self::vendorBinary($this->name), array_merge(
+        $exitCode = $this->execute(self::vendorBinary($this->name), array_merge(
             [
                 'check',
                 '--no-progress-bar',
@@ -25,9 +25,7 @@ class EasyCodingStandard extends Tool
             ],
             $context->isFixing ? ['--fix'] : [],
             $context->files
-        ), $output) === 0) {
-            return true;
-        }
+        ), $output);
 
         $json = self::parseJson(implode('', $output));
 
@@ -37,7 +35,7 @@ class EasyCodingStandard extends Tool
 
         $result = new Result();
 
-        foreach ($json['files'] as $path => $details) {
+        foreach (($json['files'] ?? []) as $path => $details) {
             $file = new File();
 
             foreach (($details['errors'] ?? []) as $error) {
@@ -50,11 +48,43 @@ class EasyCodingStandard extends Tool
                 $file->violations[] = $violation;
             }
 
+            if (! $context->isFixing) {
+                foreach (($details['diffs'] ?? []) as $diff) {
+                    $matches = [];
+
+                    preg_match_all(
+                        '/^@@ -(\d+),(\d+) \+(\d+),(\d+) @@(.+?)(?=@@|\Z)/ms',
+                        $diff['diff'],
+                        $matches,
+                        PREG_SET_ORDER
+                    );
+
+                    foreach ($matches as $match) {
+                        // 0 = all
+                        // 1 = from line number
+                        // 2 = from length
+                        // 3 = to line number
+                        // 4 = to length
+                        // 5 = diff excerpt
+
+                        $fromLineNumber = (int) $match[1];
+
+                        $violation = new Violation();
+                        $violation->line = $fromLineNumber;
+                        $violation->message = 'Styling issues found';
+                        $violation->tool = $this->name;
+                        $violation->source = rtrim($match[0], "\n\r");
+
+                        $file->violations[] = $violation;
+                    }
+                }
+            }
+
             $result->files[$path] = $file;
         }
 
         $context->addResult($result);
 
-        return false;
+        return $exitCode === 0;
     }
 }
