@@ -1,4 +1,4 @@
 vendor
 .idea
 composer.lock
-.phpcstd
+.phpcstd.ini
