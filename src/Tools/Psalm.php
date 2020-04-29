@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
@@ -15,26 +16,38 @@ class Psalm extends Tool
 
     public function run(Context $context): bool
     {
-        $tmpFile = tempnam(sys_get_temp_dir(), $this->name);
-        $tmpFileJson = "${tmpFile}.json";
+        $binary = self::vendorBinary($this->name);
 
-        rename($tmpFile, $tmpFileJson);
+        if ($context->isFixing) {
+            $this->execute($binary, array_merge(
+                ['--alter', '--issues=all'],
+                $context->files
+            ));
+        }
 
+        $tmpFileJson = $this->createTempReportFile();
         $output = [];
 
-        if ($this->execute(self::vendorBinary($this->name), array_merge(
-            $context->isFixing ? ['--alter', '--issues=all'] : [],
-            [
-                '--no-progress',
-                '--monochrome',
-                "--report=$tmpFileJson",
-            ],
-            $context->files
-        ), $output) === 0) {
+        if (
+            $this->execute($binary, array_merge(
+                [
+                    '--no-progress',
+                    '--monochrome',
+                    "--report=${tmpFileJson}",
+                ],
+                $context->files
+            ), $output) === 0
+        ) {
             return true;
         }
 
-        $json = self::parseJson(file_get_contents($tmpFileJson));
+        $contents = file_get_contents($tmpFileJson);
+
+        if ($contents === false) {
+            throw new RuntimeException('Unable to read report file');
+        }
+
+        $json = self::parseJson($contents);
 
         if (count($json) === 0) {
             echo implode("\n", $output) . ' ';
@@ -59,5 +72,22 @@ class Psalm extends Tool
         }
 
         return false;
+    }
+
+    protected function createTempReportFile(): string
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), $this->name);
+
+        if ($tmpFile === false) {
+            throw new RuntimeException('Unable to create temporary report file');
+        }
+
+        $tmpFileJson = "${tmpFile}.json";
+
+        if (! rename($tmpFile, $tmpFileJson)) {
+            throw new RuntimeException('Unable to rename temporary report file');
+        }
+
+        return $tmpFileJson;
     }
 }
