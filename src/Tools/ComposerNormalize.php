@@ -17,7 +17,7 @@ class ComposerNormalize extends Tool
 
     public function shouldRun(Context $context): bool
     {
-        if ($context->files !== []) {
+        if (! in_array(self::COMPOSER_FILE, $context->files, true)) {
             return false;
         }
 
