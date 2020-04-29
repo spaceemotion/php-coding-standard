@@ -45,9 +45,11 @@ abstract class Tool
      * @param string[] $arguments
      * @param string[] $output
      *
+     * @psalm-suppress ReferenceConstraintViolation
+     *
      * @return int The exit code of the command
      */
-    protected function execute(string $binary, array $arguments, ?array &$output = null): int
+    protected function execute(string $binary, array $arguments, array &$output = []): int
     {
         $arguments = array_filter($arguments, static function ($argument): bool {
             return $argument !== '';

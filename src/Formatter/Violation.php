@@ -15,9 +15,6 @@ class Violation
     /** @var int */
     public $line = 0;
 
-    /** @var int */
-    public $column = 0;
-
     /** @var string */
     public $severity = self::SEVERITY_ERROR;
 

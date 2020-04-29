@@ -12,12 +12,12 @@ declare(strict_types=1);
         $path .= '/..', $level++
     ) {
         if (file_exists("{$path}/{$autoloadFile}")) {
-            $path = realpath($path);
+            $realPath = realpath($path);
 
-            define('PHPCSTD_ROOT', "{$path}/");
+            define('PHPCSTD_ROOT', "{$realPath}/");
             define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
-            require_once "{$path}/vendor/autoload.php";
+            require_once "{$realPath}/vendor/autoload.php";
 
             break;
         }

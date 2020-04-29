@@ -26,8 +26,10 @@ class Context
     /** @var Result */
     public $result;
 
-    public function __construct()
+    public function __construct(Config $config)
     {
+        $this->config = $config;
+
         $this->result = new Result();
     }
 

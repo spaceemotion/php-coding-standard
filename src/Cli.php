@@ -47,6 +47,8 @@ class Cli
         $this->flags = $this->parseFlags($options);
 
         $this->files = array_slice($arguments, count($options) + 1);
+
+        $this->config = new Config();
     }
 
     /**
@@ -61,8 +63,6 @@ class Cli
             $this->showHelp();
             return true;
         }
-
-        $this->config = new Config();
 
         if (count($this->files) === 0) {
             $this->files = $this->config->getSources();
@@ -80,8 +80,7 @@ class Cli
             return false;
         }
 
-        $context = new Context();
-        $context->config = $this->config;
+        $context = new Context($this->config);
         $context->files = $this->files;
         $context->isFixing = $this->hasFlag(self::FLAG_FIX) || $this->config->shouldAutoFix();
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);

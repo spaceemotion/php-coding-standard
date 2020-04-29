@@ -44,7 +44,7 @@ class Phpstan extends Tool
             $file = new File();
 
             $violation = new Violation();
-            $violation->line = $match[3];
+            $violation->line = (int) $match[3];
             $violation->message = $match[1];
             $violation->tool = $this->name;
 

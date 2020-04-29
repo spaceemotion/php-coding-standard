@@ -75,7 +75,10 @@ class ConsoleFormatter implements Formatter
 
     /**
      * @param Violation[] $violations
+     *
      * @return Violation[]
+     *
+     * @psalm-return list<Violation>
      */
     private static function sortByLineNumber(array $violations): array
     {

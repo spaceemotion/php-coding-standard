@@ -107,7 +107,9 @@ class Config
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
+     *
+     * @psalm-return array<string, array>
      */
     protected static function readConfigs(): array
     {
