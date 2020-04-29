@@ -30,6 +30,7 @@
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
+        "psalm/phar": "^3.11",
         "symplify/easy-coding-standard-prefixed": "^7.2"
     },
     "suggest": {
@@ -37,8 +38,10 @@
         "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
         "phpmd/phpmd": "Code mess detection",
         "phpstan/phpstan": "Static analysis",
+        "psalm/phar": "Static analysis (.phar)",
         "symplify/easy-coding-standard": "Code style linter + fixer",
-        "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)"
+        "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
+        "vimeo/psalm": "Static analysis"
     },
     "config": {
         "sort-packages": true

@@ -24,6 +24,7 @@ Tool | Description
 [phpstan](https://github.com/phpstan/phpstan) | Runs logical checks
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | Tries to keep code complexity to a minimum
 [php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | Quickly lints the whole project against PHP (syntax) errors
+[psalm](https://github.com/vimeo/psalm) | Yet another static analysis checker
 [composer-normalize](https://github.com/ergebnis/composer-normalize) | Normalizes composer.json files
 
 ## Getting started
