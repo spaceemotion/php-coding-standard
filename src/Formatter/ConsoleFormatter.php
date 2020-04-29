@@ -11,11 +11,13 @@ class ConsoleFormatter implements Formatter
         'gray' => '1;30',
         'red' => '0;31',
         'yellow' => '1;33',
+        'blue' => '0;34',
     ];
 
     private const COLOR_BY_SEVERITY = [
         Violation::SEVERITY_ERROR => 'red',
         Violation::SEVERITY_WARNING => 'yellow',
+        Violation::SEVERITY_INFO => 'blue',
     ];
 
     public function format(Result $result): void
@@ -23,6 +25,7 @@ class ConsoleFormatter implements Formatter
         $counts = [
             Violation::SEVERITY_WARNING => 0,
             Violation::SEVERITY_ERROR => 0,
+            Violation::SEVERITY_INFO => 0,
         ];
 
         foreach ($result->files as $path => $file) {
