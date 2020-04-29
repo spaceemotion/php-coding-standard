@@ -9,6 +9,8 @@ There are two parts to this:
 `phpcstd` itself does not come with any tools preinstalled. 
 You can take a look at [my own coding standards](https://github.com/spaceemotion/my-php-coding-standard) as an example.
 
+![diagram of the project workflow](./img/project-workflow.png)
+
 #### Tools supported
 Tool | Description
 -----|------------
