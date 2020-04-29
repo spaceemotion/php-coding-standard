@@ -31,21 +31,45 @@ class ComposerNormalize extends Tool
         $binary = $config['binary'] ?? 'composer';
         $filename = PHPCSTD_ROOT . self::COMPOSER_FILE;
 
+        $output = [];
+
         if ($this->execute($binary, [
             'normalize',
             $filename,
             '--no-update-lock',
             $context->isFixing ? '' : '--dry-run',
-        ]) === 0) {
+        ], $output) === 0) {
             return true;
         }
 
-        $violation = new Violation();
-        $violation->message = 'composer.json is not normalized';
-        $violation->tool = $this->name;
-
         $file = new File();
-        $file->violations[] = $violation;
+
+        if (strpos($output[0], 'is not normalized') !== false) {
+            $violation = new Violation();
+            $violation->message = 'File is not normalized';
+            $violation->source = trim(implode(PHP_EOL, array_slice($output, 4, count($output) - 6)));
+            $violation->tool = $this->name;
+
+            $file->violations[] = $violation;
+        }
+
+        if (! isset($violation)) {
+            $source = '';
+
+            if (strpos($output[0], 'not valid according to schema') !== false) {
+                $source = $output[count($output) - 1];
+                $output = array_slice($output, 1, count($output) - 2);
+            }
+
+            foreach ($output as $message) {
+                $violation = new Violation();
+                $violation->message = $message;
+                $violation->source = $source;
+                $violation->tool = $this->name;
+
+                $file->violations[] = $violation;
+            }
+        }
 
         $result = new Result();
         $result->files[$filename] = $file;
