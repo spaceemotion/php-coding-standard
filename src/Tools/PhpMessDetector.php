@@ -46,9 +46,7 @@ class PhpMessDetector extends Tool
                 $file->violations[] = $violation;
             }
 
-            if (count($file->violations) > 0) {
-                $result->files[$entry['file']] = $file;
-            }
+            $result->files[$entry['file']] = $file;
         }
 
         $context->addResult($result);

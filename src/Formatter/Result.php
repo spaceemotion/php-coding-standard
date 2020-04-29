@@ -12,6 +12,10 @@ class Result
     public function add(self $result): self
     {
         foreach ($result->files as $filename => $file) {
+            if (count($file->violations) === 0) {
+                continue;
+            }
+
             $filename = self::removeRootPath($filename);
 
             if (array_key_exists($filename, $this->files)) {

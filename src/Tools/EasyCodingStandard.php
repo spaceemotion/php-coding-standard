@@ -50,9 +50,7 @@ class EasyCodingStandard extends Tool
                 $file->violations[] = $violation;
             }
 
-            if (count($file->violations) > 0) {
-                $result->files[$path] = $file;
-            }
+            $result->files[$path] = $file;
         }
 
         $context->addResult($result);
