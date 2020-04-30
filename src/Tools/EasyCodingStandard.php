@@ -85,6 +85,6 @@ class EasyCodingStandard extends Tool
 
         $context->addResult($result);
 
-        return $exitCode === 0;
+        return count($result->files) === 0;
     }
 }
