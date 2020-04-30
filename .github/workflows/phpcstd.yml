@@ -1,3 +1,5 @@
+name: phpcstd
+
 on: [push]
 
 jobs:
