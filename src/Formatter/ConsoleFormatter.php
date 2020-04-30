@@ -8,7 +8,7 @@ class ConsoleFormatter implements Formatter
 {
     private const COLORS = [
         'green' => '0;32',
-        'gray' => '1;30',
+        'gray' => '0;37',
         'red' => '0;31',
         'yellow' => '1;33',
         'blue' => '0;34',
