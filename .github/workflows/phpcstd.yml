@@ -29,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Enable all tools
+        run: sed -i -e 's/enabled = false/enabled = true/g' .phpcstd.dist.ini
+
       - name: Run phpcstd
         run: bin/phpcstd --continue
