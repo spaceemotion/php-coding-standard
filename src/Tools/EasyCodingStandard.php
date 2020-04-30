@@ -17,7 +17,7 @@ class EasyCodingStandard extends Tool
     {
         $output = [];
 
-        $exitCode = $this->execute(self::vendorBinary($this->name), array_merge(
+        $this->execute(self::vendorBinary($this->name), array_merge(
             [
                 'check',
                 '--no-progress-bar',
