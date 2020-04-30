@@ -15,11 +15,11 @@ class Config
     {
         $this->config = [];
 
-        foreach (self::readConfigs() as $config) {
+        $configs = self::readConfigs();
+
+        foreach ($configs as $config) {
             $this->config = self::mergeConfig($this->config, $config);
         }
-
-        echo PHP_EOL;
     }
 
     /**
@@ -113,11 +113,17 @@ class Config
      */
     protected static function readConfigs(): array
     {
+        $workingDirectory = getcwd();
+
+        if ($workingDirectory === false) {
+            throw new RuntimeException('Unable to get working directory.');
+        }
+
         $configs = [];
 
         $paths = array_unique(array_filter([
+            $workingDirectory . '/.phpcstd.ini',
             dirname(__DIR__) . '/.phpcstd.ini',
-            PHPCSTD_ROOT . '.phpcstd.ini',
         ]));
 
         while (($path = array_shift($paths)) !== null) {
