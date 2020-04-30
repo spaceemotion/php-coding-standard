@@ -13,4 +13,4 @@ exit((new Cli($argv))->start([
     new Tools\Phpstan(),
     new Tools\Psalm(),
     new Tools\EasyCodingStandard(),
-]) ? 1 : 0);
+]) ? 0 : 1);

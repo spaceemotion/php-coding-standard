@@ -85,11 +85,11 @@ class Cli
         $context->isFixing = $this->hasFlag(self::FLAG_FIX) || $this->config->shouldAutoFix();
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);
 
-        $code = $this->executeContext($tools, $context);
+        $success = $this->executeContext($tools, $context);
 
         (new ConsoleFormatter())->format($context->result);
 
-        return $code;
+        return $success;
     }
 
     private function hasFlag(string $flag): bool
@@ -118,6 +118,7 @@ class Cli
     private function executeContext(array $tools, Context $context): bool
     {
         $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
+        $success = true;
 
         foreach ($tools as $tool) {
             echo "-> {$tool->getName()}: ";
@@ -139,9 +140,11 @@ class Cli
             if (! $continue) {
                 return false;
             }
+
+            $success = false;
         }
 
-        return true;
+        return $success;
     }
 
     /**
