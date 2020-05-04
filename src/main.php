@@ -9,6 +9,7 @@ require_once 'init.php';
 exit((new Cli($argv))->start([
     new Tools\ComposerNormalize(),
     new Tools\PhpParallelLint(),
+    new Tools\PhpCodeSniffer(),
     new Tools\PhpMessDetector(),
     new Tools\Phpstan(),
     new Tools\Psalm(),
