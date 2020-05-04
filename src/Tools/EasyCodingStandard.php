@@ -80,7 +80,9 @@ class EasyCodingStandard extends Tool
                 }
             }
 
-            $result->files[$path] = $file;
+            if (count($file->violations) > 0) {
+                $result->files[$path] = $file;
+            }
         }
 
         $context->addResult($result);
