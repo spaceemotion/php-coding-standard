@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Context;
+use Spaceemotion\PhpCodingStandard\ProgressOutput;
 
 abstract class Tool
 {
@@ -44,13 +46,18 @@ abstract class Tool
      * @param string $binary The raw binary name
      * @param string[] $arguments
      * @param string[] $output
+     * @param callable $progressTracker
      *
      * @psalm-suppress ReferenceConstraintViolation
      *
      * @return int The exit code of the command
      */
-    protected function execute(string $binary, array $arguments, array &$output = []): int
-    {
+    protected function execute(
+        string $binary,
+        array $arguments,
+        array &$output = [],
+        ?callable $progressTracker = null
+    ): int {
         $arguments = array_filter($arguments, static function ($argument): bool {
             return $argument !== '';
         });
@@ -58,11 +65,40 @@ abstract class Tool
         $arguments = array_map('escapeshellarg', $arguments);
         $joined = implode(' ', $arguments);
 
+        $command = "{$binary} {$joined} 2>&1";
         $exitCode = 0;
 
-        exec("{$binary} {$joined} 2>&1", $output, $exitCode);
+        if ($progressTracker === null) {
+            // We don't support a progress bar
+            exec($command, $output, $exitCode);
 
-        return $exitCode;
+            return $exitCode;
+        }
+
+        // Let the tool read each line of the output
+        $progress = new ProgressOutput();
+        $handle = popen($command, 'r');
+
+        if ($handle === false) {
+            throw new RuntimeException("Unable to open process: ${command}");
+        }
+
+        while (! feof($handle)) {
+            $read = fgets($handle);
+
+            if (! is_string($read)) {
+                continue;
+            }
+
+            $output[] = $read;
+
+            // Show little dots whenever this returns true
+            if ($progressTracker($read)) {
+                $progress->advance();
+            }
+        }
+
+        return pclose($handle);
     }
 
     protected static function vendorBinary(string $binary): string
