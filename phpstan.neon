@@ -6,4 +6,12 @@ parameters:
     level: max
 
     ignoreErrors:
-        -'#Constant PHPCSTD_#'
+        - '#Constant PHPCSTD_#'
+
+        -
+            message: '#no typehint specified#'
+            path: src/Tools/PhpParallelLint/ContextOutput.php
+
+        -
+            message: '#unused parameter \$writer#'
+            path: src/Tools/PhpParallelLint/ContextOutput.php
