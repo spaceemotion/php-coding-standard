@@ -1,13 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="PSR12Plus">
-    <description>PSR-12 with some stricter rules</description>
-
-    <!-- Configuration -->
-    <config name="show_progress" value="1" />
-    <config name="installed_paths" value="../../slevomat/coding-standard,../../escapestudios/symfony2-coding-standard"/>
-
-    <arg value="p"/>
-    <arg name="colors"/>
+<ruleset name="PSR12">
     <arg name="encoding" value="utf-8"/>
 
     <!-- Ruleset base -->
@@ -18,110 +10,8 @@
         </exclude>
     </rule>
 
-    <!-- Harsher coding standard -->
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
-        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification" />
-    </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification" />
-    </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
-        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification" />
-    </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint" />
-    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-        <properties>
-            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2"/>
-            <property name="spacesCountAroundEqualsSign" value="0"/>
-            <property name="newlinesCountAfterDeclare" value="2"/>
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation" />
-    <rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit" />
-    <rule ref="SlevomatCodingStandard.Functions.StaticClosure" />
-    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators" />
-    <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
-    <rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue" />
-    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction" />
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
-        <properties>
-            <property name="searchAnnotations" value="true"/>
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace" />
-    <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias" />
-    <rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
-    <rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking" />
-    <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon" />
-    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable" />
-    <rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
-    <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch" />
-    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma" />
-    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
-        <properties>
-            <property name="linesCountBeforeControlStructure" value="1" />
-            <property name="linesCountAfterControlStructure" value="1" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
-        <properties>
-            <property name="allowSingleLineYieldStacking" value="1" />
-            <property name="linesCountAfterControlStructure" value="1" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator" />
-    <rule ref="SlevomatCodingStandard.Functions.TrailingCommaInCall" />
-    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
-        <properties>
-            <property name="caseSensitive" value="true" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile" />
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint" />
-    <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints" />
-    <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition" />
-    <rule ref="SlevomatCodingStandard.PHP.ShortList" />
-    <rule ref="SlevomatCodingStandard.PHP.TypeCast" />
-    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility" />
-    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
-    <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash" />
-    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
-        <properties>
-            <property name="forbiddenAnnotations" type="array" value="@author, @created, @version, @package, @copyright, @license" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
-        <properties>
-            <property name="forbiddenCommentPatterns" type="array" value="/PhpStorm/, /Constructor/, /Class/" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Commenting.EmptyComment" />
-    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration" />
-    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment" />
-    <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator" />
-    <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator" />
-
-    <rule ref="Symfony.Classes.PropertyDeclaration" />
-    <rule ref="Symfony.Formatting.BlankLineBeforeReturn" />
-    <rule ref="Symfony.Formatting.ReturnOrThrow" />
-    <rule ref="Symfony.Errors.ExceptionMessage" />
-    <rule ref="Symfony.Files.AlphanumericFilename">
-        <exclude-pattern>config/*</exclude-pattern>
-    </rule>
-
     <!-- Some custom formatting preferences -->
     <rule ref="Generic.Arrays.ArrayIndent">
         <exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/>
     </rule>
-
-<!--    <file>config</file>-->
-<!--    <file>src</file>-->
-<!--    <file>tests</file>-->
 </ruleset>

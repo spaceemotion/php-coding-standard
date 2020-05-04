@@ -33,12 +33,14 @@ class ComposerNormalize extends Tool
 
         $output = [];
 
-        if ($this->execute($binary, [
-            'normalize',
-            $filename,
-            '--no-update-lock',
-            $context->isFixing ? '' : '--dry-run',
-        ], $output) === 0) {
+        if (
+            $this->execute($binary, [
+                'normalize',
+                $filename,
+                '--no-update-lock',
+                $context->isFixing ? '' : '--dry-run',
+            ], $output) === 0
+        ) {
             return true;
         }
 

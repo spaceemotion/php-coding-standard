@@ -17,16 +17,18 @@ class Phpstan extends Tool
     {
         $output = [];
 
-        if ($this->execute(self::vendorBinary($this->name), array_merge(
-            [
-                'analyse',
-                '--error-format=json',
-                '--no-progress',
-                '--no-ansi',
-                '--no-interaction',
-            ],
-            $context->files
-        ), $output) === 0) {
+        if (
+            $this->execute(self::vendorBinary($this->name), array_merge(
+                [
+                    'analyse',
+                    '--error-format=json',
+                    '--no-progress',
+                    '--no-ansi',
+                    '--no-interaction',
+                ],
+                $context->files
+            ), $output) === 0
+        ) {
             return true;
         }
 

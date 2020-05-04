@@ -17,11 +17,13 @@ class PhpMessDetector extends Tool
     {
         $output = [];
 
-        if ($this->execute(self::vendorBinary($this->name), [
-            implode(',', $context->files),
-            $context->runningInCi ? 'xml' : 'json',
-            'phpmd.xml',
-        ], $output) === 0) {
+        if (
+            $this->execute(self::vendorBinary($this->name), [
+                implode(',', $context->files),
+                $context->runningInCi ? 'xml' : 'json',
+                'phpmd.xml',
+            ], $output) === 0
+        ) {
             return true;
         }
 
