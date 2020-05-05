@@ -18,14 +18,15 @@ There are two parts to this:
 You can take a look at [my own coding standards](https://github.com/spaceemotion/my-php-coding-standard) as an example.
 
 #### Tools supported
-Tool | Description
------|------------
-[EasyCodingStandard](https://github.com/symplify/easy-coding-standard) | Detects styling issues using a variety of linting tools
-[phpstan](https://github.com/phpstan/phpstan) | Runs logical checks
-[PHP Mess Detector](https://github.com/phpmd/phpmd) | Tries to keep code complexity to a minimum
-[php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | Quickly lints the whole project against PHP (syntax) errors
-[psalm](https://github.com/vimeo/psalm) | Yet another static analysis checker
-[composer-normalize](https://github.com/ergebnis/composer-normalize) | Normalizes composer.json files
+Tool | Lint | Fix | Description
+-----|------|-----|------------
+[composer-normalize](https://github.com/ergebnis/composer-normalize) | ✅ | ✅ | Validates and rearranges composer.json files
+[EasyCodingStandard](https://github.com/symplify/easy-coding-standard) | ✅ | ✅ | Combination of PHP_CodeSniffer and PHP-CS-Fixer
+[PHP Mess Detector](https://github.com/phpmd/phpmd) | ✅ | ❌ | Code complexity checker
+[php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | ✅ | ❌ | Checks for PHP (syntax) errors (using `php -l`)
+[PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) | ✅ | ✅ | Style linter + fixer
+[phpstan](https://github.com/phpstan/phpstan) | ✅ | ✅ | Static analyzer
+[psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | Static analyzer
 
 ## Getting started
 ```
