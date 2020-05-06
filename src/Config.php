@@ -134,7 +134,7 @@ class Config
 
                 // Either the file does not exist
                 if ($includePath === false) {
-                    echo "Could not find config ${includePath}, skipping\n";
+                    echo "Could not find config {$include}, skipping\n";
                     continue;
                 }
 

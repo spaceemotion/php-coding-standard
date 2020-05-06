@@ -46,7 +46,7 @@ abstract class Tool
      * @param string $binary The raw binary name
      * @param string[] $arguments
      * @param string[] $output
-     * @param callable $progressTracker
+     * @param callable|null $progressTracker
      *
      * @psalm-suppress ReferenceConstraintViolation
      *
