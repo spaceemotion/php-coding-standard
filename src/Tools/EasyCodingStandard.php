@@ -73,7 +73,9 @@ class EasyCodingStandard extends Tool
                         $violation->line = $fromLineNumber;
                         $violation->message = 'Styling issues found';
                         $violation->tool = $this->name;
-                        $violation->source = rtrim($match[0], "\n\r");
+                        $violation->source = implode("\n", $diff['appliedCheckers'])
+                            . "\n\n"
+                            . rtrim($match[0], "\n\r");
 
                         $file->violations[] = $violation;
                     }
