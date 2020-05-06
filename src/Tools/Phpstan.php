@@ -22,12 +22,12 @@ class Phpstan extends Tool
                 [
                     'analyse',
                     '--error-format=json',
-                    '--no-progress',
                     '--no-ansi',
                     '--no-interaction',
+                    '--debug',
                 ],
                 $context->files
-            ), $output) === 0
+            ), $output, [$this, 'trackProgress']) === 0
         ) {
             return true;
         }
@@ -77,5 +77,17 @@ class Phpstan extends Tool
         $context->addResult($result);
 
         return false;
+    }
+
+    protected function trackProgress(string $line): bool
+    {
+        $firstLetter = $line[0] ?? '';
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            // TODO how are file paths on windows again?
+            return $firstLetter !== '{';
+        }
+
+        return $firstLetter === '/';
     }
 }
