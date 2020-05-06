@@ -29,7 +29,7 @@ class ConsoleFormatter implements Formatter
         ];
 
         foreach ($result->files as $path => $file) {
-            echo PHP_EOL . self::colorize('green', $path) . PHP_EOL;
+            echo "\n" . self::colorize('green', $path) . "\n";
 
             $violationsSorted = self::sortByLineNumber($file->violations);
 
@@ -43,29 +43,30 @@ class ConsoleFormatter implements Formatter
 
                 $tool = self::colorize('gray', "({$violation->tool})");
 
-                echo "  {$violation->line}: [{$severity}] {$violation->message} ${tool}" . PHP_EOL;
+                echo "  {$violation->line}: [{$severity}] {$violation->message} ${tool}" . "\n";
 
                 if ($violation->source === '') {
                     continue;
                 }
 
-                echo str_repeat(' ', strlen("  {$violation->line}: [{$violation->severity}] "))
-                    . self::colorize('gray', $violation->source)
-                    . PHP_EOL;
+                $perLinePrefix = str_repeat(' ', strlen("  {$violation->line}: [{$violation->severity}] "));
+                $prefixedSource = str_replace("\n", "\n{$perLinePrefix}", $violation->source);
+
+                echo $perLinePrefix . self::colorize('gray', $prefixedSource) . "\n";
 
                 if ($idx < count($violationsSorted) - 1) {
-                    echo PHP_EOL;
+                    echo "\n";
                 }
             }
         }
 
-        echo PHP_EOL . 'Results: ' . implode(', ', array_map(
+        echo "\n" . 'Results: ' . implode(', ', array_map(
             static function (int $count, string $key): string {
                 return "${count} ${key}(s)";
             },
             $counts,
             array_keys($counts)
-        )) . PHP_EOL;
+        )) . "\n";
     }
 
     private static function colorize(string $color, string $text): string
