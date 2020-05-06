@@ -29,12 +29,12 @@ class Psalm extends Tool
         $output = [];
         $exitCode = $this->execute($binary, array_merge(
             [
-                '--no-progress',
+                '--debug',
                 '--monochrome',
                 "--report=${tmpFileJson}",
             ],
             $context->files
-        ), $output);
+        ), $output, [$this, 'trackProgress']);
 
         $contents = file_get_contents($tmpFileJson);
 
@@ -88,5 +88,10 @@ class Psalm extends Tool
         }
 
         return $tmpFileJson;
+    }
+
+    protected function trackProgress(string $line): bool
+    {
+        return stripos($line, 'Getting') === 0;
     }
 }
