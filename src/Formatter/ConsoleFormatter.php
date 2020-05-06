@@ -50,9 +50,16 @@ class ConsoleFormatter implements Formatter
                 }
 
                 $perLinePrefix = str_repeat(' ', strlen("  {$violation->line}: [{$violation->severity}] "));
-                $prefixedSource = str_replace("\n", "\n{$perLinePrefix}", $violation->source);
 
-                echo $perLinePrefix . self::colorize('gray', $prefixedSource) . "\n";
+                echo implode(
+                    "\n",
+                    array_map(
+                        static function (string $line) use ($perLinePrefix): string {
+                            return $perLinePrefix . self::colorize('gray', $line);
+                        },
+                        explode("\n", $violation->source)
+                    )
+                ) . "\n";
 
                 if ($idx < count($violationsSorted) - 1) {
                     echo "\n";
