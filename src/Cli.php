@@ -8,8 +8,8 @@ use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Formatter\ConsoleFormatter;
 use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
-use function array_map;
 use function array_filter;
+use function array_map;
 
 class Cli
 {
@@ -75,7 +75,7 @@ class Cli
                     return true;
                 }
 
-                echo "Unable to locate source: $path\n";
+                echo "Unable to locate source: ${path}\n";
                 return false;
             }
         );
@@ -154,7 +154,10 @@ class Cli
 
     /**
      * @param mixed[] $options
-     * @return array<string, bool>
+     *
+     * @return bool[]
+     *
+     * @psalm-return array<string, bool>
      */
     private function parseFlags(array $options): array
     {

@@ -23,9 +23,7 @@ class ContextOutput implements Output
      */
     private $context;
 
-    /**
-     * @var ProgressOutput
-     */
+    /** @var ProgressOutput */
     private $progress;
 
     public function __construct(IWriter $writer)

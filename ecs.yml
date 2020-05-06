@@ -8,3 +8,13 @@ parameters:
     - 'common'
 
   line_ending: '\n'
+
+services:
+  PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer:
+    property: single
+
+  PhpCsFixer\Fixer\Import\OrderedImportsFixer:
+    importsOrder:
+      - class
+      - const
+      - function
