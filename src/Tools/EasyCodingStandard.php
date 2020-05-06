@@ -22,12 +22,15 @@ class EasyCodingStandard extends Tool
                 'check',
                 '--no-progress-bar',
                 '--output-format=json',
+                '--no-interaction',
+                '-v',
             ],
             $context->isFixing ? ['--fix'] : [],
             $context->files
-        ), $output);
+        ), $output, [$this, 'trackProgress']);
 
-        $json = self::parseJson(implode('', $output));
+        $outputText = implode('', $output);
+        $json = self::parseJson(substr($outputText, (int) strpos($outputText, '{')));
 
         if ($json === []) {
             return false;
@@ -90,5 +93,10 @@ class EasyCodingStandard extends Tool
         $context->addResult($result);
 
         return count($result->files) === 0;
+    }
+
+    protected function trackProgress(string $line): bool
+    {
+        return stripos(ltrim($line), '[file]') === 0;
     }
 }
