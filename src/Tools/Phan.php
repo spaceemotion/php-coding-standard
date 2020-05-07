@@ -18,10 +18,13 @@ class Phan extends Tool
         $output = [];
 
         if (
-            $this->execute(self::vendorBinary('phan'), [
-                '--output-mode=json',
-                '--no-color',
-            ], $output) === 0
+            $this->execute(self::vendorBinary('phan'), array_merge(
+                [
+                    '--output-mode=json',
+                    '--no-color',
+                ],
+                $context->isFixing ? ['--automatic-fix'] : []
+            ), $output) === 0
         ) {
             return true;
         }
