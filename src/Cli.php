@@ -46,6 +46,8 @@ class Cli
         [$this->flags, $this->files] = $this->parseFlags($arguments);
 
         $this->config = new Config();
+
+        $this->parseFilesFromInput();
     }
 
     /**
@@ -175,5 +177,20 @@ class Cli
         }
 
         return [$flags, $files];
+    }
+
+    private function parseFilesFromInput(): void
+    {
+        // Don't block execution if we don't have any piped input
+        stream_set_blocking(STDIN, false);
+
+        // Read each file path per line from the input
+        $files = [];
+
+        while (($file = fgets(STDIN)) !== false) {
+            $files[] = trim($file);
+        }
+
+        $this->files = $files;
     }
 }

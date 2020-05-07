@@ -55,6 +55,10 @@ $ phpcstd [options] <files or folders>
   Displays this help message
 ```
 
+Instead of defining the files/folders directly (in either the config or as arguments), you can also pipe a list into it:
+```
+$ ls -A1 | vendor/bin/phpcstd
+```
 ## CI-Support
 ### Github Actions
 The `--ci` flag returns a format that can be used by GithubActions to annotate commits and PRs
