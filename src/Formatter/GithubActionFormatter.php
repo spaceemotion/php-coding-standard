@@ -15,12 +15,7 @@ class GithubActionFormatter extends ConsoleFormatter
 
             foreach ($file->violations as $violation) {
                 $type = strtolower($violation->severity);
-                $line = "{$fileName}:{$violation->line} {$type} {$violation->message} ({$violation->tool})";
-
-                echo self::colorize(
-                    self::COLOR_BY_SEVERITY[$violation->severity],
-                    $line
-                ) . "\n";
+                echo "{$fileName}:{$violation->line} {$type} {$violation->message} ({$violation->tool})\n";
             }
 
             echo "::endgroup::\n";
