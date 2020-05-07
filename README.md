@@ -55,6 +55,13 @@ $ phpcstd [options] <files or folders>
   Displays this help message
 ```
 
+## CI-Support
+### Github Actions
+The `--ci` flag returns a format that can be used by GithubActions to annotate commits and PRs
+(see [their documentation on how this works](https://github.com/actions/toolkit/blob/master/docs/commands.md#problem-matchers)).
+
+![example file change with an error](./img/github-annotation.png)
+
 ## Development
 ### Using XDebug
 This project uses [composer/xdebug-handler](https://github.com/composer/xdebug-handler) to improve performance
