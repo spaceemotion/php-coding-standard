@@ -38,8 +38,8 @@
     },
     "suggest": {
         "ergebnis/composer-normalize": "Normalizes composer.json files",
-        "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
         "phan/phan": "Static analysis (needs php-ast extension)",
+        "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
         "phpmd/phpmd": "Code mess detection",
         "phpstan/phpstan": "Static analysis",
         "psalm/phar": "Static analysis (.phar)",
