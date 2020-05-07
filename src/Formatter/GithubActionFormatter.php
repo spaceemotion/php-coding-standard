@@ -23,7 +23,7 @@ class GithubActionFormatter extends ConsoleFormatter
                 ) . "\n";
             }
 
-            echo "::endgroup\n";
+            echo "::endgroup::\n";
         }
     }
 }
