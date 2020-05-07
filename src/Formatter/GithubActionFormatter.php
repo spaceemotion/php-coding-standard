@@ -13,9 +13,11 @@ class GithubActionFormatter extends ConsoleFormatter
         foreach ($result->files as $fileName => $file) {
             echo "::group::{$fileName}\n";
 
+            $fullPath = PHPCSTD_ROOT . $fileName;
+
             foreach ($file->violations as $violation) {
                 $type = strtolower($violation->severity);
-                echo "{$fileName}:{$violation->line} {$type} {$violation->message} ({$violation->tool})\n";
+                echo "{$fullPath}:{$violation->line} {$type} {$violation->message} ({$violation->tool})\n";
             }
 
             echo "::endgroup::\n";
