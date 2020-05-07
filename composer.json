@@ -26,6 +26,7 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
         "ergebnis/composer-normalize": "^2.4",
+        "phan/phan": "2.x",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpmd/phpmd": "^2.8",
         "phpstan/phpstan": "^0.12",
@@ -38,6 +39,7 @@
     "suggest": {
         "ergebnis/composer-normalize": "Normalizes composer.json files",
         "php-parallel-lint/php-parallel-lint": "Quickly lints the whole codebase for PHP errors",
+        "phan/phan": "Static analysis (needs php-ast extension)",
         "phpmd/phpmd": "Code mess detection",
         "phpstan/phpstan": "Static analysis",
         "psalm/phar": "Static analysis (.phar)",
