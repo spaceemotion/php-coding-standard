@@ -32,7 +32,7 @@ class Cli
     /** @var string[] */
     private $files;
 
-    /** @var array<string, bool>|bool[] */
+    /** @var string[] */
     private $flags;
 
     /** @var Config */
@@ -43,11 +43,7 @@ class Cli
      */
     public function __construct(array $arguments)
     {
-        $options = getopt('', array_keys(self::OPTIONS));
-
-        $this->flags = $this->parseFlags($options);
-
-        $this->files = array_slice($arguments, count($options) + 1);
+        [$this->flags, $this->files] = $this->parseFlags($arguments);
 
         $this->config = new Config();
     }
@@ -101,7 +97,7 @@ class Cli
 
     private function hasFlag(string $flag): bool
     {
-        return array_key_exists($flag, $this->flags) && $this->flags[$flag] === true;
+        return in_array($flag, $this->flags, true);
     }
 
     /**
@@ -156,28 +152,28 @@ class Cli
 
     /**
      * @param mixed[] $options
-     *
-     * @return bool[]
-     *
-     * @psalm-return array<string, bool>
+     * @return string[][]
      */
     private function parseFlags(array $options): array
     {
-        $flags = array_combine(
-            array_keys(self::OPTIONS),
-            array_map(
-                static function ($key, $flag) use ($options): bool {
-                    return array_key_exists($flag, $options);
-                },
-                self::OPTIONS,
-                array_keys(self::OPTIONS)
-            )
-        );
+        $flags = [];
+        $files = [];
 
-        if ($flags === false) {
-            throw new RuntimeException('Unable to parse flags');
+        foreach ($options as $option) {
+            if (strpos($option, '--') !== 0) {
+                $files[] = $option;
+                continue;
+            }
+
+            $flag = substr($option, 2);
+
+            if (! array_key_exists($flag, self::OPTIONS)) {
+                throw new RuntimeException("Unknown flag: '{$flag}'");
+            }
+
+            $flags[] = $flag;
         }
 
-        return $flags;
+        return [$flags, $files];
     }
 }
