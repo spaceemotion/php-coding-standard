@@ -43,7 +43,7 @@ To minimize dependencies, `phpcstd` used ini-files for its configuration. If no 
 $ phpcstd [options] <files or folders>
 
 --ci
-  Changes the output format to checkstyle.xml for better CI integration
+  Changes the output for github actions to automatically add PR annotations
 
 --fix
   Try to fix any linting errors (disables other tools)

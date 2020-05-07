@@ -34,4 +34,4 @@ jobs:
         run: sed -i -e 's/enabled = false/enabled = true/g' .phpcstd.dist.ini
 
       - name: Run phpcstd
-        run: bin/phpcstd --continue
+        run: bin/phpcstd --continue --ci

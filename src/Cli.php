@@ -6,6 +6,7 @@ namespace Spaceemotion\PhpCodingStandard;
 
 use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Formatter\ConsoleFormatter;
+use Spaceemotion\PhpCodingStandard\Formatter\GithubActionFormatter;
 use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
 use function array_filter;
@@ -92,7 +93,8 @@ class Cli
 
         $success = $this->executeContext($tools, $context);
 
-        (new ConsoleFormatter())->format($context->result);
+        $formatter = $context->runningInCi ? new GithubActionFormatter() : new ConsoleFormatter();
+        $formatter->format($context->result);
 
         return $success;
     }

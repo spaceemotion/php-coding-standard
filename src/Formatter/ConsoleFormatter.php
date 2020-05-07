@@ -6,7 +6,7 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 
 class ConsoleFormatter implements Formatter
 {
-    private const COLORS = [
+    protected const COLORS = [
         'green' => '0;32',
         'gray' => '0;37',
         'red' => '0;31',
@@ -14,7 +14,7 @@ class ConsoleFormatter implements Formatter
         'blue' => '0;34',
     ];
 
-    private const COLOR_BY_SEVERITY = [
+    protected const COLOR_BY_SEVERITY = [
         Violation::SEVERITY_ERROR => 'red',
         Violation::SEVERITY_WARNING => 'yellow',
         Violation::SEVERITY_INFO => 'blue',
@@ -76,7 +76,7 @@ class ConsoleFormatter implements Formatter
         )) . "\n";
     }
 
-    private static function colorize(string $color, string $text): string
+    protected static function colorize(string $color, string $text): string
     {
         return "\033[" . self::COLORS[$color] . 'm' . $text . "\033[0m";
     }
@@ -88,7 +88,7 @@ class ConsoleFormatter implements Formatter
      *
      * @psalm-return list<Violation>
      */
-    private static function sortByLineNumber(array $violations): array
+    protected static function sortByLineNumber(array $violations): array
     {
         uasort(
             $violations,
