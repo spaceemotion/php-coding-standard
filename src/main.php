@@ -13,5 +13,6 @@ exit((new Cli($argv))->start([
     new Tools\PhpMessDetector(),
     new Tools\Phpstan(),
     new Tools\Psalm(),
+    new Tools\Phan(),
     new Tools\EasyCodingStandard(),
 ]) ? 0 : 1);
