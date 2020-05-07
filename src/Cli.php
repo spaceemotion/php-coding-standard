@@ -22,7 +22,10 @@ class Cli
 
     public const FLAG_HELP = 'help';
 
+    public const FLAG_ANSI = 'ansi';
+
     private const OPTIONS = [
+        self::FLAG_ANSI => 'Forces the output to be colorized',
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',

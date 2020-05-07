@@ -4,6 +4,9 @@
 
 declare(strict_types=1);
 
+use Composer\XdebugHandler\XdebugHandler;
+use Spaceemotion\PhpCodingStandard\Cli;
+
 (static function (): void {
     // Find root "bin" folder for composer installation
     static $autoloadFile = 'vendor/autoload.php';
@@ -34,5 +37,5 @@ declare(strict_types=1);
     ini_set('memory_limit', '-1');
 
     // Don't run with XDebug enabled to improve performance
-    (new \Composer\XdebugHandler\XdebugHandler('phpcstd'))->check();
+    (new XdebugHandler('phpcstd', '--' . Cli::FLAG_ANSI))->check();
 })();

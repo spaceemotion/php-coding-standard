@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Formatter;
 
+use Spaceemotion\PhpCodingStandard\Cli;
+
 class ConsoleFormatter implements Formatter
 {
     protected const COLORS = [
@@ -20,6 +22,14 @@ class ConsoleFormatter implements Formatter
         Violation::SEVERITY_INFO => 'blue',
     ];
 
+    /** @var bool */
+    protected $supportsColor = false;
+
+    public function __construct()
+    {
+        $this->supportsColor = $this->hasColorSupport();
+    }
+
     public function format(Result $result): void
     {
         $counts = [
@@ -29,19 +39,19 @@ class ConsoleFormatter implements Formatter
         ];
 
         foreach ($result->files as $path => $file) {
-            echo "\n" . self::colorize('green', $path) . "\n";
+            echo "\n" . $this->colorize('green', $path) . "\n";
 
             $violationsSorted = self::sortByLineNumber($file->violations);
 
             foreach ($violationsSorted as $idx => $violation) {
                 $counts[$violation->severity]++;
 
-                $severity = self::colorize(
+                $severity = $this->colorize(
                     self::COLOR_BY_SEVERITY[$violation->severity],
                     strtoupper($violation->severity)
                 );
 
-                $tool = self::colorize('gray', "({$violation->tool})");
+                $tool = $this->colorize('gray', "({$violation->tool})");
 
                 echo "  {$violation->line}: [{$severity}] {$violation->message} ${tool}" . "\n";
 
@@ -54,8 +64,8 @@ class ConsoleFormatter implements Formatter
                 echo implode(
                     "\n",
                     array_map(
-                        static function (string $line) use ($perLinePrefix): string {
-                            return $perLinePrefix . self::colorize('gray', $line);
+                        function (string $line) use ($perLinePrefix): string {
+                            return $perLinePrefix . $this->colorize('gray', $line);
                         },
                         explode("\n", $violation->source)
                     )
@@ -76,9 +86,49 @@ class ConsoleFormatter implements Formatter
         )) . "\n";
     }
 
-    protected static function colorize(string $color, string $text): string
+    protected function colorize(string $color, string $text): string
     {
+        if (! $this->supportsColor) {
+            return $text;
+        }
+
         return "\033[" . self::COLORS[$color] . 'm' . $text . "\033[0m";
+    }
+
+    protected function isTty(): bool
+    {
+        if (getenv('TERM_PROGRAM') === 'Hyper') {
+            return true;
+        }
+
+        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+            return (function_exists('sapi_windows_vt100_support')
+                    && sapi_windows_vt100_support(STDIN))
+                || getenv('ANSICON') !== false
+                || getenv('ConEmuANSI') === 'ON'
+                || getenv('TERM') === 'xterm';
+        }
+
+        if (function_exists('stream_isatty')) {
+            return stream_isatty(STDIN);
+        }
+
+        return false;
+    }
+
+    protected function hasColorSupport(): bool
+    {
+        // Follow https://no-color.org/ as symfony does the same
+        // https://github.com/symfony/Console/blob/master/Output/StreamOutput.php#L94
+        if (isset($_SERVER['NO_COLOR']) || getenv('NO_COLOR') !== false) {
+            return false;
+        }
+
+        if (in_array('--' . Cli::FLAG_ANSI, $_SERVER['argv'], true)) {
+            return true;
+        }
+
+        return $this->isTty();
     }
 
     /**
