@@ -24,6 +24,7 @@
         "composer/xdebug-handler": "^1.0"
     },
     "require-dev": {
+        "brainmaestro/composer-git-hooks": "^2.8",
         "ergebnis/composer-normalize": "^2.4",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpmd/phpmd": "^2.8",
@@ -48,6 +49,13 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "git diff --name-only --staged | bin/phpcstd --fix"
+            ]
+        }
+    },
     "autoload": {
         "psr-4": {
             "Spaceemotion\\PhpCodingStandard\\": "src/"
@@ -57,5 +65,9 @@
     "prefer-stable": true,
     "bin": [
         "bin/phpcstd"
-    ]
+    ],
+    "scripts": {
+        "post-install-cmd": "cghooks add --ignore-lock",
+        "post-update-cmd": "cghooks update"
+    }
 }

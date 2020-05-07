@@ -59,6 +59,14 @@ Instead of defining the files/folders directly (in either the config or as argum
 ```
 $ ls -A1 | vendor/bin/phpcstd
 ```
+
+## Git Hooks
+To not have to wait for CI pipelines to finish, you can use git hooks to run over the changed files before committing.
+
+```sh
+git diff --name-only --cached | vendor/bin/phpcstd
+```
+
 ## CI-Support
 ### Github Actions
 The `--ci` flag returns a format that can be used by GithubActions to annotate commits and PRs
