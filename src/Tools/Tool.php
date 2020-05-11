@@ -120,7 +120,11 @@ abstract class Tool
      */
     protected static function parseJson(string $raw): array
     {
-        $json = json_decode($raw, true, 512);
+        // Clean up malformed JSON output
+        $matches = [];
+        preg_match('/((?:{.*})|(?:\[.*\]))\s*$/msS', $raw, $matches);
+
+        $json = json_decode($matches[1] ?? $raw, true, 512);
 
         if (json_last_error() === JSON_ERROR_NONE) {
             return $json;
