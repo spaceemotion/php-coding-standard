@@ -46,7 +46,7 @@ class Cli
      */
     public function __construct(array $arguments)
     {
-        [$this->flags, $this->files] = $this->parseFlags($arguments);
+        [$this->flags, $this->files] = $this->parseFlags(array_slice($arguments, 1));
 
         $this->config = new Config();
 
@@ -188,12 +188,8 @@ class Cli
         stream_set_blocking(STDIN, false);
 
         // Read each file path per line from the input
-        $files = [];
-
         while (($file = fgets(STDIN)) !== false) {
-            $files[] = trim($file);
+            $this->files[] = trim($file);
         }
-
-        $this->files = $files;
     }
 }
