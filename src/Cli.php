@@ -41,6 +41,9 @@ class Cli
     /** @var string[] */
     private $flags;
 
+    /** @var string[] */
+    private $parameters;
+
     /** @var Config */
     private $config;
 
@@ -49,7 +52,7 @@ class Cli
      */
     public function __construct(array $arguments)
     {
-        [$this->flags, $this->files] = $this->parseFlags(array_slice($arguments, 1));
+        [$this->flags, $this->parameters, $this->files] = $this->parseFlags(array_slice($arguments, 1));
 
         $this->config = new Config();
 
@@ -168,6 +171,7 @@ class Cli
     private function parseFlags(array $options): array
     {
         $flags = [];
+        $parameters = [];
         $files = [];
 
         foreach ($options as $option) {
@@ -176,16 +180,23 @@ class Cli
                 continue;
             }
 
-            $flag = substr($option, 2);
+            $split = explode('=', substr($option, 2), 2);
+            $flag = $split[0];
+            $value = $split[1] ?? '';
 
             if (! array_key_exists($flag, self::OPTIONS)) {
-                throw new RuntimeException("Unknown flag: '{$flag}'");
+                throw new RuntimeException("Unknown flag/parameter: '{$flag}'");
+            }
+
+            if ($value !== '') {
+                $parameters[$flag] = $value;
+                continue;
             }
 
             $flags[] = $flag;
         }
 
-        return [$flags, $files];
+        return [$flags, $parameters, $files];
     }
 
     private function parseFilesFromInput(): void
