@@ -62,7 +62,7 @@ class PhpCodeSniffer extends Tool
 
         $totals = $json['totals'] ?? [];
 
-        return ($totals['errors'] ?? 0) >= ($totals['fixable'] ?? 0);
+        return ($totals['errors'] ?? 0) + ($totals['warnings'] ?? 0) === ($totals['fixable'] ?? 0);
     }
 
     protected function trackProgress(string $line): bool
