@@ -15,22 +15,15 @@ class PhpCodeSniffer extends Tool
 
     public function run(Context $context): bool
     {
-        $config = $context->config->getPart($this->name);
+        if ($context->isFixing) {
+            echo "\n   Additional fix pass:";
+            $this->sniff($context, 'phpcbf');
+            echo "\n   Regular pass:";
+        }
 
         $output = [];
 
-        if (
-            $this->execute(
-                self::vendorBinary($context->isFixing ? 'phpcbf' : 'phpcs'),
-                array_merge([
-                    '--report=json',
-                    '--parallel=' . (int) ($config['processes'] ?? 24),
-                    '-v', // prints out every file it parses, use this for progress tracking
-                ], $context->files),
-                $output,
-                [$this, 'trackProgress']
-            ) === 0
-        ) {
+        if ($this->sniff($context, 'phpcs', $output) === 0) {
             return true;
         }
 
@@ -75,5 +68,27 @@ class PhpCodeSniffer extends Tool
     protected function trackProgress(string $line): bool
     {
         return stripos($line, 'processing') === 0;
+    }
+
+    /**
+     * @param string[] $output
+     */
+    protected function sniff(Context $context, string $binary, array &$output = []): int
+    {
+        $config = $context->config->getPart($this->name);
+
+        return $this->execute(
+            self::vendorBinary($binary),
+            array_merge(
+                [
+                    '--report=json',
+                    '--parallel=' . (int) ($config['processes'] ?? 24),
+                    '-v', // prints out every file it parses, use this for progress tracking
+                ],
+                $context->files
+            ),
+            $output,
+            [$this, 'trackProgress']
+        );
     }
 }
