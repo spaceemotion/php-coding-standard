@@ -35,6 +35,11 @@ class Phan extends Tool
             $json = self::parseJson($output[count($output) - 2]);
         }
 
+        if ($json === []) {
+            echo implode("\n", $output);
+            return false;
+        }
+
         foreach ($json as $entry) {
             $violation = new Violation();
             $violation->message = $entry['description'];
