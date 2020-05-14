@@ -59,7 +59,9 @@ class Psalm extends Tool
             $violation->tool = $this->name;
             $violation->line = $entry['line_from'];
             $violation->source = "${entry['type']} (${entry['link']})";
-            $violation->severity = $entry['severity'];
+            $violation->severity = $entry['severity'] === Violation::SEVERITY_ERROR
+                ? Violation::SEVERITY_ERROR
+                : Violation::SEVERITY_WARNING;
 
             $file = new File();
             $file->violations[] = $violation;

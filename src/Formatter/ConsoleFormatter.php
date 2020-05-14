@@ -19,7 +19,6 @@ class ConsoleFormatter implements Formatter
     protected const COLOR_BY_SEVERITY = [
         Violation::SEVERITY_ERROR => 'red',
         Violation::SEVERITY_WARNING => 'yellow',
-        Violation::SEVERITY_INFO => 'blue',
     ];
 
     /** @var bool */
@@ -39,7 +38,6 @@ class ConsoleFormatter implements Formatter
         $counts = [
             Violation::SEVERITY_WARNING => 0,
             Violation::SEVERITY_ERROR => 0,
-            Violation::SEVERITY_INFO => 0,
         ];
 
         foreach ($result->files as $path => $file) {
