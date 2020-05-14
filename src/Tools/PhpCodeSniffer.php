@@ -15,6 +15,8 @@ class PhpCodeSniffer extends Tool
 
     public function run(Context $context): bool
     {
+        $config = $context->config->getPart($this->name);
+
         $output = [];
 
         if (
@@ -22,6 +24,7 @@ class PhpCodeSniffer extends Tool
                 self::vendorBinary($context->isFixing ? 'phpcbf' : 'phpcs'),
                 array_merge([
                     '--report=json',
+                    '--parallel=' . (int) ($config['processes'] ?? 24),
                     '-v', // prints out every file it parses, use this for progress tracking
                 ], $context->files),
                 $output,
