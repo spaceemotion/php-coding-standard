@@ -16,10 +16,13 @@ class PhpParallelLint extends Tool
 
     public function run(Context $context): bool
     {
+        $config = $context->config->getPart($this->name);
+
         $manager = new PhpParallelLint\Manager($context);
 
         $settings = new Settings();
         $settings->addPaths($context->files);
+        $settings->parallelJobs = (int) ($config['processes'] ?? 24);
 
         try {
             $result = $manager->run($settings);
