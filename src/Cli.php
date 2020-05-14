@@ -24,11 +24,14 @@ class Cli
 
     public const FLAG_ANSI = 'ansi';
 
+    public const FLAG_HIDE_SOURCE = 'hide-source';
+
     private const OPTIONS = [
         self::FLAG_ANSI => 'Forces the output to be colorized',
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',
+        self::FLAG_HIDE_SOURCE => 'Hides the "source" lines from console output',
         self::FLAG_HELP => 'Displays this help message',
     ];
 
@@ -94,13 +97,16 @@ class Cli
 
         $success = $this->executeContext($tools, $context);
 
-        $formatter = $context->runningInCi ? new GithubActionFormatter() : new ConsoleFormatter();
+        $formatter = $context->runningInCi
+            ? new GithubActionFormatter($this)
+            : new ConsoleFormatter($this);
+
         $formatter->format($context->result);
 
         return $success;
     }
 
-    private function hasFlag(string $flag): bool
+    public function hasFlag(string $flag): bool
     {
         return in_array($flag, $this->flags, true);
     }

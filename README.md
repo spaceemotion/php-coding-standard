@@ -52,6 +52,9 @@ $ phpcstd [options] <files or folders>
 --continue
   Just run the next check if the previous one failed
 
+--hide-source
+  Hides the "source" lines from console output
+
 --help
   Displays this help message
 ```

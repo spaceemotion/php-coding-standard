@@ -25,9 +25,13 @@ class ConsoleFormatter implements Formatter
     /** @var bool */
     protected $supportsColor = false;
 
-    public function __construct()
+    /** @var bool */
+    protected $printSource = false;
+
+    public function __construct(Cli $cli)
     {
         $this->supportsColor = $this->hasColorSupport();
+        $this->printSource = ! $cli->hasFlag(Cli::FLAG_HIDE_SOURCE);
     }
 
     public function format(Result $result): void
@@ -55,7 +59,7 @@ class ConsoleFormatter implements Formatter
 
                 echo "  {$violation->line}: [{$severity}] {$violation->message} ${tool}" . "\n";
 
-                if ($violation->source === '') {
+                if (! $this->printSource || $violation->source === '') {
                     continue;
                 }
 

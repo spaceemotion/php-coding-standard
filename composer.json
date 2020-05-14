@@ -54,7 +54,7 @@
     "extra": {
         "hooks": {
             "pre-commit": [
-                "git diff --name-only --staged | bin/phpcstd --fix"
+                "git diff --name-only --staged | bin/phpcstd --fix --hide-source"
             ]
         }
     },
