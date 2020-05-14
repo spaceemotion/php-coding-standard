@@ -64,7 +64,7 @@ class Phpstan extends Tool
 
             foreach ($details['messages'] as $message) {
                 $violation = new Violation();
-                $violation->line = $message['line'];
+                $violation->line = (int) ($message['line'] ?? 0);
                 $violation->message = $message['message'];
                 $violation->tool = $this->name;
 
