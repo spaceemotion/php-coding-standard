@@ -22,6 +22,7 @@ class ProgressOutput
     {
         $this->dotsPerLine = $dotsPerLine;
         $this->dotsInLine = $dotsPerLine;
+        $this->dots = 0;
     }
 
     public function __destruct()
