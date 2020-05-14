@@ -15,6 +15,9 @@ jobs:
           php-version: '7.4'
           tools: prestissimo
           coverage: none
+          extensions: php-ast
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get composer cache directory
         id: composer-cache
