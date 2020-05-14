@@ -15,6 +15,9 @@ class ProgressOutput
     /** @var int */
     protected $dotsInLine;
 
+    /** @var int */
+    protected $dots;
+
     public function __construct(int $dotsPerLine = 64)
     {
         $this->dotsPerLine = $dotsPerLine;
@@ -23,7 +26,7 @@ class ProgressOutput
 
     public function __destruct()
     {
-        echo ' ';
+        echo " ({$this->dots}) ";
     }
 
     public function advance(): void
@@ -35,6 +38,7 @@ class ProgressOutput
         }
 
         $this->dotsInLine++;
+        $this->dots++;
 
         echo '.';
     }
