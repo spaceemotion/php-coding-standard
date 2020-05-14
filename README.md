@@ -43,6 +43,9 @@ To minimize dependencies, `phpcstd` used ini-files for its configuration. If no 
 ```
 $ phpcstd [options] <files or folders>
 
+--disable=ecs,phan
+  Disables the list of tools during the run (comma-separated list)
+
 --ci
   Changes the output for github actions to automatically add PR annotations
 

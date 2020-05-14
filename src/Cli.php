@@ -26,7 +26,10 @@ class Cli
 
     public const FLAG_HIDE_SOURCE = 'hide-source';
 
+    public const PARAMETER_DISABLE = 'disable';
+
     private const OPTIONS = [
+        self::PARAMETER_DISABLE => 'Disables the list of tools during the run (comma-separated list)',
         self::FLAG_ANSI => 'Forces the output to be colorized',
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
@@ -134,13 +137,17 @@ class Cli
      */
     private function executeContext(array $tools, Context $context): bool
     {
+        $disabled = explode(',', $this->parameters[self::PARAMETER_DISABLE] ?? '');
+
         $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
         $success = true;
 
         foreach ($tools as $tool) {
-            echo "-> {$tool->getName()}: ";
+            $name = $tool->getName();
 
-            if (! $tool->shouldRun($context)) {
+            echo "-> {$name}: ";
+
+            if (in_array($name, $disabled, true) || ! $tool->shouldRun($context)) {
                 echo 'SKIP' . PHP_EOL;
                 continue;
             }
