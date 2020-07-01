@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
@@ -83,7 +84,7 @@ class Phpstan extends Tool
     {
         $firstLetter = $line[0] ?? '';
 
-        if (PHP_OS_FAMILY === 'Windows') {
+        if (Cli::isOnWindows()) {
             // TODO how are file paths on windows again?
             return $firstLetter !== '{';
         }
