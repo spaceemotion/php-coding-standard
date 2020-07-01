@@ -208,6 +208,12 @@ class Cli
 
     private function parseFilesFromInput(): void
     {
+        // Windows does not support nonblocking input streams:
+        // https://bugs.php.net/bug.php?id=34972
+        if (self::isOnWindows()) {
+            return;
+        }
+
         // Don't block execution if we don't have any piped input
         stream_set_blocking(STDIN, false);
 
@@ -215,5 +221,14 @@ class Cli
         while (($file = fgets(STDIN)) !== false) {
             $this->files[] = trim($file);
         }
+    }
+
+    public static function isOnWindows(): bool
+    {
+        if (defined('PHP_OS_FAMILY')) {
+            return PHP_OS_FAMILY === 'Windows';
+        }
+
+        return stripos(PHP_OS, 'WIN') === 0;
     }
 }
