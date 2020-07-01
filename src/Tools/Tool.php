@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
 use RuntimeException;
+use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\ProgressOutput;
 
@@ -104,12 +105,12 @@ abstract class Tool
     {
         $binary = PHPCSTD_BINARY_PATH . $binary;
 
-        if (PHP_OS_FAMILY === 'Windows') {
-            $binary = "{$binary}.bat";
-        }
-
         if (! is_file($binary)) {
             $binary = "${binary}.phar";
+        }
+
+        if (Cli::isOnWindows()) {
+            $binary = "{$binary}.bat";
         }
 
         return $binary;
