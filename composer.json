@@ -34,7 +34,7 @@
         "phpstan/phpstan-strict-rules": "^0.12",
         "psalm/phar": "^3.11",
         "squizlabs/php_codesniffer": "^3.5",
-        "symplify/easy-coding-standard-prefixed": "^7.2"
+        "symplify/easy-coding-standard-prefixed": "^8"
     },
     "suggest": {
         "ergebnis/composer-normalize": "Normalizes composer.json files",
