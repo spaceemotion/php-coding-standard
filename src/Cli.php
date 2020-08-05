@@ -26,6 +26,8 @@ class Cli
 
     public const FLAG_HIDE_SOURCE = 'hide-source';
 
+    public const FLAG_NO_FAIL = 'no-fail';
+
     public const PARAMETER_DISABLE = 'disable';
 
     private const OPTIONS = [
@@ -35,6 +37,7 @@ class Cli
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',
         self::FLAG_HIDE_SOURCE => 'Hides the "source" lines from console output',
+        self::FLAG_NO_FAIL => 'Only returns with exit code 0, regardless of any errors/warnings',
         self::FLAG_HELP => 'Displays this help message',
     ];
 
@@ -109,7 +112,7 @@ class Cli
 
         $formatter->format($context->result);
 
-        return $success;
+        return $this->hasFlag(self::FLAG_NO_FAIL) ? true : $success;
     }
 
     public function hasFlag(string $flag): bool
