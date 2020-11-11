@@ -85,4 +85,4 @@ The `--ci` flag returns a format that can be used by GithubActions to annotate c
 ### Using XDebug
 This project uses [composer/xdebug-handler](https://github.com/composer/xdebug-handler) to improve performance
 by disabling xdebug upon startup. To enable XDebug during development you need to set the following env variable:
-`MYAPP_ALLOW_XDEBUG=1` (as written in their README).
+`PHPCSTD_ALLOW_XDEBUG=1` (as written in their README).
