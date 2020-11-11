@@ -43,11 +43,14 @@ To minimize dependencies, `phpcstd` used ini-files for its configuration. If no 
 ```
 $ phpcstd [options] <files or folders>
 
---disable=ecs,phan
+--disable
   Disables the list of tools during the run (comma-separated list)
 
+--ansi
+  Forces the output to be colorized
+
 --ci
-  Changes the output for github actions to automatically add PR annotations
+  Changes the output format to checkstyle.xml for better CI integration
 
 --fix
   Try to fix any linting errors (disables other tools)
@@ -57,6 +60,12 @@ $ phpcstd [options] <files or folders>
 
 --hide-source
   Hides the "source" lines from console output
+
+--no-fail
+  Only returns with exit code 0, regardless of any errors/warnings
+
+--lint-staged
+  Uses "git diff" to determine staged files to lint
 
 --help
   Displays this help message
