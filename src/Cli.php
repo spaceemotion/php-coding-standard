@@ -58,10 +58,17 @@ class Cli
 
     /**
      * @param string[] $arguments
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct(array $arguments)
     {
         [$this->flags, $this->parameters, $this->files] = $this->parseFlags(array_slice($arguments, 1));
+
+        if ($this->hasFlag(self::FLAG_HELP)) {
+            $this->showHelp();
+            exit(0);
+        }
 
         $this->lintStaged();
 
@@ -78,11 +85,6 @@ class Cli
      */
     public function start(array $tools): bool
     {
-        if ($this->hasFlag(self::FLAG_HELP)) {
-            $this->showHelp();
-            return true;
-        }
-
         if (count($this->files) === 0) {
             $this->files = $this->config->getSources();
         }
