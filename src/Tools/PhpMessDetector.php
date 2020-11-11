@@ -20,7 +20,7 @@ class PhpMessDetector extends Tool
         if (
             $this->execute(self::vendorBinary($this->name), [
                 implode(',', $context->files),
-                $context->runningInCi ? 'xml' : 'json',
+                'json',
                 'phpmd.xml',
             ], $output) === 0
         ) {
