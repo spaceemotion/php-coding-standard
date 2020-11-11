@@ -77,11 +77,11 @@ class ContextOutput implements Output
      * @psalm-suppress MissingParamType
      */
     public function writeResult(
-        \JakubOnderka\PhpParallelLint\Result $lintResult,
+        \JakubOnderka\PhpParallelLint\Result $result,
         ErrorFormatter $errorFormatter,
         $ignoreFails
     ): void {
-        foreach ($lintResult->getErrors() as $error) {
+        foreach ($result->getErrors() as $error) {
             if (! ($error instanceof SyntaxError)) {
                 continue;
             }

@@ -83,7 +83,8 @@ class PhpCodeSniffer extends Tool
                 [
                     '--report=json',
                     '--parallel=' . (int) ($config['processes'] ?? 24),
-                    '-v', // prints out every file it parses, use this for progress tracking
+                    // prints out every file it parses, use this for progress tracking
+                    '-v',
                 ],
                 $context->files
             ),

@@ -120,6 +120,15 @@ class Cli
         return in_array($flag, $this->flags, true);
     }
 
+    public static function isOnWindows(): bool
+    {
+        if (defined('PHP_OS_FAMILY')) {
+            return PHP_OS_FAMILY === 'Windows';
+        }
+
+        return stripos(PHP_OS, 'WIN') === 0;
+    }
+
     /**
      * Shows an overview of all available flags and options.
      */
@@ -224,14 +233,5 @@ class Cli
         while (($file = fgets(STDIN)) !== false) {
             $this->files[] = trim($file);
         }
-    }
-
-    public static function isOnWindows(): bool
-    {
-        if (defined('PHP_OS_FAMILY')) {
-            return PHP_OS_FAMILY === 'Windows';
-        }
-
-        return stripos(PHP_OS, 'WIN') === 0;
     }
 }

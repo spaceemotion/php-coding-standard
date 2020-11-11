@@ -19,7 +19,8 @@ use Spaceemotion\PhpCodingStandard\Cli;
         if (file_exists("{$path}/{$autoloadFile}")) {
             $realPath = realpath($path);
 
-            define('PHPCSTD_ROOT', "{$realPath}/"); // @phan-suppress-current-line PhanUndeclaredVariable
+            // @phan-suppress-current-line PhanUndeclaredVariable
+            define('PHPCSTD_ROOT', "{$realPath}/");
             define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
             require_once "{$realPath}/vendor/autoload.php";
