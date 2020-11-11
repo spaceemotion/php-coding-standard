@@ -26,6 +26,8 @@ class Cli
 
     public const FLAG_HIDE_SOURCE = 'hide-source';
 
+    public const FLAG_LINT_STAGED = 'lint-staged';
+
     public const FLAG_NO_FAIL = 'no-fail';
 
     public const PARAMETER_DISABLE = 'disable';
@@ -38,6 +40,7 @@ class Cli
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',
         self::FLAG_HIDE_SOURCE => 'Hides the "source" lines from console output',
         self::FLAG_NO_FAIL => 'Only returns with exit code 0, regardless of any errors/warnings',
+        self::FLAG_LINT_STAGED => 'Uses "git diff" to determine staged files to lint',
         self::FLAG_HELP => 'Displays this help message',
     ];
 
@@ -60,9 +63,11 @@ class Cli
     {
         [$this->flags, $this->parameters, $this->files] = $this->parseFlags(array_slice($arguments, 1));
 
-        $this->config = new Config();
+        $this->lintStaged();
 
         $this->parseFilesFromInput();
+
+        $this->config = new Config();
     }
 
     /**
@@ -127,6 +132,26 @@ class Cli
         }
 
         return stripos(PHP_OS, 'WIN') === 0;
+    }
+
+    /**
+     * Calls 'git diff' to determine changed files.
+     * Also exists if no files have been changed.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    private function lintStaged(): void
+    {
+        if (! $this->hasFlag(self::FLAG_LINT_STAGED)) {
+            return;
+        }
+
+        exec('git diff --name-only --cached', $this->files);
+
+        if ($this->files === []) {
+            echo 'No files staged. Skipping.';
+            exit(0);
+        }
     }
 
     /**

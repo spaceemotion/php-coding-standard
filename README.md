@@ -71,7 +71,7 @@ $ ls -A1 | vendor/bin/phpcstd
 To not have to wait for CI pipelines to finish, you can use git hooks to run over the changed files before committing.
 
 ```sh
-git diff --name-only --cached | vendor/bin/phpcstd
+vendor/bin/phpcstd --lint-staged
 ```
 
 ## CI-Support
