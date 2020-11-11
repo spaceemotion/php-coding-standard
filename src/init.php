@@ -19,7 +19,7 @@ use Spaceemotion\PhpCodingStandard\Cli;
         if (file_exists("{$path}/{$autoloadFile}")) {
             $realPath = realpath($path);
 
-            // @phan-suppress-current-line PhanUndeclaredVariable
+            // @phan-suppress-next-line PhanUndeclaredVariable
             define('PHPCSTD_ROOT', "{$realPath}/");
             define('PHPCSTD_BINARY_PATH', PHPCSTD_ROOT . 'vendor/bin/');
 
