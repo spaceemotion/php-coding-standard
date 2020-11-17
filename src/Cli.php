@@ -257,7 +257,7 @@ class Cli
         stream_set_blocking(STDIN, false);
 
         // Fix "sh: turning off NDELAY mode" error on exit
-        register_shutdown_function(function() {
+        register_shutdown_function(function (): void {
             stream_set_blocking(STDIN, true);
         });
 
