@@ -256,6 +256,11 @@ class Cli
         // Don't block execution if we don't have any piped input
         stream_set_blocking(STDIN, false);
 
+        // Fix "sh: turning off NDELAY mode" error on exit
+        register_shutdown_function(function() {
+            stream_set_blocking(STDIN, true);
+        });
+
         // Read each file path per line from the input
         while (($file = fgets(STDIN)) !== false) {
             $this->files[] = trim($file);
