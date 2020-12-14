@@ -45,7 +45,7 @@ class EasyCodingStandard extends Tool
                 $violation = new Violation();
                 $violation->line = $error['line'];
                 $violation->message = $error['message'];
-                $violation->source = $error['sourceClass'];
+                $violation->source = $error['source_class'];
                 $violation->tool = $this->name;
 
                 $file->violations[] = $violation;
@@ -76,7 +76,7 @@ class EasyCodingStandard extends Tool
                         $violation->line = $fromLineNumber;
                         $violation->message = 'Styling issues found';
                         $violation->tool = $this->name;
-                        $violation->source = implode("\n", $diff['appliedCheckers'])
+                        $violation->source = implode("\n", $diff['applied_checkers'])
                             . "\n\n"
                             . rtrim($match[0], "\n\r");
 
