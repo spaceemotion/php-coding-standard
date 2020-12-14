@@ -18,7 +18,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: prestissimo
           coverage: none
           extensions: php-ast
         env:
