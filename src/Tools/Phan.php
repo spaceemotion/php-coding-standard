@@ -23,6 +23,7 @@ class Phan extends Tool
                     '--output-mode=json',
                     '--no-color',
                 ],
+                extension_loaded('ast') ? [] : ['--allow-polyfill-parser'],
                 $context->isFixing ? ['--automatic-fix'] : []
             ), $output) === 0
         ) {
