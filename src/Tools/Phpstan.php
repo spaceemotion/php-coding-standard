@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use Closure;
 use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
+use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class Phpstan extends Tool
 {
@@ -25,10 +27,14 @@ class Phpstan extends Tool
                     '--error-format=json',
                     '--no-ansi',
                     '--no-interaction',
-                    '--debug',
                 ],
                 $context->files
-            ), $output, [$this, 'trackProgress']) === 0
+            ), $output, (
+                $context->fast ? null : new ProgressTracker(
+                    Closure::fromCallable([$this, 'trackProgress']),
+                    ['--debug']
+                )
+            )) === 0
         ) {
             return true;
         }

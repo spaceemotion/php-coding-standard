@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use Closure;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
+use Spaceemotion\PhpCodingStandard\ProgressTracker;
+
+use function rtrim;
+use function implode;
+use function preg_match_all;
+
+use const PREG_SET_ORDER;
 
 class EasyCodingStandard extends Tool
 {
@@ -20,14 +28,15 @@ class EasyCodingStandard extends Tool
         $this->execute(self::vendorBinary($this->name), array_merge(
             [
                 'check',
-                '--no-progress-bar',
                 '--output-format=json',
-                '--no-interaction',
-                '-v',
             ],
             $context->isFixing ? ['--fix'] : [],
             $context->files
-        ), $output, [$this, 'trackProgress']);
+        ), $output, $context->fast ? null : (
+            new ProgressTracker(Closure::fromCallable([$this, 'trackProgress']), [
+                '--debug',
+            ])
+        ));
 
         $outputText = implode('', $output);
         $json = self::parseJson(substr($outputText, (int) strpos($outputText, '{')));
@@ -36,9 +45,21 @@ class EasyCodingStandard extends Tool
             return false;
         }
 
+        $result = $this->parseResult($json['files'] ?? [], $context);
+
+        $context->addResult($result);
+
+        return count($result->files) === 0;
+    }
+
+    /**
+     * @param mixed[] $files
+     */
+    protected function parseResult(array $files, Context $context): Result
+    {
         $result = new Result();
 
-        foreach (($json['files'] ?? []) as $path => $details) {
+        foreach ($files as $path => $details) {
             $file = new File();
 
             foreach (($details['errors'] ?? []) as $error) {
@@ -90,9 +111,7 @@ class EasyCodingStandard extends Tool
             }
         }
 
-        $context->addResult($result);
-
-        return count($result->files) === 0;
+        return $result;
     }
 
     protected function trackProgress(string $line): bool

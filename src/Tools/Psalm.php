@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
+use Closure;
 use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
+use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class Psalm extends Tool
 {
@@ -29,12 +31,14 @@ class Psalm extends Tool
         $output = [];
         $exitCode = $this->execute($binary, array_merge(
             [
-                '--debug',
                 '--monochrome',
                 "--report=${tmpFileJson}",
             ],
             $context->files
-        ), $output, [$this, 'trackProgress']);
+        ), $output, $context->fast ? null : new ProgressTracker(
+            Closure::fromCallable([$this, 'trackProgress']),
+            ['--debug']
+        ));
 
         $contents = file_get_contents($tmpFileJson);
 

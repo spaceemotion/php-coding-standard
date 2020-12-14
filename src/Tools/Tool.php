@@ -8,6 +8,9 @@ use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\ProgressOutput;
+use Spaceemotion\PhpCodingStandard\ProgressTracker;
+
+use function array_merge;
 
 abstract class Tool
 {
@@ -56,8 +59,12 @@ abstract class Tool
         string $binary,
         array $arguments,
         array &$output = [],
-        ?callable $progressTracker = null
+        ?ProgressTracker $progressTracker = null
     ): int {
+        if ($progressTracker !== null) {
+            $arguments = array_merge($arguments, $progressTracker->arguments);
+        }
+
         $arguments = array_filter($arguments, static function ($argument): bool {
             return $argument !== '';
         });
@@ -93,7 +100,7 @@ abstract class Tool
             $output[] = $read;
 
             // Show little dots whenever this returns true
-            if ($progressTracker($read)) {
+            if (($progressTracker->callback)($read)) {
                 $progress->advance();
             }
         }

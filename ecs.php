@@ -40,11 +40,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SETS, [
         SetList::COMMON,
-        SetList::SPACES,
-        SetList::ARRAY,
-        SetList::DOCBLOCK,
-        SetList::NAMESPACES,
-        SetList::CONTROL_STRUCTURES,
         SetList::CLEAN_CODE,
         SetList::DEAD_CODE,
         SetList::PSR_12,

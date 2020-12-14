@@ -16,6 +16,8 @@ class Cli
 {
     public const FLAG_CI = 'ci';
 
+    public const FLAG_FAST = 'fast';
+
     public const FLAG_CONTINUE = 'continue';
 
     public const FLAG_FIX = 'fix';
@@ -36,6 +38,7 @@ class Cli
         self::PARAMETER_DISABLE => 'Disables the list of tools during the run (comma-separated list)',
         self::FLAG_ANSI => 'Forces the output to be colorized',
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
+        self::FLAG_FAST => 'Disables all progress tracking so tools can use their cache (where applicable)',
         self::FLAG_FIX => 'Try to fix any linting errors (disables other tools)',
         self::FLAG_CONTINUE => 'Just run the next check if the previous one failed',
         self::FLAG_HIDE_SOURCE => 'Hides the "source" lines from console output',
@@ -110,6 +113,7 @@ class Cli
         $context->files = $this->files;
         $context->isFixing = $this->hasFlag(self::FLAG_FIX) || $this->config->shouldAutoFix();
         $context->runningInCi = $this->hasFlag(self::FLAG_CI);
+        $context->fast = $this->hasFlag(self::FLAG_FAST);
 
         $success = $this->executeContext($tools, $context);
 
@@ -148,9 +152,11 @@ class Cli
             return;
         }
 
+        $output = [];
+
         exec('git diff --name-status --cached', $output);
 
-        $this->files = array_filter(array_map(static function(string $line): string {
+        $this->files = array_filter(array_map(static function (string $line): string {
             // Only count added or modified files
             return $line[0] === 'A' || $line === 'M' ? ltrim($line) : '';
         }, $output));

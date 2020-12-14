@@ -20,6 +20,9 @@ class Context
     /** @var bool */
     public $runningInCi = false;
 
+    /** @var bool */
+    public $fast = false;
+
     /** @var string[] */
     public $toolsExecuted = [];
 

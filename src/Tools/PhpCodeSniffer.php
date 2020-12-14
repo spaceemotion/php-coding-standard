@@ -8,6 +8,7 @@ use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
+use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class PhpCodeSniffer extends Tool
 {
@@ -65,11 +66,6 @@ class PhpCodeSniffer extends Tool
         return ($totals['errors'] ?? 0) + ($totals['warnings'] ?? 0) === ($totals['fixable'] ?? 0);
     }
 
-    protected function trackProgress(string $line): bool
-    {
-        return stripos($line, 'processing') === 0;
-    }
-
     /**
      * @param string[] $output
      */
@@ -83,13 +79,16 @@ class PhpCodeSniffer extends Tool
                 [
                     '--report=json',
                     '--parallel=' . (int) ($config['processes'] ?? 24),
-                    // prints out every file it parses, use this for progress tracking
-                    '-v',
                 ],
                 $context->files
             ),
             $output,
-            [$this, 'trackProgress']
+            $context->fast ? null : new ProgressTracker(
+                static function (string $line): bool {
+                    return stripos($line, 'processing') === 0;
+                },
+                ['-v']
+            )
         );
     }
 }
