@@ -11,14 +11,15 @@ use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
-use function rtrim;
 use function implode;
 use function preg_match_all;
+use function rtrim;
 
 use const PREG_SET_ORDER;
 
 class EasyCodingStandard extends Tool
 {
+    /** @var string */
     protected $name = 'ecs';
 
     public function run(Context $context): bool

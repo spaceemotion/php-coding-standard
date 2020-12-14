@@ -12,6 +12,7 @@ use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class PhpCodeSniffer extends Tool
 {
+    /** @var string */
     protected $name = 'php_codesniffer';
 
     public function run(Context $context): bool

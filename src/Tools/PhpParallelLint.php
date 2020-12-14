@@ -12,6 +12,7 @@ class PhpParallelLint extends Tool
 {
     public const NAME = 'parallel-lint';
 
+    /** @var string */
     protected $name = self::NAME;
 
     public function run(Context $context): bool

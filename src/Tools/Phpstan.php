@@ -14,6 +14,7 @@ use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class Phpstan extends Tool
 {
+    /** @var string */
     protected $name = 'phpstan';
 
     public function run(Context $context): bool

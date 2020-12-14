@@ -11,6 +11,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class Phan extends Tool
 {
+    /** @var string */
     protected $name = 'phan';
 
     public function run(Context $context): bool

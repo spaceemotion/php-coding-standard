@@ -11,6 +11,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class PhpMessDetector extends Tool
 {
+    /** @var string */
     protected $name = 'phpmd';
 
     public function run(Context $context): bool

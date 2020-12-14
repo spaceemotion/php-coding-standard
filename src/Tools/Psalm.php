@@ -12,17 +12,26 @@ use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
+use function dirname;
+use function file_exists;
+
+use const DIRECTORY_SEPARATOR;
+
 class Psalm extends Tool
 {
+    /** @var string */
     protected $name = 'psalm';
 
     public function run(Context $context): bool
     {
         $binary = self::vendorBinary($this->name);
 
+        $config = $this->getConfigOption($context, $binary);
+
         if ($context->isFixing) {
             $this->execute($binary, array_merge(
                 ['--alter', '--issues=all'],
+                $config,
                 $context->files
             ));
         }
@@ -34,6 +43,7 @@ class Psalm extends Tool
                 '--monochrome',
                 "--report=${tmpFileJson}",
             ],
+            $config,
             $context->files
         ), $output, $context->fast ? null : new ProgressTracker(
             Closure::fromCallable([$this, 'trackProgress']),
@@ -99,5 +109,21 @@ class Psalm extends Tool
     protected function trackProgress(string $line): bool
     {
         return stripos($line, 'Getting') === 0;
+    }
+
+    /**
+     * @return string[]
+     *
+     * @psalm-return array{0?: string}
+     */
+    protected function getConfigOption(Context $context, string $binary): array
+    {
+        // Detect correct config location and pass it on to psalm
+        $configName = $context->config->getPart('psalm')['config'] ?? 'psalm.xml';
+        $configName = $configName[0] !== '/'
+            ? dirname($binary, 3) . DIRECTORY_SEPARATOR . $configName
+            : $configName;
+
+        return file_exists($configName) ? ["--config=${configName}"] : [];
     }
 }

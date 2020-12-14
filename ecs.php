@@ -28,7 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PhpCsFixer\Fixer\Import\OrderedImportsFixer::class)
         ->call('configure', [[
             'sort_algorithm' => 'alpha',
-            'imports_order' => ['const', 'class', 'function'],
+            'imports_order' => ['class', 'function', 'const'],
         ]]);
 
     $parameters = $containerConfigurator->parameters();

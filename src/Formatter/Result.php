@@ -9,6 +9,9 @@ class Result
     /** @var array<string, File>|File[] */
     public $files = [];
 
+    /**
+     * @return static
+     */
     public function add(self $result): self
     {
         foreach ($result->files as $filename => $file) {

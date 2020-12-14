@@ -13,6 +13,7 @@ class ComposerNormalize extends Tool
 {
     protected const COMPOSER_FILE = 'composer.json';
 
+    /** @var string */
     protected $name = 'composer-normalize';
 
     public function shouldRun(Context $context): bool
