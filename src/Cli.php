@@ -11,6 +11,7 @@ use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
 use function array_filter;
 use function array_map;
+use function substr;
 
 class Cli
 {
@@ -158,7 +159,7 @@ class Cli
 
         $this->files = array_filter(array_map(static function (string $line): string {
             // Only count added or modified files
-            return $line[0] === 'A' || $line === 'M' ? ltrim($line) : '';
+            return $line[0] === 'A' || $line[0] === 'M' ? ltrim(substr($line, 1)) : '';
         }, $output));
 
         if ($this->files === []) {
