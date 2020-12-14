@@ -5,6 +5,9 @@ includes:
 parameters:
     level: max
 
+    excludes_analyse:
+        - ecs.php
+
     ignoreErrors:
         - '#Constant PHPCSTD_#'
 
