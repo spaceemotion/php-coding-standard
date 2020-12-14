@@ -148,7 +148,12 @@ class Cli
             return;
         }
 
-        exec('git diff --name-only --cached', $this->files);
+        exec('git diff --name-status --cached', $output);
+
+        $this->files = array_filter(array_map(static function(string $line): string {
+            // Only count added or modified files
+            return $line[0] === 'A' || $line === 'M' ? ltrim($line) : '';
+        }, $output));
 
         if ($this->files === []) {
             echo 'No files staged. Skipping.';
