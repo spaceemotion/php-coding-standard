@@ -35,8 +35,11 @@ class Cli
 
     public const PARAMETER_DISABLE = 'disable';
 
+    public const PARAMETER_ONLY = 'only';
+
     private const OPTIONS = [
         self::PARAMETER_DISABLE => 'Disables the list of tools during the run (comma-separated list)',
+        self::PARAMETER_ONLY => 'Only executes the list of tools during the run (comma-separated list)',
         self::FLAG_ANSI => 'Forces the output to be colorized',
         self::FLAG_CI => 'Changes the output format to checkstyle.xml for better CI integration',
         self::FLAG_FAST => 'Disables all progress tracking so tools can use their cache (where applicable)',
@@ -188,7 +191,8 @@ class Cli
      */
     private function executeContext(array $tools, Context $context): bool
     {
-        $disabled = explode(',', $this->parameters[self::PARAMETER_DISABLE] ?? '');
+        $disabled = $this->parseList($this->parameters[self::PARAMETER_DISABLE] ?? '');
+        $only = $this->parseList($this->parameters[self::PARAMETER_ONLY] ?? '');
 
         $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
         $success = true;
@@ -198,7 +202,11 @@ class Cli
 
             echo "-> {$name}: ";
 
-            if (in_array($name, $disabled, true) || ! $tool->shouldRun($context)) {
+            if (
+                in_array($name, $disabled, true)
+                || ! $tool->shouldRun($context)
+                || ($only !== [] && ! in_array($name, $only, true))
+            ) {
                 echo 'SKIP' . PHP_EOL;
                 continue;
             }
@@ -277,5 +285,19 @@ class Cli
         while (($file = fgets(STDIN)) !== false) {
             $this->files[] = trim($file);
         }
+    }
+
+    /**
+     * @return string[]
+     *
+     * @psalm-return list<string>
+     */
+    private function parseList(string $list): array
+    {
+        if ($list === '') {
+            return [];
+        }
+
+        return array_map('trim', explode(',', $list));
     }
 }
