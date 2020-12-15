@@ -3,3 +3,4 @@ vendor
 composer.lock
 .phpcstd.ini
 cghooks.lock
+.phpunit.result.cache

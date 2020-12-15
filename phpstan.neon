@@ -8,6 +8,7 @@ parameters:
     paths:
         - bin
         - src
+        - tests
 
     excludes_analyse:
         - ecs.php

@@ -31,11 +31,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'imports_order' => ['class', 'function', 'const'],
         ]]);
 
+    $services->set(PhpCsFixer\Fixer\PhpUnit\PhpUnitMethodCasingFixer::class)
+        ->call('configure', [[
+            'case' => 'snake_case',
+        ]]);
+
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::LINE_ENDING, "\n");
     $parameters->set(Option::PATHS, [
         __DIR__ . '/bin',
         __DIR__ . '/src',
+        __DIR__ . '/tests',
     ]);
 
     $parameters->set(Option::SETS, [

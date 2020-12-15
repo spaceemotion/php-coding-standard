@@ -32,9 +32,11 @@
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "psalm/phar": "^4.3",
+        "phpunit/phpunit": "^9.5",
+        "psalm/plugin-phpunit": "^0.15.0",
         "squizlabs/php_codesniffer": "^3.5",
-        "symplify/easy-coding-standard-prefixed": "^9"
+        "symplify/easy-coding-standard-prefixed": "^9",
+        "vimeo/psalm": "^4.3"
     },
     "suggest": {
         "ergebnis/composer-normalize": "Normalizes composer.json files",
@@ -61,6 +63,11 @@
     "autoload": {
         "psr-4": {
             "Spaceemotion\\PhpCodingStandard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",

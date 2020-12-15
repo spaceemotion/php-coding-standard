@@ -7,10 +7,11 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="src" />
+        <directory name="src"/>
+        <directory name="tests"/>
         <ignoreFiles>
-            <directory name="vendor" />
-            <file name="ecs.php" />
+            <directory name="vendor"/>
+            <file name="ecs.php"/>
         </ignoreFiles>
     </projectFiles>
 
@@ -27,4 +28,8 @@
             </errorLevel>
         </UnresolvableInclude>
     </issueHandlers>
+
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

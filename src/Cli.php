@@ -59,7 +59,7 @@ class Cli
     /** @var string[] */
     private $flags;
 
-    /** @var string[] */
+    /** @var string[][] */
     private $parameters;
 
     /** @var Config */
@@ -68,15 +68,14 @@ class Cli
     /**
      * @param string[] $arguments
      *
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @throws ExitException
      */
     public function __construct(array $arguments)
     {
         [$this->flags, $this->parameters, $this->files] = $this->parseFlags(array_slice($arguments, 1));
 
         if ($this->hasFlag(self::FLAG_HELP)) {
-            $this->showHelp();
-            exit(0);
+            throw new ExitException($this->showHelp());
         }
 
         $this->lintStaged();
@@ -137,6 +136,14 @@ class Cli
         return in_array($flag, $this->flags, true);
     }
 
+    /**
+     * @return string[]
+     */
+    public function getParameter(string $parameter): array
+    {
+        return $this->parameters[$parameter] ?? [];
+    }
+
     public static function isOnWindows(): bool
     {
         if (defined('PHP_OS_FAMILY')) {
@@ -150,7 +157,7 @@ class Cli
      * Calls 'git diff' to determine changed files.
      * Also exists if no files have been changed.
      *
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @throws ExitException
      */
     private function lintStaged(): void
     {
@@ -168,24 +175,27 @@ class Cli
         }, $output));
 
         if ($this->files === []) {
-            echo 'No files staged. Skipping.';
-            exit(0);
+            throw new ExitException('No files staged. Skipping.');
         }
     }
 
     /**
      * Shows an overview of all available flags and options.
+     *
+     * @return string
      */
-    private function showHelp(): void
+    private function showHelp(): string
     {
-        echo 'Usage:' . PHP_EOL;
-        echo '  phpcstd [options] <files or folders>' . PHP_EOL . PHP_EOL;
+        $help = 'Usage:' . PHP_EOL;
+        $help .= '  phpcstd [options] <files or folders>' . PHP_EOL . PHP_EOL;
 
-        echo 'Options:' . PHP_EOL;
+        $help .= 'Options:' . PHP_EOL;
 
         foreach (self::OPTIONS as $flag => $message) {
-            echo "  --{$flag}" . PHP_EOL . "    ${message}" . PHP_EOL . PHP_EOL;
+            $help .= "  --{$flag}" . PHP_EOL . "    ${message}" . PHP_EOL . PHP_EOL;
         }
+
+        return $help;
     }
 
     /**
@@ -193,8 +203,8 @@ class Cli
      */
     private function executeContext(array $tools, Context $context): bool
     {
-        $disabled = $this->parseList($this->parameters[self::PARAMETER_DISABLE] ?? '');
-        $only = $this->parseList($this->parameters[self::PARAMETER_ONLY] ?? '');
+        $disabled = $this->getParameter(self::PARAMETER_DISABLE);
+        $only = $this->getParameter(self::PARAMETER_ONLY);
 
         $continue = $this->hasFlag(self::FLAG_CONTINUE) || $this->config->shouldContinue();
         $success = true;
@@ -237,7 +247,10 @@ class Cli
 
     /**
      * @param mixed[] $options
-     * @return string[][]
+     *
+     * @return (mixed|string|string[])[][]
+     *
+     * @psalm-return array{0: list<string>, 1: array<string, list<string>>, 2: list<mixed>}
      */
     private function parseFlags(array $options): array
     {
@@ -260,7 +273,7 @@ class Cli
             }
 
             if ($value !== '') {
-                $parameters[$flag] = $value;
+                $parameters[$flag] = $this->parseList($value);
                 continue;
             }
 
