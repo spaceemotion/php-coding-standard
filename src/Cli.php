@@ -13,6 +13,8 @@ use function array_filter;
 use function array_map;
 use function substr;
 
+use const PHP_EOL;
+
 class Cli
 {
     public const FLAG_CI = 'ci';
@@ -200,13 +202,16 @@ class Cli
         foreach ($tools as $tool) {
             $name = $tool->getName();
 
-            echo "-> {$name}: ";
-
             if (
                 in_array($name, $disabled, true)
-                || ! $tool->shouldRun($context)
                 || ($only !== [] && ! in_array($name, $only, true))
             ) {
+                continue;
+            }
+
+            echo "-> {$name}: ";
+
+            if (! $tool->shouldRun($context)) {
                 echo 'SKIP' . PHP_EOL;
                 continue;
             }
