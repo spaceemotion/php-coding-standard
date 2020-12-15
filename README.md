@@ -25,7 +25,7 @@ Tool | Lint | Fix | Source list | Description
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | ✅ | ❌ | ✅ | Code complexity checker
 [php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | ✅ | ❌ | ✅ | Checks for PHP (syntax) errors (using `php -l`)
 [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) | ✅ | ✅ | ✅ | Style linter + fixer
-[phpstan](https://github.com/phpstan/phpstan) | ✅ | ✅ | ✅ | Static analyzer
+[phpstan](https://github.com/phpstan/phpstan) | ✅ | ✅ | ⏹ | Static analyzer, source list is optional, but not recommended
 [psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | ✅ | Static analyzer
 [phan](https://github.com/phan/phan) | ✅ | ✅ | ❌ | Static analyzer
 
