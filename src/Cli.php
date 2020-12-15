@@ -181,8 +181,6 @@ class Cli
 
     /**
      * Shows an overview of all available flags and options.
-     *
-     * @return string
      */
     private function showHelp(): string
     {
