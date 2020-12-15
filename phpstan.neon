@@ -5,6 +5,10 @@ includes:
 parameters:
     level: max
 
+    paths:
+        - bin
+        - src
+
     excludes_analyse:
         - ecs.php
 

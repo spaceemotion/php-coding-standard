@@ -6,6 +6,8 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 
 class File
 {
+    public const GLOBAL = '- Global errors -';
+
     /** @var Violation[] */
     public $violations = [];
 
