@@ -20,14 +20,16 @@ You can take a look at [my own coding standards](https://github.com/spaceemotion
 #### Tools supported
 Tool | Lint | Fix | Source list | Description
 -----|------|-----|-------------|-----------
-[composer-normalize](https://github.com/ergebnis/composer-normalize) | ✅ | ✅ | ✅ | Validates and rearranges composer.json files
-[EasyCodingStandard](https://github.com/symplify/easy-coding-standard) | ✅ | ✅ | ✅ | Combination of PHP_CodeSniffer and PHP-CS-Fixer
+[composer-normalize](https://github.com/ergebnis/composer-normalize) ⭐ | ✅ | ✅ | ✅ | Validates and rearranges composer.json files
+[EasyCodingStandard](https://github.com/symplify/easy-coding-standard) ⭐ | ✅ | ✅ | ✅ | Combination of PHP_CodeSniffer and PHP-CS-Fixer
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | ✅ | ❌ | ✅ | Code complexity checker
-[php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) | ✅ | ❌ | ✅ | Checks for PHP (syntax) errors (using `php -l`)
+[php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) ⭐ | ✅ | ❌ | ✅ | Checks for PHP (syntax) errors (using `php -l`)
 [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) | ✅ | ✅ | ✅ | Style linter + fixer
-[phpstan](https://github.com/phpstan/phpstan) | ✅ | ✅ | ⏹ | Static analyzer, source list is optional, but not recommended
+[phpstan](https://github.com/phpstan/phpstan) ⭐ | ✅ | ✅ | ⏹ | Static analyzer, source list is optional, but not recommended
 [psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | ✅ | Static analyzer
 [phan](https://github.com/phan/phan) | ✅ | ✅ | ❌ | Static analyzer
+
+_⭐ = recommended_
 
 ## Getting started
 ```
