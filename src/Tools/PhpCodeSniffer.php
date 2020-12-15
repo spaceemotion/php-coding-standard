@@ -18,9 +18,9 @@ class PhpCodeSniffer extends Tool
     public function run(Context $context): bool
     {
         if ($context->isFixing) {
-            echo "\n   Additional fix pass:";
+            echo "\n   - Additional fix pass";
             $this->sniff($context, 'phpcbf');
-            echo "\n   Regular pass:";
+            echo "\n   - Regular pass\n   ";
         }
 
         $output = [];
