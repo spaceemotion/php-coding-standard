@@ -91,6 +91,10 @@ The `--ci` flag returns a format that can be used by GithubActions to annotate c
 ![example file change with an error](./img/github-annotation.png)
 
 ## Development
+### Using Docker
+1. Spin up the container using `GITHUB_PERSONAL_ACCESS_TOKEN=<token> docker-compose up -d --build`
+2. Run all commands using `docker-compose exec php <command here>`
+
 ### Using XDebug
 This project uses [composer/xdebug-handler](https://github.com/composer/xdebug-handler) to improve performance
 by disabling xdebug upon startup. To enable XDebug during development you need to set the following env variable:

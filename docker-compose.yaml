@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${USER_ID:-0}
+        GROUP_ID: ${GROUP_ID:-0}
+
+    working_dir: /usr/src/phpcstd
+
+    # Don't run as root
+    user: '${USER_ID:-0}:${GROUP_ID:-0}'
+
+    volumes:
+    - .:/usr/src/phpcstd
+    - composer:/.composer
+    - cache:/.cache
+    - tmp:/tmp
+
+    # Set up composer
+    environment:
+      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${GITHUB_PERSONAL_ACCESS_TOKEN}"}}'
+
+    # Keep container alive
+    tty: true
+
+volumes:
+  composer:
+  cache:
+  tmp:
