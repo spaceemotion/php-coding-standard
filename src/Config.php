@@ -8,6 +8,8 @@ use RuntimeException;
 
 class Config
 {
+    public const IGNORE_SOURCES = 'ignoreSources';
+
     /** @var mixed[] */
     private $config;
 

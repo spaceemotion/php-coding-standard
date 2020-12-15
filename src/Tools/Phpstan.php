@@ -6,6 +6,7 @@ namespace Spaceemotion\PhpCodingStandard\Tools;
 
 use Closure;
 use Spaceemotion\PhpCodingStandard\Cli;
+use Spaceemotion\PhpCodingStandard\Config;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
@@ -19,6 +20,9 @@ class Phpstan extends Tool
 
     public function run(Context $context): bool
     {
+        $ignoreSources = (bool) ($context->config->getPart($this->getName())[Config::IGNORE_SOURCES] ?? false);
+        $files = $ignoreSources ? [] : $context->files;
+
         $output = [];
 
         if (
@@ -29,7 +33,7 @@ class Phpstan extends Tool
                     '--no-ansi',
                     '--no-interaction',
                 ],
-                $context->files
+                $files
             ), $output, (
                 $context->fast ? null : new ProgressTracker(
                     Closure::fromCallable([$this, 'trackProgress']),
