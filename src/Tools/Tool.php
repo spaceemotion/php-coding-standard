@@ -57,12 +57,7 @@ abstract class Tool
         if (! $context->config->isEnabled($this->name)) {
             return false;
         }
-
-        if (in_array(static::class, $context->toolsExecuted, true)) {
-            return false;
-        }
-
-        return true;
+        return ! in_array(static::class, $context->toolsExecuted, true);
     }
 
     public function getName(): string

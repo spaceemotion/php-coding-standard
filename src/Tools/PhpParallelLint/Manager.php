@@ -9,10 +9,11 @@ use JakubOnderka\PhpParallelLint\NullWriter;
 use JakubOnderka\PhpParallelLint\Output;
 use JakubOnderka\PhpParallelLint\Settings;
 use Spaceemotion\PhpCodingStandard\Context;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Manager extends BaseManager
 {
-    public function __construct(Context $context, \Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(Context $context, OutputInterface $output)
     {
         $this->output = new ContextOutput(new NullWriter());
         $this->output->setContext($context);

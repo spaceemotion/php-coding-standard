@@ -13,6 +13,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ContextOutput implements Output
 {
@@ -25,7 +26,7 @@ class ContextOutput implements Output
     /** @var ProgressBar */
     private $progress;
 
-    /** @var \Symfony\Component\Console\Output\OutputInterface */
+    /** @var OutputInterface */
     private $output;
 
     public function __construct(IWriter $writer)
@@ -38,7 +39,7 @@ class ContextOutput implements Output
         $this->context = $context;
     }
 
-    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): void
+    public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
     }

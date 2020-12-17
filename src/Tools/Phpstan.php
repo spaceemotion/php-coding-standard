@@ -37,7 +37,7 @@ class Phpstan extends Tool
             return true;
         }
 
-        $lastLine = $output[count($output) - 1];
+        $lastLine = $output[(is_countable($output) ? count($output) : 0) - 1];
         $json = self::parseJson($lastLine);
         $result = new Result();
 

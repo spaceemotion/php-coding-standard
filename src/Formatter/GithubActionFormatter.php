@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Spaceemotion\PhpCodingStandard\Formatter;
 
 use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function strip_tags;
 
 class GithubActionFormatter extends ConsoleFormatter
 {
-    public function format(Result $result, \Symfony\Component\Console\Style\SymfonyStyle $style): void
+    public function format(Result $result, SymfonyStyle $style): void
     {
         foreach ($result->files as $fileName => $file) {
             $fullPath = PHPCSTD_ROOT . $fileName;

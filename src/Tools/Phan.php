@@ -10,7 +10,6 @@ use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 use function file_get_contents;
-use function preg_match;
 
 class Phan extends Tool
 {
@@ -58,19 +57,5 @@ class Phan extends Tool
         }
 
         return false;
-    }
-
-    private function searchJson(array $output): string
-    {
-        // Traverse from array end
-        for ($i = count($output) - 1; $i >= 0; $i--) {
-            $line = $output[$i];
-
-            if (preg_match('/\[{.+}]/', $line) === 1) {
-                return $line;
-            }
-        }
-
-        return '';
     }
 }

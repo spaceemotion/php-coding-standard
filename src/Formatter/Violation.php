@@ -10,8 +10,6 @@ class Violation
 
     public const SEVERITY_ERROR = 'error';
 
-    public const SEVERITY_INFO = 'info';
-
     /** @var int */
     public $line = 0;
 

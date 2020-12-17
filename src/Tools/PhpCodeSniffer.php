@@ -26,13 +26,13 @@ class PhpCodeSniffer extends Tool
             return true;
         }
 
-        $json = self::parseJson($output[count($output) - 1]);
+        $json = self::parseJson($output[(is_countable($output) ? count($output) : 0) - 1]);
         $result = new Result();
 
         foreach (($json['files'] ?? []) as $fileName => $details) {
             $messages = $details['messages'] ?? [];
 
-            if (count($messages) === 0) {
+            if ((is_countable($messages) ? count($messages) : 0) === 0) {
                 continue;
             }
 

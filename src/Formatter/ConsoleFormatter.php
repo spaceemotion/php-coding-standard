@@ -6,6 +6,7 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function array_keys;
 use function array_sum;
@@ -21,14 +22,6 @@ use const STR_PAD_RIGHT;
 
 class ConsoleFormatter implements Formatter
 {
-    protected const COLORS = [
-        'green' => '0;32',
-        'gray' => '0;37',
-        'red' => '0;31',
-        'yellow' => '1;33',
-        'blue' => '0;34',
-    ];
-
     protected const COLOR_BY_SEVERITY = [
         Violation::SEVERITY_ERROR => 'fg=red',
         Violation::SEVERITY_WARNING => 'fg=yellow',
@@ -42,7 +35,7 @@ class ConsoleFormatter implements Formatter
         $this->printSource = ! $hideSource;
     }
 
-    public function format(Result $result, \Symfony\Component\Console\Style\SymfonyStyle $style): void
+    public function format(Result $result, SymfonyStyle $style): void
     {
         $counts = [
             Violation::SEVERITY_WARNING => 0,
