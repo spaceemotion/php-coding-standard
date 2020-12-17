@@ -10,6 +10,8 @@ use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
+use function preg_match;
+
 class Phpstan extends Tool
 {
     /** @var string */
@@ -23,7 +25,7 @@ class Phpstan extends Tool
         $output = [];
 
         if (
-            $this->execute(self::vendorBinary($this->name), array_merge(
+            $this->execute(self::vendorBinary($this->getName()), array_merge(
                 [
                     'analyse',
                     '--error-format=json',
@@ -37,35 +39,34 @@ class Phpstan extends Tool
             return true;
         }
 
-        $lastLine = $output[(is_countable($output) ? count($output) : 0) - 1];
-        $json = self::parseJson($lastLine);
+        $json = self::parseJson($this->getJsonLine($output));
         $result = new Result();
 
+        $globalFile = new File();
+        $result->files[File::GLOBAL] = $globalFile;
+
         if ($json === []) {
+            $message = trim(implode("\n", $output));
             $match = [];
 
-            if (preg_match('/(.*) in (.*?) on line (\d+)$/i', $lastLine, $match) !== 1) {
+            if (preg_match('/(.*) in (.*?) on line (\d+)$/i', $message, $match) !== 1) {
                 $violation = new Violation();
-                $violation->message = trim($lastLine);
+                $violation->message = $message;
                 $violation->tool = $this->getName();
 
-                $file = new File();
-                $file->violations[] = $violation;
-                $result->files[File::GLOBAL] = $file;
+                $globalFile->violations[] = $violation;
                 $context->addResult($result);
 
                 return false;
             }
-
-            $file = new File();
 
             $violation = new Violation();
             $violation->line = (int) $match[3];
             $violation->message = $match[1];
             $violation->tool = $this->getName();
 
+            $file = new File();
             $file->violations[] = $violation;
-
             $result->files[$match[2]] = $file;
 
             $context->addResult($result);
@@ -80,7 +81,7 @@ class Phpstan extends Tool
                 $violation = new Violation();
                 $violation->line = (int) ($message['line'] ?? 0);
                 $violation->message = $message['message'];
-                $violation->tool = $this->name;
+                $violation->tool = $this->getName();
 
                 $file->violations[] = $violation;
             }
@@ -88,8 +89,27 @@ class Phpstan extends Tool
             $result->files[$filename] = $file;
         }
 
+        foreach ($json['errors'] as $error) {
+            $violation = new Violation();
+            $violation->message = $error;
+            $violation->tool = $this->getName();
+
+            $globalFile->violations[] = $violation;
+        }
+
         $context->addResult($result);
 
         return false;
+    }
+
+    private function getJsonLine(array $output): string
+    {
+        foreach ($output as $line) {
+            if (preg_match('/^{"totals/', $line) === 1) {
+                return $line;
+            }
+        }
+
+        return '';
     }
 }
