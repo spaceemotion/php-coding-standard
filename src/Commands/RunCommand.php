@@ -111,14 +111,20 @@ class RunCommand extends Command
     {
         $this->config = new Config($output);
 
-        $context = new Context($this->config);
-        $context->isFixing = (bool) $input->getOption(Cli::FLAG_FIX) || $this->config->shouldAutoFix();
-        $context->files = $this->getFiles($input);
-        $context->runningInCi = (bool) $input->getOption(Cli::FLAG_CI);
+        $files = $this->getFiles($input);
 
-        if ($context->files === []) {
+        if ($files === []) {
             $output->writeln('No files specified');
             return 0;
+        }
+
+        $context = new Context($this->config);
+        $context->isFixing = (bool) $input->getOption(Cli::FLAG_FIX) || $this->config->shouldAutoFix();
+        $context->runningInCi = (bool) $input->getOption(Cli::FLAG_CI);
+        $context->files = $files;
+
+        if ($context->runningInCi) {
+            $input->setInteractive(false);
         }
 
         $success = $this->executeContext($input, $output, $context);
@@ -155,6 +161,7 @@ class RunCommand extends Command
                 continue;
             }
 
+            $tool->setInput($input);
             $tool->setOutput($output);
 
             if (! $tool->shouldRun($context)) {

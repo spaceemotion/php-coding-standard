@@ -58,7 +58,7 @@
     "extra": {
         "hooks": {
             "pre-commit": [
-                "bin/phpcstd --fix --hide-source --skip=phan --lint-staged"
+                "bin/phpcstd --fix --hide-source --skip=phan --lint-staged --no-interaction"
             ]
         }
     },

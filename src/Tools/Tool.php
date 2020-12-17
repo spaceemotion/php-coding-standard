@@ -8,6 +8,7 @@ use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -27,8 +28,16 @@ abstract class Tool
     /** @var string A short name for the tool to be used in the config */
     protected $name = '';
 
+    /** @var InputInterface */
+    protected $input;
+
     /** @var OutputInterface */
     protected $output;
+
+    public function setInput(InputInterface $input): void
+    {
+        $this->input = $input;
+    }
 
     public function setOutput(OutputInterface $output): void
     {
@@ -98,12 +107,22 @@ abstract class Tool
             });
         }
 
+        $isInteractive = $this->input->isInteractive();
+
         $progress = new ProgressBar($this->output);
         $progress->setMessage($this->getName());
         $progress->setBarWidth(1);
-        $progress->setProgressCharacter(self::CHARS[0]);
-        $progress->setRedrawFrequency(1);
         $progress->setFormat('%bar% %message% (elapsed: %elapsed:6s%)');
+
+        if ($isInteractive) {
+            $progress->setRedrawFrequency(1);
+            $progress->setBarCharacter(self::CHARS[0]);
+        } else {
+            $progress->minSecondsBetweenRedraws(5);
+            $progress->maxSecondsBetweenRedraws(5);
+            $progress->setOverwrite(false);
+        }
+
         $progress->start();
 
         $process->start(static function ($type, $buffer) use (&$output): void {
@@ -111,7 +130,10 @@ abstract class Tool
         });
 
         while ($process->isRunning()) {
-            $progress->setProgressCharacter(self::CHARS[$progress->getProgress() % 8]);
+            if ($isInteractive) {
+                $progress->setProgressCharacter(self::CHARS[$progress->getProgress() % 8]);
+            }
+
             $progress->advance();
 
             // Create two rotations per second
@@ -119,6 +141,10 @@ abstract class Tool
         }
 
         $progress->clear();
+
+        if (! $isInteractive) {
+            $this->output->writeln('');
+        }
 
         return (int) $process->getExitCode();
     }
