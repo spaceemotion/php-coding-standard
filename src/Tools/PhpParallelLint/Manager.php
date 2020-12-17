@@ -12,10 +12,11 @@ use Spaceemotion\PhpCodingStandard\Context;
 
 class Manager extends BaseManager
 {
-    public function __construct(Context $context)
+    public function __construct(Context $context, \Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->output = new ContextOutput(new NullWriter());
         $this->output->setContext($context);
+        $this->output->setOutput($output);
     }
 
     protected function getDefaultOutput(Settings $settings): Output

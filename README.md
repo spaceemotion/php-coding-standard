@@ -25,9 +25,9 @@ Tool | Lint | Fix | Source list | Description
 [PHP Mess Detector](https://github.com/phpmd/phpmd) | ✅ | ❌ | ✅ | Code complexity checker
 [php-parallel-lint](https://github.com/php-parallel-lint/php-parallel-lint) ⭐ | ✅ | ❌ | ✅ | Checks for PHP (syntax) errors (using `php -l`)
 [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) | ✅ | ✅ | ✅ | Style linter + fixer
-[phpstan](https://github.com/phpstan/phpstan) ⭐ | ✅ | ✅ | ⏹ | Static analyzer, source list is optional, but not recommended
+[phpstan](https://github.com/phpstan/phpstan) ⭐ | ✅ | ❌ | ⏹ | Static analyzer, source list is optional, but not recommended
 [psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | ✅ | Static analyzer
-[phan](https://github.com/phan/phan) | ✅ | ✅ | ❌ | Static analyzer
+[phan](https://github.com/phan/phan) | ✅ | ✅ | ❌ | Static analyzer, requires the "php-ast" extension
 
 _⭐ = recommended_
 
@@ -39,38 +39,34 @@ composer require-dev spaceemotion/php-coding-standard
 This will install the `phpcstd` binary to your vendor folder.
 
 ### Configuration via .phpcstd(.dist).ini
-To minimize dependencies, `phpcstd` used ini-files for its configuration. If no `.phpcstd.ini` file can be found in your project folder, a `.phpcstd.dist.ini` file will be used as fallback (if possible).
+To minimize dependencies, `phpcstd` uses .ini-files for its configuration.
+If no `.phpcstd.ini` file can be found in your project folder,
+a `.phpcstd.dist.ini` file will be used as fallback (if possible).
 
 ### Command options
 ```
-$ phpcstd [options] <files or folders>
+Usage:
+  run [options] [--] [<files>...]
 
---disable
-  Disables the list of tools during the run (comma-separated list)
+Arguments:
+  files                 List of files to parse instead of the configured sources
 
---ansi
-  Forces the output to be colorized
-
---ci
-  Changes the output format to checkstyle.xml for better CI integration
-
---fix
-  Try to fix any linting errors (disables other tools)
-
---continue
-  Just run the next check if the previous one failed
-
---hide-source
-  Hides the "source" lines from console output
-
---no-fail
-  Only returns with exit code 0, regardless of any errors/warnings
-
---lint-staged
-  Uses "git diff" to determine staged files to lint
-
---help
-  Displays this help message
+Options:
+  -s, --skip=SKIP       Disables the list of tools during the run (comma-separated list) (multiple values allowed)
+  -o, --only=ONLY       Only executes the list of tools during the run (comma-separated list) (multiple values allowed)
+      --continue        Run the next check even if the previous one failed
+      --fix             Try to fix any linting errors
+      --hide-source     Hides the "source" lines from console output
+      --lint-staged     Uses "git diff" to determine staged files to lint
+      --ci              Changes the output format to GithubActions for better CI integration
+      --no-fail         Only returns with exit code 0, regardless of any errors/warnings
+  -h, --help            Display help for the given command. When no command is given display help for the run command
+  -q, --quiet           Do not output any message
+  -V, --version         Display this application version
+      --ansi            Force ANSI output
+      --no-ansi         Disable ANSI output
+  -n, --no-interaction  Do not ask any interactive question
+  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
 Instead of defining the files/folders directly (in either the config or as arguments), you can also pipe a list into it:

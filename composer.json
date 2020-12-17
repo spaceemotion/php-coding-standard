@@ -19,9 +19,11 @@
         }
     ],
     "require": {
-        "php": "^7.1 || ^8.0",
+        "php": ">=7.1",
         "ext-json": "*",
-        "composer/xdebug-handler": "^1.0"
+        "composer/xdebug-handler": "^1.0",
+        "symfony/console": "^3 || ^4 || ^5.2",
+        "symfony/process": "^5.2"
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
@@ -56,7 +58,7 @@
     "extra": {
         "hooks": {
             "pre-commit": [
-                "bin/phpcstd --fix --hide-source --disable=phan --lint-staged"
+                "bin/phpcstd --fix --hide-source --skip=phan --lint-staged"
             ]
         }
     },

@@ -9,6 +9,9 @@ use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
+use function file_get_contents;
+use function preg_match;
+
 class Phan extends Tool
 {
     /** @var string */
@@ -16,29 +19,25 @@ class Phan extends Tool
 
     public function run(Context $context): bool
     {
-        $output = [];
+        $outputFile = $this->createTempReportFile();
 
         if (
             $this->execute(self::vendorBinary('phan'), array_merge(
                 [
                     '--output-mode=json',
+                    '--output=' . $outputFile,
                     '--no-color',
                 ],
                 extension_loaded('ast') ? [] : ['--allow-polyfill-parser'],
                 $context->isFixing ? ['--automatic-fix'] : []
-            ), $output) === 0
+            )) === 0
         ) {
             return true;
         }
 
-        $json = self::parseJson($output[count($output) - 1]);
+        $json = self::parseJson(file_get_contents($outputFile));
 
         if ($json === []) {
-            $json = self::parseJson($output[count($output) - 2]);
-        }
-
-        if ($json === []) {
-            echo implode("\n", $output);
             return false;
         }
 
@@ -59,5 +58,19 @@ class Phan extends Tool
         }
 
         return false;
+    }
+
+    private function searchJson(array $output): string
+    {
+        // Traverse from array end
+        for ($i = count($output) - 1; $i >= 0; $i--) {
+            $line = $output[$i];
+
+            if (preg_match('/\[{.+}]/', $line) === 1) {
+                return $line;
+            }
+        }
+
+        return '';
     }
 }

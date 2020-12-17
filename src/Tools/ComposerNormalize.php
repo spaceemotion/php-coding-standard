@@ -5,9 +5,16 @@ declare(strict_types=1);
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
 use Spaceemotion\PhpCodingStandard\Context;
+use Spaceemotion\PhpCodingStandard\DiffViolation;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
+
+use function implode;
+use function preg_match;
+use function trim;
+
+use const PHP_EOL;
 
 class ComposerNormalize extends Tool
 {
@@ -18,6 +25,7 @@ class ComposerNormalize extends Tool
 
     public function shouldRun(Context $context): bool
     {
+        // TODO does not check against file names, only full paths
         if (! in_array(self::COMPOSER_FILE, $context->files, true)) {
             return false;
         }
@@ -38,6 +46,7 @@ class ComposerNormalize extends Tool
             $this->execute($binary, [
                 'normalize',
                 $filename,
+                '--diff',
                 '--no-update-lock',
                 $context->isFixing ? '' : '--dry-run',
             ], $output) === 0
@@ -46,32 +55,22 @@ class ComposerNormalize extends Tool
         }
 
         $file = new File();
+        $text = trim(implode(PHP_EOL, $output));
 
-        if (strpos($output[0], 'is not normalized') !== false) {
-            $violation = new Violation();
-            $violation->message = 'File is not normalized';
-            $violation->source = trim(implode(PHP_EOL, array_slice($output, 4, count($output) - 6)));
-            $violation->tool = $this->name;
+        $matches = [];
 
-            $file->violations[] = $violation;
+        if (preg_match('/^-{10,} begin diff -{10,}(.+)^-{10,} end diff -{10,}/ms', $text, $matches) === 1) {
+            $file->violations = DiffViolation::make($this, $matches[1], static function (): string {
+                return 'File is not normalized';
+            });
         }
 
-        if (! isset($violation)) {
-            $source = '';
+        if ($file->violations === []) {
+            $violation = new Violation();
+            $violation->message = $text;
+            $violation->tool = $this->getName();
 
-            if (strpos($output[0], 'not valid according to schema') !== false) {
-                $source = $output[count($output) - 1];
-                $output = array_slice($output, 1, count($output) - 2);
-            }
-
-            foreach ($output as $message) {
-                $violation = new Violation();
-                $violation->message = $message;
-                $violation->source = $source;
-                $violation->tool = $this->name;
-
-                $file->violations[] = $violation;
-            }
+            $file->violations[] = $violation;
         }
 
         $result = new Result();

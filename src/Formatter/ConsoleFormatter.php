@@ -4,7 +4,20 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Formatter;
 
-use Spaceemotion\PhpCodingStandard\Cli;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function array_keys;
+use function array_sum;
+use function explode;
+use function preg_replace;
+use function str_repeat;
+use function strip_tags;
+use function strlen;
+use function strpos;
+
+use const STR_PAD_LEFT;
+use const STR_PAD_RIGHT;
 
 class ConsoleFormatter implements Formatter
 {
@@ -17,35 +30,31 @@ class ConsoleFormatter implements Formatter
     ];
 
     protected const COLOR_BY_SEVERITY = [
-        Violation::SEVERITY_ERROR => 'red',
-        Violation::SEVERITY_WARNING => 'yellow',
+        Violation::SEVERITY_ERROR => 'fg=red',
+        Violation::SEVERITY_WARNING => 'fg=yellow',
     ];
-
-    /** @var bool */
-    protected $supportsColor = false;
 
     /** @var bool */
     protected $printSource = false;
 
-    public function __construct(Cli $cli)
+    public function __construct(bool $hideSource)
     {
-        $this->supportsColor = $this->hasColorSupport();
-        $this->printSource = ! $cli->hasFlag(Cli::FLAG_HIDE_SOURCE);
+        $this->printSource = ! $hideSource;
     }
 
-    public function format(Result $result): void
+    public function format(Result $result, \Symfony\Component\Console\Style\SymfonyStyle $style): void
     {
         $counts = [
             Violation::SEVERITY_WARNING => 0,
             Violation::SEVERITY_ERROR => 0,
         ];
 
+        $style->writeln('');
+
         foreach ($result->files as $path => $file) {
-            echo "\n" . $this->colorize('green', $path) . "\n";
+            $style->writeln("<info>{$path}</info>");
 
-            $violationsSorted = self::sortByLineNumber($file->violations);
-
-            foreach ($violationsSorted as $idx => $violation) {
+            foreach (self::sortByLineNumber($file->violations) as $violation) {
                 $counts[$violation->severity]++;
 
                 $severity = $this->colorize(
@@ -53,84 +62,49 @@ class ConsoleFormatter implements Formatter
                     strtoupper($violation->severity)
                 );
 
-                $tool = $this->colorize('gray', "({$violation->tool})");
+                $tool = $this->colorize('fg=blue', $violation->tool);
 
-                echo "  {$violation->line}: [{$severity}] {$violation->message} ${tool}" . "\n";
+                $message = $this->highlightClasses($violation->message);
 
-                if (! $this->printSource || $violation->source === '') {
-                    continue;
+                if ($this->printSource && $violation->source !== '') {
+                    $message .= "\n<gray>{$violation->source}</gray>";
                 }
 
-                $perLinePrefix = str_repeat(' ', strlen("  {$violation->line}: [{$violation->severity}] "));
-
-                echo implode(
-                    "\n",
-                    array_map(
-                        function (string $line) use ($perLinePrefix): string {
-                            return $perLinePrefix . $this->colorize('gray', $line);
-                        },
-                        explode("\n", $violation->source)
-                    )
-                ) . "\n";
-
-                if ($idx < count($violationsSorted) - 1) {
-                    echo "\n";
-                }
+                $this->writeRow($style, [
+                    (string) $violation->line,
+                    $severity,
+                    $tool,
+                    $message,
+                ]);
             }
+
+            $style->writeln('', Output::OUTPUT_RAW);
         }
 
-        echo "\n" . 'Results: ' . implode(', ', array_map(
+        $results = implode(', ', array_map(
             static function (int $count, string $key): string {
                 return "${count} ${key}(s)";
             },
             $counts,
             array_keys($counts)
-        )) . "\n";
+        ));
+
+        if ($counts[Violation::SEVERITY_ERROR] > 0) {
+            $style->error($results);
+            return;
+        }
+
+        if ($counts[Violation::SEVERITY_WARNING] > 0) {
+            $style->warning($results);
+            return;
+        }
+
+        $style->success($results);
     }
 
     protected function colorize(string $color, string $text): string
     {
-        if (! $this->supportsColor) {
-            return $text;
-        }
-
-        return "\033[" . self::COLORS[$color] . 'm' . $text . "\033[0m";
-    }
-
-    protected function isTty(): bool
-    {
-        if (getenv('TERM_PROGRAM') === 'Hyper') {
-            return true;
-        }
-
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
-            return (function_exists('sapi_windows_vt100_support')
-                    && sapi_windows_vt100_support(STDIN))
-                || getenv('ANSICON') !== false
-                || getenv('ConEmuANSI') === 'ON'
-                || getenv('TERM') === 'xterm';
-        }
-
-        if (function_exists('stream_isatty')) {
-            return stream_isatty(STDIN);
-        }
-
-        return false;
-    }
-
-    protected function hasColorSupport(): bool
-    {
-        // Follow https://no-color.org/ as symfony does the same
-        // https://github.com/symfony/Console/blob/master/Output/StreamOutput.php#L94
-        if (isset($_SERVER['NO_COLOR']) || getenv('NO_COLOR') !== false) {
-            return false;
-        }
-
-        if (in_array('--' . Cli::FLAG_ANSI, $_SERVER['argv'], true)) {
-            return true;
-        }
-
-        return $this->isTty();
+        return "<{$color}>{$text}</>";
     }
 
     /**
@@ -150,5 +124,41 @@ class ConsoleFormatter implements Formatter
         );
 
         return array_values($violations);
+    }
+
+    /**
+     * @param string[] $array
+     */
+    protected function writeRow(OutputInterface $output, array $array): void
+    {
+        $widths = [5, 8, 15, 0];
+        $nlPrefix = str_repeat(' ', array_sum($widths) + count($widths) - 1);
+
+        foreach ($array as $column => $cell) {
+            foreach (explode("\n", $cell) as $idx => $line) {
+                if ($widths[$column] > 0) {
+                    $rawLength = $widths[$column] + strlen($line) - strlen(strip_tags($line));
+                    $line = str_pad($line, $rawLength, ' ', $column > 1 ? STR_PAD_RIGHT : STR_PAD_LEFT);
+                }
+
+                $output->write(($idx > 0 ? "\n{$nlPrefix}" : '') . $line . ' ');
+            }
+        }
+
+        $output->write(PHP_EOL);
+    }
+
+    protected function highlightClasses(string $message): string
+    {
+        // Only highlight text when no tags exist yet
+        if (strpos($message, '</') !== false) {
+            return $message;
+        }
+
+        // Find variables
+        $message = preg_replace('/\$\w+/S', '<fg=cyan>$0</>', $message);
+
+        // Find classes/statics/const
+        return preg_replace('/\\\\?[A-Za-z]+\\\\[A-Za-z\\\]+(::[a-zA-Z]+(\(\))?)?/S', '<fg=magenta>$0</>', $message);
     }
 }

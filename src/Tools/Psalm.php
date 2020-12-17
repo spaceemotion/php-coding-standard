@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
-use Closure;
 use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
-use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 use function dirname;
 use function file_exists;
@@ -30,7 +28,7 @@ class Psalm extends Tool
 
         if ($context->isFixing) {
             $this->execute($binary, array_merge(
-                ['--alter', '--issues=all'],
+                ['--alter', '--issues=all', '--no-progress'],
                 $config,
                 $context->files
             ));
@@ -42,13 +40,11 @@ class Psalm extends Tool
             [
                 '--monochrome',
                 "--report=${tmpFileJson}",
+                '--no-progress',
             ],
             $config,
             $context->files
-        ), $output, $context->fast ? null : new ProgressTracker(
-            Closure::fromCallable([$this, 'trackProgress']),
-            ['--debug']
-        ));
+        ), $output);
 
         $contents = file_get_contents($tmpFileJson);
 
@@ -87,28 +83,6 @@ class Psalm extends Tool
         }
 
         return $exitCode === 0;
-    }
-
-    protected function createTempReportFile(): string
-    {
-        $tmpFile = tempnam(sys_get_temp_dir(), $this->name);
-
-        if ($tmpFile === false) {
-            throw new RuntimeException('Unable to create temporary report file');
-        }
-
-        $tmpFileJson = "${tmpFile}.json";
-
-        if (! rename($tmpFile, $tmpFileJson)) {
-            throw new RuntimeException('Unable to rename temporary report file');
-        }
-
-        return $tmpFileJson;
-    }
-
-    protected function trackProgress(string $line): bool
-    {
-        return stripos($line, 'Getting') === 0;
     }
 
     /**

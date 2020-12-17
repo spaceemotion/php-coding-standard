@@ -5,21 +5,24 @@ declare(strict_types=1);
 namespace Spaceemotion\PhpCodingStandard;
 
 use RuntimeException;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Config
 {
     public const IGNORE_SOURCES = 'ignoreSources';
 
+    /** @var OutputInterface */
+    protected $output;
+
     /** @var mixed[] */
-    private $config;
+    private $config = [];
 
-    public function __construct()
+    public function __construct(OutputInterface $output)
     {
-        $this->config = [];
+        $this->output = $output;
 
-        $configs = self::readConfigs();
-
-        foreach ($configs as $config) {
+        foreach ($this->readConfigs() as $config) {
             $this->config = self::mergeConfig($this->config, $config);
         }
     }
@@ -66,7 +69,7 @@ class Config
     /**
      * @return mixed[]
      */
-    protected static function readConfig(string $path): array
+    protected function readConfig(string $path): array
     {
         if (! is_file($path)) {
             $path = preg_replace('/\.ini$/i', '.dist.ini', $path);
@@ -76,7 +79,7 @@ class Config
             }
         }
 
-        echo "Including config: {$path}\n";
+        $this->output->writeln("Including config: {$path}", Output::VERBOSITY_VERBOSE);
 
         $config = parse_ini_file($path, true);
 
@@ -113,7 +116,7 @@ class Config
      *
      * @psalm-return array<string, array>
      */
-    protected static function readConfigs(): array
+    protected function readConfigs(): array
     {
         $workingDirectory = getcwd();
 
@@ -129,20 +132,26 @@ class Config
         ]));
 
         while (($path = array_shift($paths)) !== null) {
-            $config = self::readConfig($path);
+            $config = $this->readConfig($path);
 
             foreach (array_reverse((array) ($config['include'] ?? [])) as $include) {
                 $includePath = realpath(dirname($path) . '/' . $include);
 
                 // Either the file does not exist
                 if ($includePath === false) {
-                    echo "Could not find config {$include}, skipping\n";
+                    $this->output->writeln(
+                        "Could not find config {$include}, skipping",
+                        Output::VERBOSITY_NORMAL
+                    );
                     continue;
                 }
 
                 // or we've already loaded its contents
                 if (array_key_exists($includePath, $configs)) {
-                    echo "Cyclic dependency found at ${path} for ${includePath}\n";
+                    $this->output->writeln(
+                        "Cyclic dependency found at ${path} for ${includePath}",
+                        Output::VERBOSITY_NORMAL
+                    );
                     continue;
                 }
 

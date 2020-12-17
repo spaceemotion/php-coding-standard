@@ -7,15 +7,33 @@ namespace Spaceemotion\PhpCodingStandard\Tools;
 use RuntimeException;
 use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Context;
-use Spaceemotion\PhpCodingStandard\ProgressOutput;
-use Spaceemotion\PhpCodingStandard\ProgressTracker;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 use function array_merge;
+use function implode;
+use function preg_match;
+use function rename;
+use function sys_get_temp_dir;
+use function tempnam;
+use function usleep;
 
 abstract class Tool
 {
+    public const CHARS = ['⠏', '⠛', '⠹', '⢸', '⣰', '⣤', '⣆', '⡇'];
+
     /** @var string A short name for the tool to be used in the config */
     protected $name = '';
+
+    /** @var OutputInterface */
+    protected $output;
+
+    public function setOutput(OutputInterface $output): void
+    {
+        $this->output = $output;
+    }
 
     /**
      * Runs this tool with the given context.
@@ -58,54 +76,51 @@ abstract class Tool
     protected function execute(
         string $binary,
         array $arguments,
-        array &$output = [],
-        ?ProgressTracker $progressTracker = null
+        array &$output = []
     ): int {
-        if ($progressTracker !== null) {
-            $arguments = array_merge($arguments, $progressTracker->arguments);
-        }
-
         $arguments = array_filter($arguments, static function ($argument): bool {
             return $argument !== '';
         });
 
-        $arguments = array_map('escapeshellarg', $arguments);
-        $joined = implode(' ', $arguments);
+        $command = array_merge([$binary], $arguments);
 
-        $command = "{$binary} {$joined} 2>&1";
-        $exitCode = 0;
-
-        if ($progressTracker === null) {
-            // We don't support a progress bar
-            exec($command, $output, $exitCode);
-
-            return $exitCode;
+        if ($this->output->isVeryVerbose()) {
+            $this->output->writeln('Executing: ' . implode(' ', $command), Output::OUTPUT_RAW);
         }
 
-        // Let the tool read each line of the output
-        $progress = new ProgressOutput();
-        $handle = popen($command, 'r');
+        $process = new Process($command);
+        $process->setTimeout(null);
 
-        if ($handle === false) {
-            throw new RuntimeException("Unable to open process: ${command}");
+        if ($this->output->isDebug()) {
+            return $process->run(function ($type, $buffer) use (&$output): void {
+                $this->output->write($buffer);
+                $output[] = $buffer;
+            });
         }
 
-        while (! feof($handle)) {
-            $read = fgets($handle);
+        $progress = new ProgressBar($this->output);
+        $progress->setMessage($this->getName());
+        $progress->setBarWidth(1);
+        $progress->setProgressCharacter(self::CHARS[0]);
+        $progress->setRedrawFrequency(1);
+        $progress->setFormat('%bar% %message% (elapsed: %elapsed:6s%)');
+        $progress->start();
 
-            if (! is_string($read)) {
-                continue;
-            }
+        $process->start(static function ($type, $buffer) use (&$output): void {
+            $output[] = $buffer;
+        });
 
-            $output[] = $read;
+        while ($process->isRunning()) {
+            $progress->setProgressCharacter(self::CHARS[$progress->getProgress() % 8]);
+            $progress->advance();
 
-            // Show little dots whenever this returns true
-            if (($progressTracker->callback)($read)) {
-                $progress->advance();
-            }
+            // Create two rotations per second
+            usleep((int) ((1 / 8 / 2) * 1000000));
         }
 
-        return pclose($handle);
+        $progress->clear();
+
+        return (int) $process->getExitCode();
     }
 
     protected static function vendorBinary(string $binary): string
@@ -121,6 +136,23 @@ abstract class Tool
         }
 
         return $binary;
+    }
+
+    protected function createTempReportFile(): string
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), $this->name);
+
+        if ($tmpFile === false) {
+            throw new RuntimeException('Unable to create temporary report file');
+        }
+
+        $tmpFileJson = "${tmpFile}.json";
+
+        if (! rename($tmpFile, $tmpFileJson)) {
+            throw new RuntimeException('Unable to rename temporary report file');
+        }
+
+        return $tmpFileJson;
     }
 
     /**

@@ -6,5 +6,5 @@ namespace Spaceemotion\PhpCodingStandard\Formatter;
 
 interface Formatter
 {
-    public function format(Result $result): void;
+    public function format(Result $result, \Symfony\Component\Console\Style\SymfonyStyle $style): void;
 }

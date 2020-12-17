@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
-use Closure;
-use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Config;
 use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
-use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class Phpstan extends Tool
 {
@@ -32,14 +29,10 @@ class Phpstan extends Tool
                     '--error-format=json',
                     '--no-ansi',
                     '--no-interaction',
+                    '--no-progress',
                 ],
                 $files
-            ), $output, (
-                $context->fast ? null : new ProgressTracker(
-                    Closure::fromCallable([$this, 'trackProgress']),
-                    ['--debug']
-                )
-            )) === 0
+            ), $output) === 0
         ) {
             return true;
         }
@@ -98,17 +91,5 @@ class Phpstan extends Tool
         $context->addResult($result);
 
         return false;
-    }
-
-    protected function trackProgress(string $line): bool
-    {
-        $firstLetter = $line[0] ?? '';
-
-        if (Cli::isOnWindows()) {
-            // TODO how are file paths on windows again?
-            return $firstLetter !== '{';
-        }
-
-        return $firstLetter === '/';
     }
 }

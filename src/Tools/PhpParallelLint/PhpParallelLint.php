@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Spaceemotion\PhpCodingStandard\Tools;
+namespace Spaceemotion\PhpCodingStandard\Tools\PhpParallelLint;
 
 use JakubOnderka\PhpParallelLint\Settings;
 use Spaceemotion\PhpCodingStandard\Context;
-use Throwable;
+use Spaceemotion\PhpCodingStandard\Tools\Tool;
 
 class PhpParallelLint extends Tool
 {
@@ -19,19 +19,14 @@ class PhpParallelLint extends Tool
     {
         $config = $context->config->getPart($this->name);
 
-        $manager = new PhpParallelLint\Manager($context);
+        $manager = new Manager($context, $this->output);
 
         $settings = new Settings();
         $settings->addPaths($context->files);
         $settings->parallelJobs = (int) ($config['processes'] ?? 24);
 
-        try {
-            $result = $manager->run($settings);
+        $result = $manager->run($settings);
 
-            return ! $result->hasError();
-        } catch (Throwable $exception) {
-            fwrite(STDERR, $exception->getTraceAsString());
-            return false;
-        }
+        return ! $result->hasError();
     }
 }

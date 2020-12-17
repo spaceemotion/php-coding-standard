@@ -8,7 +8,6 @@ use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
-use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
 class PhpCodeSniffer extends Tool
 {
@@ -18,9 +17,7 @@ class PhpCodeSniffer extends Tool
     public function run(Context $context): bool
     {
         if ($context->isFixing) {
-            echo "\n   - Additional fix pass";
             $this->sniff($context, 'phpcbf');
-            echo "\n   - Regular pass\n   ";
         }
 
         $output = [];
@@ -83,13 +80,7 @@ class PhpCodeSniffer extends Tool
                 ],
                 $context->files
             ),
-            $output,
-            $context->fast ? null : new ProgressTracker(
-                static function (string $line): bool {
-                    return stripos($line, 'processing') === 0;
-                },
-                ['-v']
-            )
+            $output
         );
     }
 }

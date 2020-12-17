@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard;
 
+use Spaceemotion\PhpCodingStandard\Commands\RunCommand;
+use Symfony\Component\Console\Application;
+
 require_once 'init.php';
 
-try {
-    exit((new Cli($argv))->start([
-        new Tools\ComposerNormalize(),
-        new Tools\PhpParallelLint(),
-        new Tools\EasyCodingStandard(),
-        new Tools\PhpCodeSniffer(),
-        new Tools\PhpMessDetector(),
-        new Tools\Phpstan(),
-        new Tools\Psalm(),
-        new Tools\Phan(),
-    ]) ? 0 : 1);
-} catch (ExitException $e) {
-    echo $e->getMessage();
-}
+$command = new RunCommand();
+$command->addTool(new Tools\ComposerNormalize());
+$command->addTool(new Tools\PhpParallelLint\PhpParallelLint());
+$command->addTool(new Tools\EasyCodingStandard());
+$command->addTool(new Tools\PhpCodeSniffer());
+$command->addTool(new Tools\PhpMessDetector());
+$command->addTool(new Tools\Phpstan());
+$command->addTool(new Tools\Psalm());
+$command->addTool(new Tools\Phan());
+
+$application = new Application('phpcstd');
+
+$application->add($command);
+$application->setDefaultCommand($command->getName());
+$application->run();

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Tools;
 
-use Closure;
 use Spaceemotion\PhpCodingStandard\Context;
+use Spaceemotion\PhpCodingStandard\DiffViolation;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
-use Spaceemotion\PhpCodingStandard\ProgressTracker;
 
+use function array_map;
+use function array_merge;
+use function basename;
 use function implode;
-use function preg_match_all;
-use function rtrim;
-
-use const PREG_SET_ORDER;
+use function preg_replace;
+use function str_replace;
+use function strtolower;
 
 class EasyCodingStandard extends Tool
 {
@@ -30,14 +31,11 @@ class EasyCodingStandard extends Tool
             [
                 'check',
                 '--output-format=json',
+                '--no-progress-bar',
             ],
             $context->isFixing ? ['--fix'] : [],
             $context->files
-        ), $output, $context->fast ? null : (
-            new ProgressTracker(Closure::fromCallable([$this, 'trackProgress']), [
-                '--debug',
-            ])
-        ));
+        ), $output);
 
         $outputText = implode('', $output);
         $json = self::parseJson(substr($outputText, (int) strpos($outputText, '{')));
@@ -75,35 +73,16 @@ class EasyCodingStandard extends Tool
 
             if (! $context->isFixing) {
                 foreach (($details['diffs'] ?? []) as $diff) {
-                    $matches = [];
+                    $violations = DiffViolation::make($this, $diff['diff'], static function (int $idx) use ($diff): string {
+                        return $idx > 0
+                            ? '(contd.)'
+                            : "Styling issues:\n- " . implode(
+                                "\n- ",
+                                self::prettifyCheckers($diff['applied_checkers'])
+                            );
+                    });
 
-                    preg_match_all(
-                        '/^@@ -(\d+),(\d+) \+(\d+),(\d+) @@(.+?)(?=@@|\Z)/ms',
-                        $diff['diff'],
-                        $matches,
-                        PREG_SET_ORDER
-                    );
-
-                    foreach ($matches as $match) {
-                        // 0 = all
-                        // 1 = from line number
-                        // 2 = from length
-                        // 3 = to line number
-                        // 4 = to length
-                        // 5 = diff excerpt
-
-                        $fromLineNumber = (int) $match[1];
-
-                        $violation = new Violation();
-                        $violation->line = $fromLineNumber;
-                        $violation->message = 'Styling issues found';
-                        $violation->tool = $this->name;
-                        $violation->source = implode("\n", $diff['applied_checkers'])
-                            . "\n\n"
-                            . rtrim($match[0], "\n\r");
-
-                        $file->violations[] = $violation;
-                    }
+                    $file->violations = array_merge($file->violations, $violations);
                 }
             }
 
@@ -115,8 +94,20 @@ class EasyCodingStandard extends Tool
         return $result;
     }
 
-    protected function trackProgress(string $line): bool
+    /**
+     * @return string[]
+     *
+     * @psalm-return array<array-key, string>
+     */
+    private static function prettifyCheckers($applied_checkers): array
     {
-        return stripos(ltrim($line), '[file]') === 0;
+        return array_map(static function (string $checker): string {
+            $className = basename(str_replace(['\\', '.'], '/', $checker));
+            $withoutSuffix = preg_replace('/Fixer$/', '', $className);
+
+            $name = strtolower(preg_replace('/(?<!^)[A-Z]/', ' $0', $withoutSuffix));
+
+            return $name . " <gray>(${checker})</gray>";
+        }, $applied_checkers);
     }
 }

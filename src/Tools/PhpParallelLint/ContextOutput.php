@@ -12,8 +12,7 @@ use Spaceemotion\PhpCodingStandard\Context;
 use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
-use Spaceemotion\PhpCodingStandard\ProgressOutput;
-use Spaceemotion\PhpCodingStandard\Tools\PhpParallelLint;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class ContextOutput implements Output
 {
@@ -23,17 +22,25 @@ class ContextOutput implements Output
      */
     private $context;
 
-    /** @var ProgressOutput */
+    /** @var ProgressBar */
     private $progress;
+
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
+    private $output;
 
     public function __construct(IWriter $writer)
     {
-        $this->progress = new ProgressOutput();
+        // Do nothing
     }
 
     public function setContext(Context $context): void
     {
         $this->context = $context;
+    }
+
+    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): void
+    {
+        $this->output = $output;
     }
 
     /**
@@ -64,6 +71,10 @@ class ContextOutput implements Output
      */
     public function setTotalFileCount($count): void
     {
+        $this->progress = new ProgressBar($this->output, $count);
+        $this->progress->setFormat('  %message%: %current%/%max% [%bar%] %percent:3s%%');
+        $this->progress->setMessage(PhpParallelLint::NAME);
+        $this->progress->start();
     }
 
     /**
@@ -81,6 +92,8 @@ class ContextOutput implements Output
         ErrorFormatter $errorFormatter,
         $ignoreFails
     ): void {
+        $this->progress->clear();
+
         foreach ($result->getErrors() as $error) {
             if (! ($error instanceof SyntaxError)) {
                 continue;

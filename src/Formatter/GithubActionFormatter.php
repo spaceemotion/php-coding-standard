@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Formatter;
 
+use Symfony\Component\Console\Output\Output;
+
+use function strip_tags;
+
 class GithubActionFormatter extends ConsoleFormatter
 {
-    public function format(Result $result): void
+    public function format(Result $result, \Symfony\Component\Console\Style\SymfonyStyle $style): void
     {
         foreach ($result->files as $fileName => $file) {
             $fullPath = PHPCSTD_ROOT . $fileName;
@@ -17,17 +21,22 @@ class GithubActionFormatter extends ConsoleFormatter
                 $violations[$violation->line][$type][] = "{$violation->message} ({$violation->tool})";
             }
 
-            echo "::group::{$fileName}\n";
+            $style->writeln("::group::{$fileName}", Output::OUTPUT_RAW);
 
             foreach ($violations as $line => $byType) {
                 foreach ($byType as $type => $violation) {
                     // Replace NL with url-encoded %0A so they show up
-                    $violation = str_replace("\n", '%0A', trim(implode("\n", $violation)));
-                    echo "::{$type} file={$fullPath},line={$line}::{$violation}\n";
+                    $violation = trim(strip_tags(implode("\n", $violation)));
+                    $violation = str_replace("\n", '%0A', $violation);
+
+                    $style->writeln(
+                        "::{$type} file={$fullPath},line={$line}::{$violation}",
+                        Output::OUTPUT_RAW
+                    );
                 }
             }
 
-            echo "::endgroup::\n";
+            $style->writeln('::endgroup::', Output::OUTPUT_RAW);
         }
     }
 }
