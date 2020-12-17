@@ -54,14 +54,14 @@ class PhpCodeSniffer extends Tool
 
         $context->result->add($result);
 
-        // Return true as long as we can fix it
-        if (! $context->isFixing) {
-            return false;
-        }
-
         $totals = $json['totals'] ?? [];
 
-        return ($totals['errors'] ?? 0) + ($totals['warnings'] ?? 0) === ($totals['fixable'] ?? 0);
+        // Return true as long as we can fix it
+        if (! $context->isFixing) {
+            return ($totals['errors'] ?? 0) === 0;
+        }
+
+        return ($totals['errors'] ?? 0) === ($totals['fixable'] ?? 0);
     }
 
     /**
