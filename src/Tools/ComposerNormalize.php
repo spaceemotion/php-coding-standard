@@ -47,7 +47,7 @@ class ComposerNormalize extends Tool
                 'normalize',
                 $filename,
                 '--diff',
-                '--no-update-lock',
+                (bool) $config['updateLock'] ? '' : '--no-update-lock',
                 $context->isFixing ? '' : '--dry-run',
             ], $output) === 0
         ) {
