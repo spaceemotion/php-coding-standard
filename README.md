@@ -28,6 +28,7 @@ Tool | Lint | Fix | Source list | Description
 [phpstan](https://github.com/phpstan/phpstan) ⭐ | ✅ | ❌ | ⏹ | Static analyzer, source list is optional, but not recommended
 [psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | ✅ | Static analyzer
 [phan](https://github.com/phan/phan) | ✅ | ✅ | ❌ | Static analyzer, requires the "php-ast" extension
+[rector](https://github.com/rectorphp/rector) ⭐ | ✅ | ✅ | ✅ | Code up-/downgrading and refactoring tool
 
 _⭐ = recommended_
 

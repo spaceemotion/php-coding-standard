@@ -12,6 +12,7 @@ require_once 'init.php';
 $command = new RunCommand();
 $command->addTool(new Tools\ComposerNormalize());
 $command->addTool(new Tools\PhpParallelLint\PhpParallelLint());
+$command->addTool(new Tools\Rector());
 $command->addTool(new Tools\EasyCodingStandard());
 $command->addTool(new Tools\PhpCodeSniffer());
 $command->addTool(new Tools\PhpMessDetector());

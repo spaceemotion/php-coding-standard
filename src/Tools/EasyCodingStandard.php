@@ -95,11 +95,12 @@ class EasyCodingStandard extends Tool
     }
 
     /**
+     * @param string[] $applied_checkers
      * @return string[]
      *
      * @psalm-return array<array-key, string>
      */
-    private static function prettifyCheckers($applied_checkers): array
+    private static function prettifyCheckers(array $applied_checkers): array
     {
         return array_map(static function (string $checker): string {
             $className = basename(str_replace(['\\', '.'], '/', $checker));
