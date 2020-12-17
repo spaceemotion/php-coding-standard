@@ -29,6 +29,7 @@ use function substr;
 
 class RunCommand extends Command
 {
+    /** @var string */
     protected static $defaultName = 'run';
 
     /** @var Tool[] */
@@ -209,10 +210,13 @@ class RunCommand extends Command
         }, $output));
     }
 
+    /**
+     * @return string[]
+     */
     private function getFiles(InputInterface $input): array
     {
         // 1. --lint-staged takes precedence
-        if ((bool) $input->getOption(Cli::FLAG_LINT_STAGED)) {
+        if ((bool) ($input->getOption(Cli::FLAG_LINT_STAGED))) {
             return $this->lintStaged();
         }
 
@@ -225,6 +229,6 @@ class RunCommand extends Command
 
         // 3. Read from argument
         // 4. Read from config
-        return $input->getArgument('files') ?: $this->config->getSources();
+        return array_map('strval', (array) $input->getArgument('files')) ?: $this->config->getSources();
     }
 }

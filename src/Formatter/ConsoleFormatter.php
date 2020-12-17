@@ -152,6 +152,10 @@ class ConsoleFormatter implements Formatter
         $message = preg_replace('/\$\w+/S', '<fg=cyan>$0</>', $message);
 
         // Find classes/statics/const
-        return preg_replace('/\\\\?[A-Za-z]+\\\\[A-Za-z\\\]+(::[a-zA-Z]+(\(\))?)?/S', '<fg=magenta>$0</>', $message);
+        return (string) preg_replace(
+            '/\\\\?[A-Za-z]+\\\\[A-Za-z\\\]+(::[a-zA-Z]+(\(\))?)?/S',
+            '<fg=magenta>$0</>',
+            $message
+        );
     }
 }

@@ -31,6 +31,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'imports_order' => ['class', 'function', 'const'],
         ]]);
 
+    $services->set(PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer::class)
+        ->call('configure', [[
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
+        ]]);
+
     $services->set(PhpCsFixer\Fixer\PhpUnit\PhpUnitMethodCasingFixer::class)
         ->call('configure', [[
             'case' => 'snake_case',

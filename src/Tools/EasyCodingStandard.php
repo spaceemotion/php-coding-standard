@@ -48,7 +48,7 @@ class EasyCodingStandard extends Tool
 
         $context->addResult($result);
 
-        return count($result->files) === 0;
+        return $result->files === [];
     }
 
     /**
@@ -86,7 +86,7 @@ class EasyCodingStandard extends Tool
                 }
             }
 
-            if (count($file->violations) > 0) {
+            if ($file->violations !== []) {
                 $result->files[$path] = $file;
             }
         }

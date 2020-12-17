@@ -19,6 +19,7 @@ use function strtolower;
 
 class Rector extends Tool
 {
+    /** @var string */
     protected $name = 'rector';
 
     public function run(Context $context): bool

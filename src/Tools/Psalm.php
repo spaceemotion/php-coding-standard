@@ -54,7 +54,7 @@ class Psalm extends Tool
 
         $json = self::parseJson($contents);
 
-        if (count($json) === 0) {
+        if ($json === []) {
             if ($exitCode === 0) {
                 return true;
             }

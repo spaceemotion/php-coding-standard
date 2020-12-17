@@ -37,6 +37,9 @@ class Cli
         return stripos(PHP_OS, 'WIN') === 0;
     }
 
+    /**
+     * @return string[]
+     */
     public static function parseFilesFromInput(): array
     {
         // Windows does not support nonblocking input streams:

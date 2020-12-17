@@ -15,7 +15,7 @@ class Result
     public function add(self $result): self
     {
         foreach ($result->files as $filename => $file) {
-            if (count($file->violations) === 0) {
+            if ($file->violations === []) {
                 continue;
             }
 
