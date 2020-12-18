@@ -54,10 +54,7 @@ abstract class Tool
      */
     public function shouldRun(Context $context): bool
     {
-        if (! $context->config->isEnabled($this->name)) {
-            return false;
-        }
-        return ! in_array(static::class, $context->toolsExecuted, true);
+        return true;
     }
 
     public function getName(): string

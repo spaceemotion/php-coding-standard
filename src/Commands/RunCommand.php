@@ -22,7 +22,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_filter;
 use function array_map;
 use function exec;
-use function get_class;
 use function in_array;
 use function ltrim;
 use function substr;
@@ -155,22 +154,25 @@ class RunCommand extends Command
         foreach ($this->tools as $tool) {
             $name = $tool->getName();
 
+            if (! $context->config->isEnabled($name)) {
+                // Don't show a message for tools we don't need/have
+                continue;
+            }
+
             if (
+                // Check against --skip
                 in_array($name, $skipped, true)
+                // Check against --only
                 || ($only !== [] && ! in_array($name, $only, true))
+                // Additional checks
+                || ! $tool->shouldRun($context)
             ) {
+                $output->writeln("<comment>-</comment> {$name}: <comment>SKIP</comment>");
                 continue;
             }
 
             $tool->setInput($input);
             $tool->setOutput($output);
-
-            if (! $tool->shouldRun($context)) {
-                $output->writeln("<comment>-</comment> {$name}: <comment>SKIP</comment>");
-                continue;
-            }
-
-            $context->toolsExecuted[] = get_class($tool);
 
             $start = time();
             $result = $tool->run($context);
@@ -183,11 +185,11 @@ class RunCommand extends Command
 
             $output->writeln("<fg=red>✘</> {$name}: <fg=red>FAIL</> ${timeTaken}");
 
-            if (! $continue) {
-                return false;
-            }
-
             $success = false;
+
+            if (! $continue) {
+                break;
+            }
         }
 
         return $success;
