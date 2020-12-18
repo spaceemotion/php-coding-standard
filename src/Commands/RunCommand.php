@@ -116,7 +116,7 @@ class RunCommand extends Command
 
         if ($files === []) {
             $output->writeln('No files specified');
-            return 0;
+            return self::SUCCESS;
         }
 
         $context = new Context($this->config);
@@ -138,7 +138,7 @@ class RunCommand extends Command
 
         $formatter->format($context->result, new SymfonyStyle($input, $output));
 
-        return (bool) $input->getOption(Cli::FLAG_NO_FAIL) ? 0 : (int) ! $success;
+        return (bool) $input->getOption(Cli::FLAG_NO_FAIL) ? self::SUCCESS : (int) ! $success;
     }
 
     private function executeContext(InputInterface $input, OutputInterface $output, Context $context): bool
