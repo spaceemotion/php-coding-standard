@@ -5,8 +5,16 @@
 /.phan export-ignore
 /img export-ignore
 
+/tests export-ignore
+phpunit.xml export-ignore
+
+.env export-ignore
+Dockerfile export-ignore
+docker-compose.yaml export-ignore
+
 ecs.yml export-ignore
 phpcs.xml export-ignore
 phpmd.xml export-ignore
 phpstan.neon export-ignore
 psalm.xml export-ignore
+rector.php export-ignore
