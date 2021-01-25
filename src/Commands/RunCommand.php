@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spaceemotion\PhpCodingStandard\Commands;
 
+use InvalidArgumentException;
 use Spaceemotion\PhpCodingStandard\Cli;
 use Spaceemotion\PhpCodingStandard\Config;
 use Spaceemotion\PhpCodingStandard\Context;
@@ -142,7 +143,8 @@ class RunCommand extends Command
 
     private function executeContext(InputInterface $input, OutputInterface $output, Context $context): bool
     {
-        $grayStyle = new OutputFormatterStyle('#777');
+        $grayStyle = $this->getOutputStyle('#777');
+
         $output->getFormatter()->setStyle('gray', $grayStyle);
 
         $skipped = $input->getOption(Cli::PARAMETER_SKIP);
@@ -232,5 +234,14 @@ class RunCommand extends Command
         // 3. Read from argument
         // 4. Read from config
         return array_map('strval', (array) $input->getArgument('files')) ?: $this->config->getSources();
+    }
+
+    private function getOutputStyle(string $foreground): OutputFormatterStyle
+    {
+        try {
+            return new OutputFormatterStyle($foreground);
+        } catch (InvalidArgumentException $ex) {
+            return new OutputFormatterStyle('default');
+        }
     }
 }
