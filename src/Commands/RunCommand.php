@@ -29,6 +29,8 @@ use function substr;
 
 class RunCommand extends Command
 {
+    public const SUCCESS = 0;
+
     /** @var string */
     protected static $defaultName = 'run';
 
