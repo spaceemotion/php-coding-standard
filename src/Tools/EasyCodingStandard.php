@@ -14,6 +14,7 @@ use function array_map;
 use function array_merge;
 use function basename;
 use function implode;
+use function preg_match;
 use function preg_replace;
 use function str_replace;
 use function strtolower;
@@ -38,7 +39,9 @@ class EasyCodingStandard extends Tool
         ), $output);
 
         $outputText = implode('', $output);
-        $json = self::parseJson(substr($outputText, (int) strpos($outputText, '{')));
+        preg_match('/\{\s*"totals".+/ms', $outputText, $matches);
+
+        $json = self::parseJson($matches[0] ?? '');
 
         if ($json === []) {
             return false;
