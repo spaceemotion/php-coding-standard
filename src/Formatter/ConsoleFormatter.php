@@ -149,7 +149,7 @@ class ConsoleFormatter implements Formatter
         }
 
         // Find variables
-        $message = preg_replace('/\$\w+/S', '<fg=cyan>$0</>', $message);
+        $message = preg_replace('/\$\w+/S', '<fg=cyan>$0</>', $message) ?? $message;
 
         // Find classes/statics/const
         return (string) preg_replace(

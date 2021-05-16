@@ -15,6 +15,7 @@ use Symfony\Component\Process\Process;
 
 use function array_merge;
 use function implode;
+use function is_string;
 use function preg_match;
 use function rename;
 use function sys_get_temp_dir;
@@ -28,7 +29,7 @@ abstract class Tool
     /** @var string A short name for the tool to be used in the config */
     protected $name = '';
 
-    /** @var InputInterface */
+    /** @var InputInterface|null */
     protected $input;
 
     /** @var OutputInterface */
@@ -93,31 +94,18 @@ abstract class Tool
         $process->setTimeout(null);
 
         if ($this->output->isDebug()) {
-            return $process->run(function ($type, $buffer) use (&$output): void {
+            return $process->run(function (string $type, string $buffer) use (&$output): void {
                 $this->output->write($buffer);
                 $output[] = $buffer;
             });
         }
 
-        $isInteractive = $this->input->isInteractive();
+        $isInteractive = $this->input !== null && $this->input->isInteractive();
 
-        $progress = new ProgressBar($this->output);
-        $progress->setMessage($this->getName());
-        $progress->setBarWidth(1);
-        $progress->setFormat('%bar% %message% (elapsed: %elapsed:6s%)');
-
-        if ($isInteractive) {
-            $progress->setRedrawFrequency(1);
-            $progress->setBarCharacter(self::CHARS[0]);
-        } else {
-            $progress->minSecondsBetweenRedraws(5);
-            $progress->maxSecondsBetweenRedraws(5);
-            $progress->setOverwrite(false);
-        }
-
+        $progress = $this->createProgressBar($isInteractive);
         $progress->start();
 
-        $process->start(static function ($type, $buffer) use (&$output): void {
+        $process->start(static function (string $type, string $buffer) use (&$output): void {
             $output[] = $buffer;
         });
 
@@ -176,8 +164,12 @@ abstract class Tool
     /**
      * @return mixed[]
      */
-    protected static function parseJson(string $raw): array
+    protected static function parseJson($raw): array
     {
+        if (! is_string($raw)) {
+            return [];
+        }
+
         // Clean up malformed JSON output
         $matches = [];
         preg_match('/((?:{.*})|(?:\[.*\]))\s*$/msS', $raw, $matches);
@@ -189,5 +181,27 @@ abstract class Tool
         }
 
         return [];
+    }
+
+
+    protected function createProgressBar(bool $isInteractive): ProgressBar
+    {
+        $progress = new ProgressBar($this->output);
+        $progress->setMessage($this->getName());
+        $progress->setBarWidth(1);
+        $progress->setFormat('%bar% %message% (elapsed: %elapsed:6s%)');
+
+        if ($isInteractive) {
+            $progress->setRedrawFrequency(1);
+            $progress->setBarCharacter(self::CHARS[0]);
+
+            return $progress;
+        }
+
+        $progress->minSecondsBetweenRedraws(5);
+        $progress->maxSecondsBetweenRedraws(5);
+        $progress->setOverwrite(false);
+
+        return $progress;
     }
 }

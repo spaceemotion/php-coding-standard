@@ -149,8 +149,8 @@ class RunCommand extends Command
 
         $output->getFormatter()->setStyle('gray', $grayStyle);
 
-        $skipped = $input->getOption(Cli::PARAMETER_SKIP);
-        $only = $input->getOption(Cli::PARAMETER_ONLY);
+        $skipped = (array) $input->getOption(Cli::PARAMETER_SKIP);
+        $only = (array) $input->getOption(Cli::PARAMETER_ONLY);
 
         $continue = (bool) $input->getOption(Cli::FLAG_CONTINUE) || $this->config->shouldContinue();
         $success = true;
@@ -234,8 +234,14 @@ class RunCommand extends Command
         }
 
         // 3. Read from argument
+        $files = array_map('strval', (array) $input->getArgument('files'));
+
+        if ($files !== []) {
+            return $files;
+        }
+
         // 4. Read from config
-        return array_map('strval', (array) $input->getArgument('files')) ?: $this->config->getSources();
+        return $this->config->getSources();
     }
 
     private function getOutputStyle(string $foreground): OutputFormatterStyle

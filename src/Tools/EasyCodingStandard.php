@@ -73,14 +73,18 @@ class EasyCodingStandard extends Tool
 
             if (! $context->isFixing) {
                 foreach (($details['diffs'] ?? []) as $diff) {
-                    $violations = DiffViolation::make($this, $diff['diff'], static function (int $idx) use ($diff): string {
-                        return $idx > 0
-                            ? '(contd.)'
-                            : "Styling issues:\n- " . implode(
-                                "\n- ",
-                                self::prettifyCheckers($diff['applied_checkers'])
-                            );
-                    });
+                    $violations = DiffViolation::make(
+                        $this,
+                        $diff['diff'],
+                        static function (int $idx) use ($diff): string {
+                            return $idx > 0
+                                ? '(contd.)'
+                                : "Styling issues:\n- " . implode(
+                                    "\n- ",
+                                    self::prettifyCheckers($diff['applied_checkers'])
+                                );
+                        }
+                    );
 
                     $file->violations = array_merge($file->violations, $violations);
                 }
@@ -104,9 +108,11 @@ class EasyCodingStandard extends Tool
     {
         return array_map(static function (string $checker): string {
             $className = basename(str_replace(['\\', '.'], '/', $checker));
-            $withoutSuffix = preg_replace('/Fixer$/', '', $className);
+            $withoutSuffix = preg_replace('/Fixer$/', '', $className) ?? $className;
 
-            $name = strtolower(preg_replace('/(?<!^)[A-Z]/', ' $0', $withoutSuffix));
+            $name = strtolower(
+                preg_replace('/(?<!^)[A-Z]/', ' $0', $withoutSuffix) ?? $withoutSuffix
+            );
 
             return $name . " <gray>(${checker})</gray>";
         }, $applied_checkers);
