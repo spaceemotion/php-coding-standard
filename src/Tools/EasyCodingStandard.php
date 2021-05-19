@@ -39,7 +39,7 @@ class EasyCodingStandard extends Tool
         ), $output);
 
         $outputText = implode('', $output);
-        preg_match('/\{\s*"totals".+/ms', $outputText, $matches);
+        preg_match('/\{\s*"(totals|meta)".+/ms', $outputText, $matches);
 
         $json = self::parseJson($matches[0] ?? '');
 
