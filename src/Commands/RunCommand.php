@@ -69,6 +69,13 @@ class RunCommand extends Command
         );
 
         $this->addOption(
+            Cli::FLAG_INTERACTIVE,
+            null,
+            InputOption::VALUE_NONE,
+            'Force interactive mode'
+        );
+
+        $this->addOption(
             Cli::FLAG_FIX,
             null,
             InputOption::VALUE_NONE,
@@ -128,6 +135,10 @@ class RunCommand extends Command
 
         if ($context->runningInCi) {
             $input->setInteractive(false);
+        }
+
+        if ((bool) $input->getOption(Cli::FLAG_INTERACTIVE)) {
+            $input->setInteractive(true);
         }
 
         $success = $this->executeContext($input, $output, $context);

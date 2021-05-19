@@ -12,6 +12,8 @@ class Cli
 {
     public const FLAG_CI = 'ci';
 
+    public const FLAG_INTERACTIVE = 'interactive';
+
     public const FLAG_CONTINUE = 'continue';
 
     public const FLAG_FIX = 'fix';
