@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$string of function trim expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Tools/ComposerNormalize.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of function simplexml_load_string expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Tools/Deptrac.php
+
+		-
+			message: "#^Method Spaceemotion\\\\PhpCodingStandard\\\\Tools\\\\Phpstan\\:\\:getJsonLine\\(\\) has parameter \\$output with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Tools/Phpstan.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strtolower expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Tools/Rector.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
+			count: 1
+			path: src/Tools/Rector.php
+
+		-
+			message: "#^Method Spaceemotion\\\\PhpCodingStandard\\\\Tools\\\\Tool\\:\\:parseJson\\(\\) has parameter \\$raw with no typehint specified\\.$#"
+			count: 1
+			path: src/Tools/Tool.php
+
+		-
+			message: "#^Parameter \\#1 \\$commandName of method Symfony\\\\Component\\\\Console\\\\Application\\:\\:setDefaultCommand\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/main.php
+
