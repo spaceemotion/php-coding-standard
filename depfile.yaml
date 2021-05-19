@@ -1,0 +1,15 @@
+paths:
+  - ./src
+  - ./tests
+layers:
+  - name: Sources
+    collectors:
+      - type: directory
+        regex: src/.*
+  - name: Tests
+    collectors:
+      - type: directory
+        regex: tests/.*
+ruleset:
+  Tests:
+    - Sources

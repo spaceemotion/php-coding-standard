@@ -29,6 +29,7 @@ Tool | Lint | Fix | Source list | Description
 ⭐ [phpstan](https://github.com/phpstan/phpstan) | ✅ | ❌ | ⏹ | Static analyzer, source list is optional, but not recommended
 [psalm](https://github.com/vimeo/psalm) | ✅ | ✅ | ✅ | Static analyzer
 ⭐ [rector](https://github.com/rectorphp/rector) | ✅ | ✅ | ✅ | Code up-/downgrading and refactoring tool
+[deptrac](https://github.com/qossmic/deptrac) | ✅ | ❌ | ❌ | Static analyzer that enforces rules for dependencies between software layers
 
 _⭐ = recommended_
 
