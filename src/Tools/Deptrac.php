@@ -11,6 +11,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 class Deptrac extends Tool
 {
+    /** @var string */
     protected $name = 'deptrac';
 
     public function run(Context $context): bool
@@ -18,11 +19,11 @@ class Deptrac extends Tool
         $outputFile = $this->createTempReportFile();
 
         if (
-            $this->execute(self::vendorBinary('deptrac'),  [
+            $this->execute(self::vendorBinary('deptrac'), [
                 '--formatter=xml',
                 '--no-progress',
                 '--no-interaction',
-                "--xml-dump={$outputFile}"
+                "--xml-dump={$outputFile}",
             ]) === 0
         ) {
             return true;

@@ -183,7 +183,6 @@ abstract class Tool
         return [];
     }
 
-
     protected function createProgressBar(bool $isInteractive): ProgressBar
     {
         $progress = new ProgressBar($this->output);
