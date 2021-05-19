@@ -12,6 +12,7 @@ use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
 use function implode;
 use function preg_match;
+use function preg_replace;
 use function trim;
 
 use const PHP_EOL;
@@ -55,7 +56,7 @@ class ComposerNormalize extends Tool
         }
 
         $file = new File();
-        $text = trim(implode(PHP_EOL, $output));
+        $text = trim(preg_replace('/^Running ergebnis.*/', '', implode(PHP_EOL, $output)));
 
         $matches = [];
 
