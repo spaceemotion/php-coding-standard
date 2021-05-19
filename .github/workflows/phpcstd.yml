@@ -128,9 +128,3 @@ jobs:
 
       - name: Run phpcstd
         run: php bin/phpcstd --ci -vvv --only=${{ matrix.tool }}
-
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Run tests
-        run: vendor/bin/phpunit
