@@ -1,7 +1,8 @@
 {
     "name": "spaceemotion/php-coding-standard",
-    "type": "library",
     "description": "Combines multiple code quality tools into one binary with unified output.",
+    "license": "ISC",
+    "type": "library",
     "keywords": [
         "phpcs",
         "linting",
@@ -10,14 +11,13 @@
         "analysis",
         "code quality"
     ],
-    "homepage": "https://github.com/spaceemotion/php-coding-standard",
-    "license": "ISC",
     "authors": [
         {
             "name": "spaceemotion",
             "email": "hello@spaceemotion.net"
         }
     ],
+    "homepage": "https://github.com/spaceemotion/php-coding-standard",
     "require": {
         "php": ">=7.1",
         "ext-SimpleXML": "*",
@@ -55,16 +55,8 @@
         "symplify/easy-coding-standard-prefixed": "Code style linter + fixer (.phar)",
         "vimeo/psalm": "Static analysis"
     },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "hooks": {
-            "pre-commit": [
-                "bin/phpcstd --fix --hide-source --skip=phan --lint-staged --no-interaction"
-            ]
-        }
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Spaceemotion\\PhpCodingStandard\\": "src/"
@@ -75,11 +67,19 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "bin": [
         "bin/phpcstd"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "bin/phpcstd --fix --hide-source --skip=phan --lint-staged --no-interaction"
+            ]
+        }
+    },
     "scripts": {
         "post-install-cmd": "cghooks add --ignore-lock",
         "post-update-cmd": "cghooks update"
