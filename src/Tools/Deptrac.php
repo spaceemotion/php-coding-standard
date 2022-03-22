@@ -23,7 +23,7 @@ class Deptrac extends Tool
                 '--formatter=xml',
                 '--no-progress',
                 '--no-interaction',
-                "--xml-dump={$outputFile}",
+                "--output={$outputFile}",
             ]) === 0
         ) {
             return true;
