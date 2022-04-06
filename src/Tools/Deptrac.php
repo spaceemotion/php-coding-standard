@@ -9,6 +9,8 @@ use Spaceemotion\PhpCodingStandard\Formatter\File;
 use Spaceemotion\PhpCodingStandard\Formatter\Result;
 use Spaceemotion\PhpCodingStandard\Formatter\Violation;
 
+use function preg_match;
+
 class Deptrac extends Tool
 {
     /** @var string */
@@ -23,7 +25,9 @@ class Deptrac extends Tool
                 '--formatter=xml',
                 '--no-progress',
                 '--no-interaction',
-                "--output={$outputFile}",
+                $this->useNewOutputFormat()
+                    ? "--output={$outputFile}"
+                    : "--xml-dump={$outputFile}",
             ]) === 0
         ) {
             return true;
@@ -56,6 +60,22 @@ class Deptrac extends Tool
             $result->files[(string) $occurrence['file']] = $file;
 
             $context->addResult($result);
+        }
+
+        return false;
+    }
+
+    protected function useNewOutputFormat(): bool
+    {
+        $output = [];
+        $matches = [];
+
+        $this->execute(self::vendorBinary('deptrac'), ['--version'], $output);
+
+        preg_match('/(?<version>[\d.]+)/', implode(' ', $output), $matches);
+
+        if (isset($matches['version'])) {
+            return ((float) $matches['version']) >= 0.19;
         }
 
         return false;
