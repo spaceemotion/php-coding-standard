@@ -26,7 +26,7 @@ class PhpCodeSniffer extends Tool
             return true;
         }
 
-        $json = self::parseJson($output[end($output)]);
+        $json = self::parseJson(end($output));
         $result = new Result();
 
         foreach (($json['files'] ?? []) as $fileName => $details) {
