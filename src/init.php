@@ -38,5 +38,5 @@ use Spaceemotion\PhpCodingStandard\Cli;
     ini_set('memory_limit', '-1');
 
     // Don't run with XDebug enabled to improve performance
-    (new XdebugHandler('phpcstd', '--' . Cli::FLAG_ANSI))->check();
+    (new XdebugHandler('phpcstd'))->check();
 })();

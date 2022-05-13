@@ -24,26 +24,25 @@ class Rector extends Tool
 
     public function run(Context $context): bool
     {
-        $outputFile = $this->createTempReportFile();
         $binary = self::vendorBinary('rector');
+        $output = [];
 
         if (
             $this->execute($binary, array_merge([
                 'process',
                 '--output-format=json',
-                '--output-file=' . $outputFile,
                 '--no-progress-bar',
                 $context->isFixing ? '' : '--dry-run',
-            ], $context->files)) === 0
+            ], $context->files), $output) === 0
         ) {
             return true;
         }
 
-        $json = self::parseJson(file_get_contents($outputFile));
+        $json = self::parseJson(end($output));
 
         $result = new Result();
 
-        foreach ($json['file_diffs'] as $diff) {
+        foreach ($json['file_diffs'] ?? [] as $diff) {
             $file = new File();
             $file->violations = DiffViolation::make($this, $diff['diff'], function (int $idx) use ($diff): string {
                 return $idx > 0
