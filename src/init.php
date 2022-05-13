@@ -5,7 +5,6 @@
 declare(strict_types=1);
 
 use Composer\XdebugHandler\XdebugHandler;
-use Spaceemotion\PhpCodingStandard\Cli;
 
 (static function (): void {
     // Find root "bin" folder for composer installation
