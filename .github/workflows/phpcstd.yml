@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.4]
+        php: [8.1]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup cache environment
         id: extcache
@@ -25,7 +25,7 @@ jobs:
           key: ${{ env.key }}
 
       - name: Cache extensions
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
@@ -45,7 +45,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
@@ -83,7 +83,7 @@ jobs:
         ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup cache environment
         id: extcache
@@ -94,7 +94,7 @@ jobs:
           key: ${{ env.key }}
 
       - name: Cache extensions
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
@@ -114,7 +114,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
@@ -126,5 +126,5 @@ jobs:
       - name: Enable all tools
         run: sed -i -e 's/enabled = false/enabled = true/g' .phpcstd.dist.ini
 
-      - name: Run phpcstd
-        run: php bin/phpcstd --ci -vvv --only=${{ matrix.tool }}
+      - name: Run phpcstd (in no-fail mode)
+        run: php bin/phpcstd --ci -vvv --only=${{ matrix.tool }} --no-fail
