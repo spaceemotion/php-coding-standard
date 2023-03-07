@@ -194,11 +194,11 @@ class RunCommand extends Command
             $timeTaken = '<gray>' . Helper::formatTime(time() - $start) . '</gray>';
 
             if ($result) {
-                $output->writeln("✔ {$name}: <info>OK</info> ${timeTaken}");
+                $output->writeln("✔ {$name}: <info>OK</info> {$timeTaken}");
                 continue;
             }
 
-            $output->writeln("<fg=red>✘</> {$name}: <fg=red>FAIL</> ${timeTaken}");
+            $output->writeln("<fg=red>✘</> {$name}: <fg=red>FAIL</> {$timeTaken}");
 
             $success = false;
 

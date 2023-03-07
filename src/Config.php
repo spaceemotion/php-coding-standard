@@ -149,7 +149,7 @@ class Config
                 // or we've already loaded its contents
                 if (array_key_exists($includePath, $configs)) {
                     $this->output->writeln(
-                        "Cyclic dependency found at ${path} for ${includePath}",
+                        "Cyclic dependency found at {$path} for {$includePath}",
                         Output::VERBOSITY_NORMAL
                     );
                     continue;
