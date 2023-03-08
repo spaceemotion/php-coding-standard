@@ -76,7 +76,7 @@ class ConsoleFormatter implements Formatter
 
         $results = implode(', ', array_map(
             static function (int $count, string $key): string {
-                return "${count} ${key}(s)";
+                return "{$count} {$key}(s)";
             },
             $counts,
             array_keys($counts)

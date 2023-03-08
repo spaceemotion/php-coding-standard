@@ -134,7 +134,7 @@ abstract class Tool
         $binary = PHPCSTD_BINARY_PATH . $binary;
 
         if (! is_file($binary)) {
-            $binary = "${binary}.phar";
+            $binary = "{$binary}.phar";
         }
 
         if (Cli::isOnWindows()) {
@@ -152,7 +152,7 @@ abstract class Tool
             throw new RuntimeException('Unable to create temporary report file');
         }
 
-        $tmpFileJson = "${tmpFile}.json";
+        $tmpFileJson = "{$tmpFile}.json";
 
         if (! rename($tmpFile, $tmpFileJson)) {
             throw new RuntimeException('Unable to rename temporary report file');

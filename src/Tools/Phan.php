@@ -45,7 +45,7 @@ class Phan extends Tool
             $violation->message = $entry['description'];
             $violation->tool = $this->name;
             $violation->line = $entry['location']['lines']['begin'];
-            $violation->source = "${entry['check_name']} (${entry['type_id']})";
+            $violation->source = "{$entry['check_name']} ({$entry['type_id']})";
 
             $file = new File();
             $file->violations[] = $violation;

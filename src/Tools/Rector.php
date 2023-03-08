@@ -75,7 +75,7 @@ class Rector extends Tool
 
             $name = strtolower(preg_replace('/(?<!^)[A-Z]/', ' $0', $withoutSuffix));
 
-            return $name . " <gray>(${rector})</gray>";
+            return $name . " <gray>({$rector})</gray>";
         }, $applied_rectors);
     }
 }

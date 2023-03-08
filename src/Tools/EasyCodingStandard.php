@@ -117,7 +117,7 @@ class EasyCodingStandard extends Tool
                 preg_replace('/(?<!^)[A-Z]/', ' $0', $withoutSuffix) ?? $withoutSuffix
             );
 
-            return $name . " <gray>(${checker})</gray>";
+            return $name . " <gray>({$checker})</gray>";
         }, $applied_checkers);
     }
 }

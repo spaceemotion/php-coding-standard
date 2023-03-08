@@ -39,7 +39,7 @@ class Psalm extends Tool
         $exitCode = $this->execute($binary, array_merge(
             [
                 '--monochrome',
-                "--report=${tmpFileJson}",
+                "--report={$tmpFileJson}",
                 '--no-progress',
             ],
             $config,
@@ -68,7 +68,7 @@ class Psalm extends Tool
             $violation->message = $entry['message'];
             $violation->tool = $this->name;
             $violation->line = $entry['line_from'];
-            $violation->source = "${entry['type']} (${entry['link']})";
+            $violation->source = "{$entry['type']} ({$entry['link']})";
             $violation->severity = $entry['severity'] === Violation::SEVERITY_ERROR
                 ? Violation::SEVERITY_ERROR
                 : Violation::SEVERITY_WARNING;
@@ -98,6 +98,6 @@ class Psalm extends Tool
             ? dirname($binary, 3) . DIRECTORY_SEPARATOR . $configName
             : $configName;
 
-        return file_exists($configName) ? ["--config=${configName}"] : [];
+        return file_exists($configName) ? ["--config={$configName}"] : [];
     }
 }
